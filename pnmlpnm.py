@@ -72,7 +72,7 @@ History:
 
 0.11.30.2   Seems like finally fixed 16 bpc P5 and P6 files reading. Looks ugly but works.
 
-1.12.1.2   Seem to be ready for release.
+1.12.1.2    Seem to be ready for release.
 
 """
 
@@ -206,7 +206,7 @@ def pnm2list(filename: str) -> tuple[int, int, int, int, list[list[list[int]]]]:
     ╚══════════╝ '''
 
 def list2bin(in_list_3d: list[list[list[int]]], maxcolors: int) -> bytes:
-    """Convert PNG to PGM P5 or PPM P6 (binary) data structure in memory.
+    """Convert nested image data list to PGM P5 or PPM P6 (binary) data structure in memory.
 
     Based on Netpbm specs at https://netpbm.sourceforge.net/doc/
 
@@ -278,7 +278,7 @@ def list2pnm(out_filename: str, in_list_3d: list[list[list[int]]], maxcolors: in
 
     Output:
 
-    - ``out_filename`` - PNM file.
+    - ``out_filename`` - PNM file name.
 
 
     """
@@ -307,7 +307,7 @@ def list2pnmascii(out_filename: str, in_list_3d: list[list[list[int]]], maxcolor
 
     Output:
 
-    - ``out_filename`` - PNM file.
+    - ``out_filename`` - PNM file name.
 
     """
 
