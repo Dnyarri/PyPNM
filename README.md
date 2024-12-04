@@ -24,7 +24,50 @@ Module **pnmlpnm.py** contains 100% pure Python implementation of everything one
 - **list2pnmascii** - alternative function to write ASCII PPM (P3) or PGM (P2) files.
 - **create_image** - creating empty nested 3D list for image representation. Not used within this particular module but often needed by programs this module is supposed to be used with.
 
-Detailed functions arguments description is provided in docstrings, but in general looks simple like that - you feed the function with your image data list and a filename, and get PNM file with that name written.
+Detailed functions arguments description is provided below as well as in docstrings.
+
+### pnm2list
+
+`X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(in_filename)`
+
+read data from PPM/PGM file, where:
+
+- `X, Y, Z`   - image sizes (int);
+- `maxcolors` - number of colors per channel for current image (int);
+- `image3D`   - image pixel data as list(list(list(int)));
+- `in_filename` - PPM/PGM file name (str).
+
+### list2bin
+
+`image_bytes = pnmlpnm.list2bin(image3D, maxcolors)`
+
+Convert nested image data list to PGM P5 or PPM P6 (binary) data structure in memory, where:
+
+- `image3D`   - `Y*X*Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
+- `maxcolors` - number of colors per channel for current image (int).
+- `image_bytes` - PNM-structured binary data.
+
+### list2pnm
+
+`pnmlpnm.list2pnm(out_filename, image3D, maxcolors)` where:
+
+- `image3D`   - `Y*X*Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
+- `maxcolors` - number of colors per channel for current image (int).
+- `out_filename` - PNM file name.
+
+### list2pnmascii
+
+Similar to `list2pnm` above but creates ascii pnm file instead of binary.
+
+`pnmlpnm.list2pnmascii(out_filename, image3D, maxcolors)` where:
+
+- `image3D`   - `Y*X*Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
+- `maxcolors` - number of colors per channel for current image (int).
+- `out_filename` - PNM file name.
+
+### create_image
+
+Create empty 3D nested list of `X*Y*Z` sizes.
 
 ## viewer.py
 
@@ -38,4 +81,4 @@ All this means that you may use *pnmlpnm* and Tkinter to visualize any data that
 
 [Netpbm file formats description](https://netpbm.sourceforge.net/doc/)
 
-[PyPNM page](https://dnyarri.github.io/pypnm.html)
+[PyPNM page](https://dnyarri.github.io/pypnm.html) containing example application of using `list2bin` to produce data for Tkinter `PhotoImage(data=...)` to display.
