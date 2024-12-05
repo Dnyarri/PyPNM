@@ -2,21 +2,35 @@
 
 ## Overview
 
-PPM and PGM (particular cases on PNM format group) are simplest file formats for RGB and L images, correspondingly. This simplicity lead to some consequences:
+PPM and PGM (particular cases of PNM format group) are simplest file formats for RGB and L images, correspondingly. This simplicity lead to some adverse consequences:
 
 - lack of strict official specification. Instead, you may find words like "usual" in format description. Surely, there is someone who implement this part of image format in unprohibited, yet a totally unusual way.
 
-- unwillingness of many software developers to provide any good support to for simple and open format. It took years for almighty Adobe Photoshop developers to include PNM module in distribution rather than count on third-party developers, and surely (see above) they used this chance to implement their own unusual separator scheme nobody else uses. What as to PNM support in Python, say, Pillow... sorry, I promised not to mention Pillow anywhere ladies and children are allowed to read it.
+- unwillingness of many software developers to provide any good support to for simple and open format. It took years for almighty Adobe Photoshop developers to include PNM module in distribution rather than count on third-party developers, and surely (see above) they used this chance to implement a separator scheme nobody else uses. What as to PNM support in Python, say, Pillow... sorry, I promised not to mention Pillow anywhere ladies and children are allowed to read it.
 
-As a result, novice Python user (like me) may find it difficult to get reliable input/output modules for PPM and PGM image formats; therefore current PyPNM package was developed, combining input/output functions for 8-bits and 16-bits per channel binary and ascii PGM and PPM files, i.e. P2, P5, P3 and P6 PNM file types.
+As a result, novice Python user (like me) may find it difficult to get reliable input/output modules for PPM and PGM image formats; therefore current PyPNM package was developed, combining input/output functions for 8-bits and 16-bits per channel binary and ascii PGM and PPM files, i.e. P2, P5, P3 and P6 PNM file types.  Yes, right, I mean it: both greyscale and RGB are supported with 16-bit per channel color depth (0...65535 range) directly, i.e. without any reconversion to weird data type.
 
-## Image representation
+## Target Image representation
 
-Is seems logical to represent an RGB image as nested 3D structure - X, Y-sized matrix of three-component RGB vectors. Since in Python list seem to be about the only variant for mutable structures like that, it is suitable to represent image as list(list(list(int))) structure. Therefore, it would be convenient to have module read/write image data to/from such a structure.
+Is seems logical to represent an RGB image as nested 3D structure - (X, Y)-sized matrix of three-component RGB vectors. Since in Python list seem to be about the only variant for mutable structures like that, it is suitable to represent image as list(list(list(int))) structure. Therefore, it would be convenient to have module read/write image data to/from such a structure. Note that for L images memory structure is still list(list(list(int))), just innermost list have only one component.
+
+## Installation
+
+In case of installing using pip:
+
+`pip install PyPNM`
+
+then in your program import section:
+
+`from pypnm import pnmlpnm`
+
+then use functions as described in section *"pnmlpnm.py functions"* below.
+
+In case you downloaded file **pnmlpnm.py** from Github or somewhere else as plain .py file and not a package, simply put this file into your program folder, then use `import pnmlpnm`.
 
 ## pnmlpnm.py
 
-Module **pnmlpnm.py** contains 100% pure Python implementation of everything one may need to read/write a variety of PGM and PPM files. I/O functions are written as functions/procedures, as simple as possible, and listed below:
+Module file **pnmlpnm.py** contains 100% pure Python implementation of everything one may need to read/write a variety of PGM and PPM files. I/O functions are written as functions/procedures, as simple as possible, and listed below:
 
 - **pnm2list**  - reading binary or ascii RGB PPM or L PGM file and returning image data as ints and nested list.
 - **list2bin**  - getting image data as ints and nested list and creating binary PPM (P6) or PGM (P5) data structure in memory. Suitable for generating data to display with Tkinter.
@@ -75,10 +89,14 @@ Program **viewer.py** is a small illustrative utility: using *pnmlpnm* package, 
 
 [![Example of ascii ppm opened in viewer.py and converted to binary ppm on the fly to be rendered with Tkinter](https://dnyarri.github.io/pypnm/viewer.png)](https://dnyarri.github.io/pypnm.html)
 
-All this means that you may use *pnmlpnm* and Tkinter to visualize any data that can be represented as greyscale or RGB without huge external packages and writing files on disk; all you need is Tkinter, included into standard CPython distributions, and highly compatible pure Python *pnmlpnm.py* taking only 12 kbytes.
+As a result, you may use *pnmlpnm* and Tkinter to visualize any data that can be represented as greyscale or RGB without huge external packages and writing files on disk; all you need is Tkinter, included into standard CPython distributions, and highly compatible pure Python *pnmlpnm.py* taking only 12 kbytes.
 
 ### References
 
 [Netpbm file formats description](https://netpbm.sourceforge.net/doc/)
 
-[PyPNM page](https://dnyarri.github.io/pypnm.html) containing example application of using `list2bin` to produce data for Tkinter `PhotoImage(data=...)` to display.
+[PyPNM at PyPI](https://pypi.org/project/PyPNM/) installing PyPN with pip. Does not provide example etc., only core converter.
+
+[PyPNM at Github](https://github.com/Dnyarri/PyPNM) containing example application of using `list2bin` to produce data for Tkinter `PhotoImage(data=...)` to display, and examples of open/save.
+
+[PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling) - image rescaling applications using Scale2x and Scale3x, PNG I/O is based on PyPNG, and PPM/PGM I/O - on current PyPNM. That is, everything is based on standard Python and therefore quite OS-independent.
