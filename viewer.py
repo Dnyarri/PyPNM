@@ -8,7 +8,7 @@ Viewer does not use PPM file directly to display it in Tkinter - it loads file (
 
 from tkinter import Button, Frame, Label, PhotoImage, Tk, filedialog
 
-import pnmlpnm
+from pypnm import pnmlpnm
 
 
 def DisMiss():
