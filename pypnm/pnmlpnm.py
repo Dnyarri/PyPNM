@@ -50,15 +50,15 @@ Copyright and redistribution
 -----------------------------
 Written by Ilya Razmanov (https://dnyarri.github.io/) to provide working with PPM/PGM files and creating PPM data to be displayed with Tkinter "PhotoImage" class.
 
-May be freely used and redistributed.
+May be freely used, redistributed and modified. In case of introducing useful modifications, please report to original developer.
 
 References
------------------------------
+-----------
 
 Netpbm specs: https://netpbm.sourceforge.net/doc/
 
-History:  
-----------
+History:
+---------
 
 0.11.26.0   Initial working version 26 Nov 2024.
 
@@ -80,7 +80,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.12.1.2'
+__version__ = '1.12.12.1'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -107,8 +107,13 @@ def pnm2list(filename: str) -> tuple[int, int, int, int, list[list[list[int]]]]:
 
     """
 
+    magic_list = ['P6', 'P3', 'P5', 'P2']
+
     with open(filename, 'rb') as file:  # Open file in binary mode
         magic = file.readline().strip().decode()
+
+        if magic not in magic_list:
+            raise ValueError(f"Unsupported format {filename}: {magic[:32]}")
 
         # Passing comments by
         comment_line = file.readline().decode()

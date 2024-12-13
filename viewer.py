@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-"""Test shell for pnmlpnm - Tkinter viewer.
+"""Test shell for pnmlpnm module - Tkinter viewer.
 
-Viewer does not use PPM file directly to display it in Tkinter - it loads file (in this case - PPM or PGM, just because I have my pnmlpnm module anyway), then construct PPM-like bytes data object in memory, and then show it using Tkinter. You may easily check this: Tkinter do not show ASCII PPM and PGM, while this viewer does. This is because pnmlpnm is used to reconvert ASCII file into in-memory bytes on the fly.
+Viewer does not use PPM file directly to display it in Tkinter - it loads file (in this case - PPM or PGM, just because I have my pnmlpnm module anyway), then construct PPM-like bytes data object in memory, and then show it using Tkinter. You may easily check this: Tkinter itself do not show ASCII PPM and PGM, while this viewer does.
 
 """
 
@@ -13,33 +13,32 @@ from pypnm import pnmlpnm
 
 def DisMiss():
     """Kill dialog and continue"""
+
     sortir.destroy()
 
 
 def GetSource():
     """Opening source image and redefining other controls state"""
-    global zoom_factor
+
+    global zoom_factor, sourcefilename, preview, preview_data
     zoom_factor = 1
-    global sourcefilename
-    global preview  # Important!
-    global preview_data  # Important!
     sourcefilename = filedialog.askopenfilename(title='Open PPM/PGM file to view', filetypes=[('Portable map formats', '.ppm .pgm')])
     if sourcefilename == '':
         return
 
-    """ ┌───────────────────────────────────────┐
+    ''' ┌───────────────────────────────────────┐
         │ Loading file, converting data to list │
-        └──────────────────────────────────────-┘ """
+        └──────────────────────────────────────-┘ '''
     X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(sourcefilename)
 
-    """ ┌─────────────────────────────────────────────────────────────────────────┐
+    ''' ┌─────────────────────────────────────────────────────────────────────────┐
         │ Converting list to bytes of PPM-like structure "preview_data" in memory │
-        └────────────────────────────────────────────────────────────────────────-┘ """
+        └────────────────────────────────────────────────────────────────────────-┘ '''
     preview_data = pnmlpnm.list2bin(image3D, maxcolors)
 
-    """ ┌────────────────────────────────────────────────┐
+    ''' ┌────────────────────────────────────────────────┐
         │ Now showing "preview_data" bytes using Tkinter │
-        └────────────────────────────────────────────────┘ """
+        └────────────────────────────────────────────────┘ '''
     preview = PhotoImage(data=preview_data)
     preview = preview.zoom(zoom_factor, zoom_factor)  # "zoom" zooms in, "subsample" zooms out
     zanyato.config(text='Source', image=preview, compound='top')
@@ -56,9 +55,9 @@ def GetSource():
 def SaveAsBin():
     """Once pressed on Save as bin"""
 
-    """ ┌───────────────────────────────────────┐
+    ''' ┌───────────────────────────────────────┐
         │ Loading file, converting data to list │
-        └──────────────────────────────────────-┘  """
+        └──────────────────────────────────────-┘ '''
     X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(sourcefilename)
 
     # Adjusting "Save to" formats to be displayed according to bitdepth
@@ -80,18 +79,18 @@ def SaveAsBin():
     if savefilename == '':
         return
 
-    """ ┌───────────────────────────────────────────────────────┐
+    ''' ┌───────────────────────────────────────────────────────┐
         │ Converting list to bytes and saving as "savefilename" │
-        └──────────────────────────────────────────────────────-┘ """
+        └──────────────────────────────────────────────────────-┘ '''
     pnmlpnm.list2pnm(savefilename, image3D, maxcolors)
 
 
 def SaveAsAscii():
     """Once pressed on Save as ASCII"""
 
-    """ ┌───────────────────────────────────────┐
+    ''' ┌───────────────────────────────────────┐
         │ Loading file, converting data to list │
-        └──────────────────────────────────────-┘ """
+        └──────────────────────────────────────-┘ '''
     X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(sourcefilename)
 
     # Adjusting "Save to" formats to be displayed according to bitdepth
@@ -113,16 +112,15 @@ def SaveAsAscii():
     if savefilename == '':
         return
 
-    """ ┌────────────────────────────────────────────────────────┐
+    ''' ┌────────────────────────────────────────────────────────┐
         │ Converting list to string and saving as "savefilename" │
-        └───────────────────────────────────────────────────────-┘ """
+        └───────────────────────────────────────────────────────-┘ '''
     pnmlpnm.list2pnmascii(savefilename, image3D, maxcolors)
 
 
 def zoomIn():
-    global zoom_factor
+    global zoom_factor, preview
     zoom_factor = min(zoom_factor + 1, 3)  # max zoom 3
-    global preview
     preview = PhotoImage(data=preview_data)
     preview = preview.zoom(zoom_factor, zoom_factor)
     zanyato.config(text='Source', image=preview, compound='top')
@@ -137,9 +135,8 @@ def zoomIn():
 
 
 def zoomOut():
-    global zoom_factor
+    global zoom_factor, preview
     zoom_factor = max(zoom_factor - 1, 1)  # min zoom 1
-    global preview
     preview = PhotoImage(data=preview_data)
     preview = preview.zoom(zoom_factor, zoom_factor)
     zanyato.config(text='Source', image=preview, compound='top')
@@ -152,6 +149,10 @@ def zoomOut():
     else:
         butt_minus.config(state='normal', cursor='hand2')
 
+
+''' ╔═══════════╗
+    ║ Main body ║
+    ╚═══════════╝ '''
 
 sortir = Tk()
 
