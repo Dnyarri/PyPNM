@@ -1,0 +1,3 @@
+.git* export-ignore
+compatibility/** export-ignore
+compatibility export-ignore
