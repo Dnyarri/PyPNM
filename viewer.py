@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
 
-"""Test shell for pnmlpnm module - Tkinter viewer.
+"""Test shell for pnmlpnm module - Tkinter-based viewer.
 
-Viewer does not use PPM file directly to display it with Tkinter - it loads file (in this case - PPM or PGM, just because I have my pnmlpnm module anyway), then construct PPM-like bytes data object in memory, and then show it using Tkinter. You may easily check this: Tkinter itself does not show ASCII PPM and PGM, while this viewer does.
+Viewer does not use PPM file directly to display it with Tkinter Tkinter PhotoImage(file=...) - it loads file (in this case - PPM or PGM, just because it's a demo for pnmlpnm module anyway), then constructs PPM-like bytes data object in memory, and then displays it using Tkinter PhotoImage(data=...). For example, it's able to display ascii PGM and PPM, not directly supported by Tkinter, since it recodes them to binary on the fly.
 
 """
+
+__author__ = 'Ilya Razmanov'
+__copyright__ = '(c) 2024-2025 Ilya Razmanov'
+__credits__ = 'Ilya Razmanov'
+__license__ = 'unlicense'
+__version__ = '1.13.6.0'
+__maintainer__ = 'Ilya Razmanov'
+__email__ = 'ilyarazmanov@gmail.com'
+__status__ = 'Production'
 
 from tkinter import Button, Frame, Label, PhotoImage, Tk, filedialog
 
@@ -30,6 +39,10 @@ def GetSource():
         │ Loading file, converting data to list │
         └──────────────────────────────────────-┘ """
     X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(sourcefilename)
+
+
+    label_info.config(text=f'X={X} Y={Y} Z={Z} maxcolors={maxcolors}')
+    sortir.update()
 
     """ ┌─────────────────────────────────────────────────────────────────────────┐
         │ Converting list to bytes of PPM-like structure "preview_data" in memory │
@@ -158,13 +171,16 @@ sortir = Tk()
 
 zoom_factor = 1
 
-sortir.title('PNMViewer')
+sortir.title(f'PNMViewer v. {__version__}')
 sortir.geometry('+200+100')
 sortir.minsize(300, 110)
 
 # Main dialog icon is PPM as well!
 icon = PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00')
 sortir.iconphoto(True, icon)
+
+label_info = Label(sortir, text='PNM image file viewer', font=('courier', 8),  foreground='grey')
+label_info.pack(side='bottom', padx=0, pady=1, fill='both')
 
 frame_left = Frame(sortir, borderwidth=2, relief='groove')
 frame_left.pack(side='left', anchor='nw')
