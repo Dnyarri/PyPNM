@@ -81,7 +81,7 @@ __license__ = 'unlicense'
 __version__ = '1.13.10.7'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
-__status__ = 'Development'
+__status__ = 'Production'
 
 import array
 import re
