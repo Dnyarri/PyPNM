@@ -1,14 +1,18 @@
-# PyPNM - PPM and PGM image files reading and writing
+
+| [EN] | [RU](README.RU.md) |
+| ---- | ---- |
+
+# PyPNM - Pure Python PPM and PGM image files reading and writing module
 
 ## Overview and justification
 
-PPM and PGM (particular cases of PNM format group) are simplest file formats for RGB and L images, correspondingly. This simplicity lead to some adverse consequences:
+PPM and PGM (particular cases of PNM format group) are simplest file formats for RGB and L images, correspondingly. Paradoxically, this simplicity lead to some adverse consequences:
 
 - lack of strict official specification. Instead, you may find words like "usual" in format description. Surely, there is someone who implement this part of image format in unprohibited, yet a totally unusual way.
 
 - unwillingness of many software developers to provide any good support to for simple and open format. It took years for almighty Adobe Photoshop developers to include PNM module in distribution rather than count on third-party developers, and surely (see above) they used this chance to implement a separator scheme nobody else uses. What as to PNM support in Python, say, Pillow... sorry, I promised not to mention Pillow anywhere ladies and children are allowed to read it.
 
-As a result, novice Python user (like me) may find it difficult to get reliable input/output modules for PPM and PGM image formats; therefore current PyPNM module was developed, combining input/output functions for 8-bits and 16-bits per channel binary and ascii PGM and PPM files, i.e. P2, P5, P3 and P6 PNM file types. Both greyscale and RGB with 16-bit per channel color depth (0...65535 range) are supported directly, without limitations and without dancing with tambourine and proclaiming it to be a novel method.
+As a result, novice Python user (like me) may find it difficult to get reliable input/output modules for PPM and PGM image formats; therefore current PyPNM module was developed, combining input/output functions for 8-bits and 16-bits per channel binary and ascii [Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html) and [Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html) files, i.e. P2, P5, P3 and P6 PNM file types. Both greyscale and RGB with 16-bit per channel color depth (0...65535 range) are supported directly, without limitations and without dancing with tambourine and proclaiming it to be a novel method.
 
 ## Format compatibility
 
@@ -81,7 +85,7 @@ read data from PPM/PGM file, where:
 Convert nested image data list to PGM P5 or PPM P6 (binary) data structure in memory, where:
 
 - `image3D`   - `Y*X*Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
-- `maxcolors` - number of colors per channel for current image (int).
+- `maxcolors` - number of colors per channel for current image (int);
 - `image_bytes` - PNM-structured binary data.
 
 ### list2pnm
@@ -89,7 +93,7 @@ Convert nested image data list to PGM P5 or PPM P6 (binary) data structure in me
 `pnmlpnm.list2pnm(out_filename, image3D, maxcolors)` where:
 
 - `image3D`   - `Y*X*Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
-- `maxcolors` - number of colors per channel for current image (int).
+- `maxcolors` - number of colors per channel for current image (int);
 - `out_filename` - PNM file name.
 
 ### list2pnmascii
@@ -99,7 +103,7 @@ Similar to `list2pnm` above but creates ascii pnm file instead of binary.
 `pnmlpnm.list2pnmascii(out_filename, image3D, maxcolors)` where:
 
 - `image3D`   - `Y*X*Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
-- `maxcolors` - number of colors per channel for current image (int).
+- `maxcolors` - number of colors per channel for current image (int);
 - `out_filename` - PNM file name.
 
 ### create_image
@@ -118,7 +122,7 @@ As a result, you may use *pnmlpnm* and Tkinter to visualize any data that can be
 
 1. [Netpbm file formats description](https://netpbm.sourceforge.net/doc/).
 
-2. [PyPNM at PyPI](https://pypi.org/project/PyPNM/) - installing PyPN with pip. Does not contain viewer example etc., only core converter.
+2. [PyPNM at PyPI](https://pypi.org/project/PyPNM/) - installing PyPN with `pip`. Does not contain viewer example etc., only core converter, but provides regular `pip`-driven automated updates.
 
 3. [PyPNM at Github](https://github.com/Dnyarri/PyPNM/) containing example viewer application, illustrating using `list2bin` to produce data for Tkinter `PhotoImage(data=...)` to display, and of open/save various portable map formats.
 
