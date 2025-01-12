@@ -124,8 +124,8 @@ As a result, you may use *pnmlpnm* and Tkinter to visualize any data that can be
 
 2. [PyPNM at PyPI](https://pypi.org/project/PyPNM/) - installing PyPN with `pip`. Does not contain viewer example etc., only core converter, but provides regular `pip`-driven automated updates.
 
-3. [PyPNM at Github](https://github.com/Dnyarri/PyPNM/) containing example viewer application, illustrating using `list2bin` to produce data for Tkinter `PhotoImage(data=...)` to display, and of open/save various portable map formats.
+3. [PyPNM at Github](https://github.com/Dnyarri/PyPNM/) containing example viewer application, illustrating using `list2bin` to produce data for Tkinter `PhotoImage(data=...)` to display, as well as opening/saving various portable map formats.
 
-4. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - usage example, pure Python image rescaling applications using Scale2x and Scale3x, PNG I/O is based on [PyPNG](https://gitlab.com/drj11/pypng), and PPM/PGM I/O - on  [PyPNM](https://pypi.org/project/PyPNM/), thus making all applications cross-platform.
+4. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - usage example, pure Python image rescaling applications using Scale2x and Scale3x, PNG I/O is based on [PyPNG](https://gitlab.com/drj11/pypng), and PPM/PGM I/O - on  [PyPNM](https://pypi.org/project/PyPNM/), thus making everything pure Python and therefore cross-platform.
 
-5. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - usage example, contains image filtering application «Averager», implementing non-standard adaptive image averaging. Filter before/after preview based on statically linked PyPNM list2bin code and Tkinter `PhotoImage(data=...)` class.
+5. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - usage example, contains image filtering application «Averager», implementing non-standard adaptive image averaging. Filter before/after preview based on statically linked PyPNM list2bin code and Tkinter `PhotoImage(data=...)` class. As a result, fully operational pure Python interactive image filtering application ensued.

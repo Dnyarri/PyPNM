@@ -124,6 +124,6 @@
 
 3. [PyPNM на Github](https://github.com/Dnyarri/PyPNM/) - содержит пример приложения для просмотра, иллюстрирующий применение `list2bin` для визуализации данных с помощью Tkinter `PhotoImage(data=...), и конверсию изображений между форматами.
 
-4. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - пример применения, масштабирование изображений методами Scale2x и Scale3x, ввод/вывод PNG основан на [PyPNG](https://gitlab.com/drj11/pypng), а PNM - на [PyPNM](https://pypi.org/project/PyPNM/), что делает приложения кросс-платформенными.
+4. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - пример применения, масштабирование изображений методами Scale2x и Scale3x на чистом Python, ввод/вывод PNG основан на [PyPNG](https://gitlab.com/drj11/pypng), а PNM - на [PyPNM](https://pypi.org/project/PyPNM/), что делает приложения кросс-платформенными.
 
-5. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - пример применения, содержит программу фильтрования изображений «Averager», превью "до и после" основано на статически внедрённом коде PyPNM list2bin и на классе Tkinter `PhotoImage(data=...)`.
+5. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - пример применения, содержит программу фильтрования изображений «Averager», превью "до и после" основано на статически внедрённом коде PyPNM list2bin и на классе Tkinter `PhotoImage(data=...)`. Таким образом, представлено небольшое, но полноценное интерактивное приложение для фильтрования изображений, реализованное исключительно на Python.
