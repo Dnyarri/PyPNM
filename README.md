@@ -4,8 +4,7 @@
 
 # PyPNM - Pure Python PPM and PGM image files reading and writing module
 
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pypnm)
- ![PyPI - Downloads](https://img.shields.io/pypi/dm/pypnm)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pypnm) ![PyPI - Version](https://img.shields.io/pypi/v/pypnm) ![PyPI - Downloads](https://img.shields.io/pypi/dm/pypnm)
 
 ## Overview and justification
 

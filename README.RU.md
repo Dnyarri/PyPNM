@@ -4,8 +4,7 @@
 
 # PyPNM - модуль чтения и записи графических форматов PPM и PGM на чистом Python
 
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pypnm)
- ![PyPI - Downloads](https://img.shields.io/pypi/dm/pypnm)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pypnm) ![PyPI - Version](https://img.shields.io/pypi/v/pypnm) ![PyPI - Downloads](https://img.shields.io/pypi/dm/pypnm)
 
 ## Обзор и предпосылки
 
