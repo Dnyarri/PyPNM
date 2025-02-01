@@ -4,6 +4,9 @@
 
 # PyPNM - Pure Python PPM and PGM image files reading and writing module
 
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pypnm)
+ ![PyPI - Downloads](https://img.shields.io/pypi/dm/pypnm)
+
 ## Overview and justification
 
 PPM and PGM (particular cases of PNM format group) are simplest file formats for RGB and L images, correspondingly. Paradoxically, this simplicity lead to some adverse consequences:
