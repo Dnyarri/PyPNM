@@ -164,13 +164,13 @@ zoom_factor = 1
 
 sortir.title(f'PNMViewer v. {__version__}')
 sortir.geometry('+200+100')
-sortir.minsize(300, 110)
+sortir.minsize(360, 210)
 
 # Main dialog icon is PPM as well!
 icon = PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00')
 sortir.iconphoto(True, icon)
 
-label_info = Label(sortir, text='PNM image file viewer', font=('courier', 8), foreground='grey')
+label_info = Label(sortir, text=f'PNMViewer v.{__version__}, {pnmlpnm.__name__} v.{pnmlpnm.__version__}', font=('courier', 8), foreground='grey')
 label_info.pack(side='bottom', padx=0, pady=1, fill='both')
 
 frame_left = Frame(sortir, borderwidth=2, relief='groove')
