@@ -1,5 +1,5 @@
 
-| [EN] | [RU](README.RU.md) |
+| 【EN】 | [〖RU〗](README.RU.md) |
 | ---- | ---- |
 
 # PyPNM - Pure Python PPM and PGM image files reading and writing module
@@ -63,7 +63,7 @@ Module file **pnmlpnm.py** contains 100% pure Python implementation of everythin
 
 - **pnm2list**  - reading binary or ascii RGB PPM or L PGM file and returning image data as nested list of int.
 - **list2bin**  - getting image data as nested list of int and creating binary PPM (P6) or PGM (P5) data structure in memory. Suitable for generating data to display with Tkinter.
-- **list2pnm**  - writing data created with list2bin to file.
+- **list2pnm**  - getting image data as nested list of int and writing binary PPM (P6) or PGM (P5) file.
 - **list2pnmascii** - alternative function to write ASCII PPM (P3) or PGM (P2) files.
 - **create_image** - creating empty nested 3D list for image representation. Not used within this particular module but often needed by programs this module is supposed to be used with.
 
@@ -73,7 +73,7 @@ Detailed functions arguments description is provided below as well as in docstri
 
 `X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(in_filename)`
 
-read data from PPM/PGM file, where:
+read data from PPM/PGM file to nested image data list, where:
 
 - `X, Y, Z`   - image sizes (int);
 - `maxcolors` - number of colors per channel for current image (int);
@@ -92,7 +92,9 @@ Convert nested image data list to PGM P5 or PPM P6 (binary) data structure in me
 
 ### list2pnm
 
-`pnmlpnm.list2pnm(out_filename, image3D, maxcolors)` where:
+`pnmlpnm.list2pnm(out_filename, image3D, maxcolors)`
+
+Write PGM P5 or PPM P6 (binary) file from nested image data list, where:
 
 - `image3D`   - `Y*X*Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
 - `maxcolors` - number of colors per channel for current image (int);
@@ -100,15 +102,17 @@ Convert nested image data list to PGM P5 or PPM P6 (binary) data structure in me
 
 ### list2pnmascii
 
-Similar to `list2pnm` above but creates ascii pnm file instead of binary.
-
 `pnmlpnm.list2pnmascii(out_filename, image3D, maxcolors)` where:
+
+Write PGM P2 or PPM P3 (ASCII text) file from nested image data list, where:
 
 - `image3D`   - `Y*X*Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
 - `maxcolors` - number of colors per channel for current image (int);
 - `out_filename` - PNM file name.
 
 ### create_image
+
+`image3D = create_image(X, Y, Z)`
 
 Create empty 3D nested list of `X*Y*Z` sizes.
 
