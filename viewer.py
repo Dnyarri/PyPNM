@@ -1,8 +1,17 @@
 #!/usr/bin/env python3
 
-"""Test shell for pnmlpnm module - Tkinter-based viewer.
+"""Test shell for `pnmlpnm <https://github.com/Dnyarri/PyPNM/>`_ module - Tkinter-based viewer.
 
-Viewer does not use PPM file directly to display it with Tkinter Tkinter PhotoImage(file=...) - instead, it loads file (in this case - PPM or PGM, just because it's a demo for pnmlpnm module anyway), then constructs PPM-like bytes data object in memory, and then displays it using Tkinter PhotoImage(data=...). For example, it's able to display ascii PGM and PPM, not directly supported by Tkinter, since it recodes them to binary on the fly.
+Viewer does not use PPM file directly to display it with Tkinter PhotoImage(file=...) - 
+instead, it loads file (in this case - PPM, PGM, or PBM, just because it's a demo for pnmlpnm module anyway),
+then constructs PPM-like bytes data object in memory, and then displays it using Tkinter PhotoImage(data=...).
+For example, it's able to display ascii PGM and PPM, not directly supported by Tkinter,
+since it recodes them to binary on the fly.
+
+NOTE:
+
+This is special developer edition, including `PNG support <https://gitlab.com/drj11/pypng>`_,
+created deliberately to test LA and RGBA preview.
 
 """
 
@@ -10,13 +19,15 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.14.1.10'
+__version__ = '1.15.9.21'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
+from pathlib import Path
 from tkinter import Button, Frame, Label, PhotoImage, Tk, filedialog
 
+from pypng import pnglpng
 from pypnm import pnmlpnm
 
 
@@ -32,7 +43,7 @@ def GetSource():
     global zoom_factor, sourcefilename, preview, preview_data
     global X, Y, Z, maxcolors, image3D
     zoom_factor = 1
-    sourcefilename = filedialog.askopenfilename(title='Open PPM/PGM file to view', filetypes=[('Portable map formats', '.ppm .pgm .pbm')])
+    sourcefilename = filedialog.askopenfilename(title='Open image file', filetypes=[('Supported formats', '.png .ppm .pgm .pbm'), ('PNG', '.png'), ('PNM', '.ppm .pgm .pbm')])
     if sourcefilename == '':
         return
 
@@ -40,7 +51,17 @@ def GetSource():
         │ Loading file, converting data to list │
         │ NOTE: maxcolors, image3D are GLOBALS! │
         └───────────────────────────────────────┘ """
-    X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(sourcefilename)
+
+    if Path(sourcefilename).suffix == '.png':
+        # Reading image as list
+        X, Y, Z, maxcolors, image3D, info = pnglpng.png2list(sourcefilename)
+
+    elif Path(sourcefilename).suffix in ('.ppm', '.pgm', '.pbm'):
+        # Reading image as list
+        X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(sourcefilename)
+
+    else:
+        raise ValueError('Extension not recognized')
 
     label_info.config(text=f'X={X} Y={Y} Z={Z} maxcolors={maxcolors}')
     sortir.update()
@@ -48,7 +69,7 @@ def GetSource():
     """ ┌─────────────────────────────────────────────────────────────────────────┐
         │ Converting list to bytes of PPM-like structure "preview_data" in memory │
         └────────────────────────────────────────────────────────────────────────-┘ """
-    preview_data = pnmlpnm.list2bin(image3D, maxcolors)
+    preview_data = pnmlpnm.list2bin(image3D, maxcolors, True)
 
     """ ┌────────────────────────────────────────────────┐
         │ Now showing "preview_data" bytes using Tkinter │
@@ -178,7 +199,7 @@ frame_left.pack(side='left', anchor='nw')
 frame_right = Frame(sortir, borderwidth=2, relief='groove')
 frame_right.pack(side='left', anchor='nw')
 
-butt01 = Button(frame_left, text='Open PPM/PGM...'.center(24, ' '), font=('helvetica', 16), cursor='hand2', justify='center', command=GetSource)
+butt01 = Button(frame_left, text='Open image...'.center(24, ' '), font=('helvetica', 16), cursor='hand2', justify='center', command=GetSource)
 butt01.pack(side='top', padx=4, pady=[2, 12], fill='both')
 
 butt02 = Button(frame_left, text='Save binary PPM/PGM...', font=('helvetica', 12), cursor='arrow', justify='center', state='disabled', command=SaveAsBin)
