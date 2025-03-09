@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 
-"""Test shell for pnmlpnm module - Tkinter-based viewer.
+"""Test shell for `pnmlpnm <https://github.com/Dnyarri/PyPNM/>`_ module - Tkinter-based viewer.
 
-Viewer does not use PPM file directly to display it with Tkinter Tkinter PhotoImage(file=...) - instead, it loads file (in this case - PPM or PGM, just because it's a demo for pnmlpnm module anyway), then constructs PPM-like bytes data object in memory, and then displays it using Tkinter PhotoImage(data=...). For example, it's able to display ascii PGM and PPM, not directly supported by Tkinter, since it recodes them to binary on the fly.
+Viewer does not use PPM file directly to display it with Tkinter PhotoImage(file=...) -
+instead, it loads file (in this case - PPM, PGM or PBM, just because it's a demo for pnmlpnm module anyway),
+then constructs PPM-like bytes data object in memory, and then displays it using Tkinter PhotoImage(data=...).
+For example, it's able to display ascii PGM and PPM, not directly supported by Tkinter,
+since it recodes them to binary on the fly.
 
 """
 
@@ -10,7 +14,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.14.1.10'
+__version__ = '1.15.9.21'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
