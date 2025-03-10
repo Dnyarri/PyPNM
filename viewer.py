@@ -19,7 +19,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.15.9.21'
+__version__ = '1.15.10.14'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -85,6 +85,7 @@ def GetSource():
     # enabling "Save as..."
     butt02.config(state='normal', cursor='hand2')
     butt03.config(state='normal', cursor='hand2')
+    butt04.config(state='normal', cursor='hand2')
 
 
 def SaveAsBin():
@@ -141,6 +142,31 @@ def SaveAsAscii():
         │ Converting list to string and saving as "savefilename" │
         └───────────────────────────────────────────────────────-┘ """
     pnmlpnm.list2pnmascii(savefilename, image3D, maxcolors)
+
+def SaveAsPNG():
+    """Once pressed on Save PNG"""
+
+    # Open "Save as..." file
+    savefilename = filedialog.asksaveasfilename(
+        title='Save PNG file',
+        filetypes=[('Portable network graphics', '.png')],
+        defaultextension=('Portable network graphics', '.png'),
+    )
+    if savefilename == '':
+        return
+
+    # Creating dummy info
+    info = {}
+    # Fixing color mode. The rest is fixed with pnglpng v. 25.01.07.
+    if maxcolors > 255:
+        info['bitdepth'] = 16
+    else:
+        info['bitdepth'] = 8
+
+    """ ┌───────────────────────────────────┐
+        │ Feeding list to PyPNG via pnglpng │
+        └──────────────────────────────────-┘ """
+    pnglpng.list2png(savefilename, image3D, info)
 
 
 def zoomIn():
@@ -207,6 +233,9 @@ butt02.pack(side='top', padx=4, pady=2, fill='both')
 
 butt03 = Button(frame_left, text='Save ASCII PPM/PGM...', font=('helvetica', 12), cursor='arrow', justify='center', state='disabled', command=SaveAsAscii)
 butt03.pack(side='top', padx=4, pady=2, fill='both')
+
+butt04 = Button(frame_left, text='Save PNG...', font=('helvetica', 12), cursor='arrow', justify='center', state='disabled', command=SaveAsPNG)
+butt04.pack(side='top', padx=4, pady=2, fill='both')
 
 butt99 = Button(frame_left, text='Exit', font=('helvetica', 16), cursor='hand2', justify='center', command=DisMiss)
 butt99.pack(side='bottom', padx=4, pady=[12, 2], fill='both')
