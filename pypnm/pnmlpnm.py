@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 """Functions to read PPM and PGM files to nested 3D list of int and/or write back.
+NOTE: This is special Python 3.4 version!
 
 Overview
 ---------
@@ -114,7 +115,7 @@ import re
     ║ pnm2list ║
     ╚══════════╝ """
 
-def pnm2list(in_filename: str) -> tuple[int, int, int, int, list[list[list[int]]]]:
+def pnm2list(in_filename):
     """Read PGM or PPM file to nested image data list.
 
     Usage
@@ -139,7 +140,7 @@ def pnm2list(in_filename: str) -> tuple[int, int, int, int, list[list[list[int]]
             │ IF Continuous tone │
             └────────────────────┘ """
         # Getting header by pattern
-        header: list[bytes] = re.search(
+        header = re.search(
             rb'(^P\d\s(?:\s*#.*\s)*'  # last \s gives better compatibility than [\r\n]
             rb'\s*(\d+)\s(?:\s*#.*\s)*'  # first \s further improves compatibility
             rb'\s*(\d+)\s(?:\s*#.*\s)*'
@@ -213,7 +214,7 @@ def pnm2list(in_filename: str) -> tuple[int, int, int, int, list[list[list[int]]
             │ IF 1 Bit/pixel │
             └────────────────┘ """
         # Getting header by pattern. Note that for 1 bit pattern does not include maxcolors
-        header: list[bytes] = re.search(
+        header = re.search(
             rb'(^P\d\s(?:\s*#.*\s)*'  # last \s gives better compatibility than [\r\n]
             rb'\s*(\d+)\s(?:\s*#.*\s)*'  # first \s further improves compatibility
             rb'\s*(\d+)\s)',
@@ -268,7 +269,7 @@ def pnm2list(in_filename: str) -> tuple[int, int, int, int, list[list[list[int]]
             list_3d = [[[(255 * (1 - int(list_1d[z + x * Z + y * X * Z]))) for z in range(Z)] for x in range(X)] for y in range(Y)]
 
     else:
-        raise ValueError(f'Unsupported format {in_filename}: {full_bytes[:32]}')
+        raise ValueError('Unsupported format')
 
     return (X, Y, Z, maxcolors, list_3d)  # Output mimic that of pnglpng
 
@@ -277,7 +278,7 @@ def pnm2list(in_filename: str) -> tuple[int, int, int, int, list[list[list[int]]
     ║ list2bin ║
     ╚══════════╝ """
 
-def list2bin(list_3d: list[list[list[int]]], maxcolors: int, show_chessboard: bool = False) -> bytes:
+def list2bin(list_3d, maxcolors, show_chessboard) -> bytes:
     """Convert nested image data list to PGM P5 or PPM P6 (binary) data structure in memory to be used with Tkinter PhotoImage(data=...).
 
     Based on `Netpbm specifications<https://netpbm.sourceforge.net/doc/>`_.
@@ -343,7 +344,7 @@ def list2bin(list_3d: list[list[list[int]]], maxcolors: int, show_chessboard: bo
     else:
         datatype = 'H'
 
-    header = array.array('B', f'{magic}\n{X} {Y}\n{maxcolors}\n'.encode('ascii'))
+    header = array.array('B', (str(magic) + '\n' + str(X) + ' ' + str(Y) + '\n' + str(maxcolors) + '\n').encode('ascii'))
     content = array.array(datatype, list_1d)
 
     content.byteswap()  # Critical for 16 bits per channel
@@ -355,7 +356,7 @@ def list2bin(list_3d: list[list[list[int]]], maxcolors: int, show_chessboard: bo
     ║ list2pnm ║
     ╚══════════╝ """
 
-def list2pnm(out_filename: str, list_3d: list[list[list[int]]], maxcolors: int) -> None:
+def list2pnm(out_filename, list_3d, maxcolors):
     """Write binary PNM `out_filename` file; writing performed per row to reduce RAM usage.
 
     Usage
@@ -390,7 +391,7 @@ def list2pnm(out_filename: str, list_3d: list[list[list[int]]], maxcolors: int) 
         datatype = 'H'
 
     with open(out_filename, 'wb') as file_pnm:
-        file_pnm.write(array.array('B', f'{magic}\n{X} {Y}\n{maxcolors}\n'.encode('ascii')))  # Writing PNM header to file
+        file_pnm.write(array.array('B', (str(magic) + '\n' + str(X) + ' ' + str(Y) + '\n' + str(maxcolors) + '\n').encode('ascii')))  # Writing PNM header to file
         for y in range(Y):
             row_1d = [list_3d[y][x][z] for x in range(X) for z in range(Z_READ)]  # Flattening row
             row_array = array.array(datatype, row_1d)  # list[int] to array
@@ -404,7 +405,7 @@ def list2pnm(out_filename: str, list_3d: list[list[list[int]]], maxcolors: int) 
     ║ list2pnmascii ║
     ╚═══════════════╝ """
 
-def list2pnmascii(out_filename: str, list_3d: list[list[list[int]]], maxcolors: int) -> None:
+def list2pnmascii(out_filename, list_3d, maxcolors):
     """Write ASCII PNM `out_filename` file; writing performed per sample to reduce RAM usage.
 
     Usage
@@ -440,7 +441,7 @@ def list2pnmascii(out_filename: str, list_3d: list[list[list[int]]], maxcolors: 
         Z_READ = 3  # To skip alpha later
 
     with open(out_filename, 'w') as file_pnm:
-        file_pnm.write(f'{magic}\n{X} {Y}\n{maxcolors}\n')  # Writing file header
+        file_pnm.write(str(magic) + '\n' + str(X) + ' ' + str(Y) + '\n' + str(maxcolors) + '\n')  # Writing file header
         sample_count = 0  # Start counting samples to break line <= 60 char
         for y in range(Y):
             for x in range(X):
@@ -448,7 +449,7 @@ def list2pnmascii(out_filename: str, list_3d: list[list[list[int]]], maxcolors: 
                     sample_count += 1
                     if (sample_count % 3) == 0:  # 3 must fit any specs for line length
                         file_pnm.write('\n')  # Writing break to fulfill specs line <= 60 char
-                    file_pnm.write(f'{list_3d[y][x][z]} ')  # Writing channel value to file
+                    file_pnm.write(str(list_3d[y][x][z]) + ' ')  # Writing channel value to file
 
     return None  # End of 'list2pnmascii' function writing ASCII PPM/PGM file
 
@@ -457,7 +458,7 @@ def list2pnmascii(out_filename: str, list_3d: list[list[list[int]]], maxcolors: 
     ║ Create empty image ║
     ╚════════════════════╝ """
 
-def create_image(X: int, Y: int, Z: int) -> list[list[list[int]]]:
+def create_image(X, Y, Z):
     """Create empty 3D nested list of X * Y * Z size."""
 
     new_image = [

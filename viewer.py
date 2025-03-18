@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 """Test shell for `pnmlpnm <https://github.com/Dnyarri/PyPNM/>`_ module - Tkinter-based viewer.
+NOTE:
+This is special Python 3.4 version!
 
 Viewer does not use PPM file directly to display it with Tkinter PhotoImage(file=...) - 
 instead, it loads file (in this case - PPM, PGM, or PBM, just because it's a demo for pnmlpnm module anyway),
@@ -9,7 +11,6 @@ For example, it's able to display ascii PGM and PPM, not directly supported by T
 since it recodes them to binary on the fly.
 
 NOTE:
-
 This is special developer edition, including `PNG support <https://gitlab.com/drj11/pypng>`_,
 created deliberately to test LA and RGBA preview.
 
@@ -63,7 +64,7 @@ def GetSource():
     else:
         raise ValueError('Extension not recognized')
 
-    label_info.config(text=f'X={X} Y={Y} Z={Z} maxcolors={maxcolors}')
+    label_info.config(text='X=' + str(X) + ' Y=' + str(Y) + ' Z=' + str(Z) + ' maxcolors=' + str(maxcolors))
     sortir.update()
 
     """ ┌─────────────────────────────────────────────────────────────────────────┐
@@ -81,7 +82,7 @@ def GetSource():
     label_zoom.config(state='normal')
     butt_plus.config(state='normal', cursor='hand2')
     # updating zoom factor display
-    label_zoom.config(text=f'Zoom {zoom_factor}:1')
+    label_zoom.config(text='Zoom ' + str(zoom_factor) + ':1')
     # enabling "Save as..."
     butt02.config(state='normal', cursor='hand2')
     butt03.config(state='normal', cursor='hand2')
@@ -103,7 +104,7 @@ def SaveAsBin():
 
     # Open "Save as..." file
     savefilename = filedialog.asksaveasfilename(
-        title=f'Save {filetype} file',
+        title='Save file',
         filetypes=format,
         defaultextension=extension,
     )
@@ -131,7 +132,7 @@ def SaveAsAscii():
 
     # Open "Save as..." file
     savefilename = filedialog.asksaveasfilename(
-        title=f'Save {filetype} file',
+        title='Save file',
         filetypes=format,
         defaultextension=extension,
     )
@@ -176,7 +177,7 @@ def zoomIn():
     preview = preview.zoom(zoom_factor, zoom_factor)
     zanyato.config(text='Source', image=preview, compound='top')
     # updating zoom factor display
-    label_zoom.config(text=f'Zoom {zoom_factor}:1')
+    label_zoom.config(text='Zoom ' + str(zoom_factor) + ':1')
     # reenabling +/- buttons
     butt_minus.config(state='normal', cursor='hand2')
     if zoom_factor == 3:  # max zoom 3
@@ -192,7 +193,7 @@ def zoomOut():
     preview = preview.zoom(zoom_factor, zoom_factor)
     zanyato.config(text='Source', image=preview, compound='top')
     # updating zoom factor display
-    label_zoom.config(text=f'Zoom {zoom_factor}:1')
+    label_zoom.config(text='Zoom ' + str(zoom_factor) + ':1')
     # reenabling +/- buttons
     butt_plus.config(state='normal', cursor='hand2')
     if zoom_factor == 1:  # min zoom 1
@@ -209,7 +210,7 @@ sortir = Tk()
 
 zoom_factor = 1
 
-sortir.title(f'PNMViewer v. {__version__}')
+sortir.title('PNMViewer')
 sortir.geometry('+200+100')
 sortir.minsize(360, 210)
 
@@ -217,7 +218,7 @@ sortir.minsize(360, 210)
 icon = PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00')
 sortir.iconphoto(True, icon)
 
-label_info = Label(sortir, text=f'PNMViewer v.{__version__}, {pnmlpnm.__name__} v.{pnmlpnm.__version__}', font=('courier', 8), foreground='grey')
+label_info = Label(sortir, text='PNMViewer', font=('courier', 8), foreground='grey')
 label_info.pack(side='bottom', padx=0, pady=1, fill='both')
 
 frame_left = Frame(sortir, borderwidth=2, relief='groove')
@@ -252,7 +253,7 @@ butt_plus.pack(side='left', padx=0, pady=0, fill='both')
 butt_minus = Button(frame_zoom, text='-', font=('courier', 8), width=2, cursor='arrow', justify='center', state='disabled', command=zoomOut)
 butt_minus.pack(side='right', padx=0, pady=0, fill='both')
 
-label_zoom = Label(frame_zoom, text=f'Zoom {zoom_factor}:1', font=('courier', 8), state='disabled')
+label_zoom = Label(frame_zoom, text='Zoom ' + str(zoom_factor) + ':1', font=('courier', 8), state='disabled')
 label_zoom.pack(side='left', anchor='n', padx=2, pady=0, fill='both')
 
 sortir.mainloop()
