@@ -6,6 +6,9 @@
 
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pypnm) ![PyPI - Version](https://img.shields.io/pypi/v/pypnm) ![PyPI - Downloads](https://img.shields.io/pypi/dm/pypnm)
 
+> [!NOTE]
+> Это специальная версия, совместимая со старыми версиями Python. Данная версия успешно прошла испытания под Python 3.4 под Windows XP. Если у вас работает Python 3.10 или свежее, вам лучше переключиться на ветку [**main**](https://github.com/Dnyarri/PyPNM/tree/main/), где висит последняя доступная версия.
+
 ## Обзор и предпосылки
 
 Графические форматы PPM ([Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html)) и PGM ([Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html)) (частные случаи группы форматов PNM) представляют собой простейшие открытые форматы хранения изображений в пространствах RGB и L (серый), соответственно. Как ни странно, эта простота приводит к нежелательным побочным явлениям:

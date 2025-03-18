@@ -6,6 +6,9 @@
 
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pypnm) ![PyPI - Version](https://img.shields.io/pypi/v/pypnm) ![PyPI - Downloads](https://img.shields.io/pypi/dm/pypnm)
 
+> [!NOTE]
+> This is a special version, deliberately made to be compatible with old versions of Python 3. It was successfully tested with Python 3.4 under Windows XP, and may probably work even with something more antique. If you have Python 3.10 or above, switch to [**main** branch](https://github.com/Dnyarri/PyPNM/tree/main/).
+
 ## Overview and justification
 
 PPM ([Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html)) and PGM ([Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html)) (particular cases of PNM format group) are simplest file formats for RGB and L images, correspondingly. Paradoxically, this simplicity lead to some adverse consequences:

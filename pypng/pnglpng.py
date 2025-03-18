@@ -65,13 +65,15 @@ Fixed missing `maxcolors` for 1-bit images.
 
 25.03.01    Improved robustness, `list2png` is skipping any possible input channel above 4-th.
 
+25.03.01.34 Special build of 25.03.01 version, downgraded to Python 3.4.
+
 """
 
 __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '25.03.01'
+__version__ = '25.03.01.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'

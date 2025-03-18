@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 """Test shell for `pnmlpnm <https://github.com/Dnyarri/PyPNM/>`_ module - Tkinter-based viewer.
-NOTE:
-This is special Python 3.4 version!
+
+NOTE: This is special Python 3.4 compatible version!
 
 Viewer does not use PPM file directly to display it with Tkinter PhotoImage(file=...) - 
 instead, it loads file (in this case - PPM, PGM, or PBM, just because it's a demo for pnmlpnm module anyway),
@@ -10,17 +10,13 @@ then constructs PPM-like bytes data object in memory, and then displays it using
 For example, it's able to display ascii PGM and PPM, not directly supported by Tkinter,
 since it recodes them to binary on the fly.
 
-NOTE:
-This is special developer edition, including `PNG support <https://gitlab.com/drj11/pypng>`_,
-created deliberately to test LA and RGBA preview.
-
 """
 
 __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.15.10.14'
+__version__ = '1.15.10.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -96,15 +92,13 @@ def SaveAsBin():
     if Z < 3:
         format = [('Portable grey map', '.pgm')]
         extension = ('Portable grey map', '.pgm')
-        filetype = 'PGM'
     else:
         format = [('Portable pixel map', '.ppm')]
         extension = ('Portable pixel map', '.ppm')
-        filetype = 'PPM'
 
     # Open "Save as..." file
     savefilename = filedialog.asksaveasfilename(
-        title='Save file',
+        title='Save PNM file',
         filetypes=format,
         defaultextension=extension,
     )
@@ -124,15 +118,13 @@ def SaveAsAscii():
     if Z < 3:
         format = [('Portable grey map', '.pgm')]
         extension = ('Portable grey map', '.pgm')
-        filetype = 'PGM'
     else:
         format = [('Portable pixel map', '.ppm')]
         extension = ('Portable pixel map', '.ppm')
-        filetype = 'PPM'
 
     # Open "Save as..." file
     savefilename = filedialog.asksaveasfilename(
-        title='Save file',
+        title='Save PNM file',
         filetypes=format,
         defaultextension=extension,
     )
@@ -218,7 +210,7 @@ sortir.minsize(360, 210)
 icon = PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00')
 sortir.iconphoto(True, icon)
 
-label_info = Label(sortir, text='PNMViewer', font=('courier', 8), foreground='grey')
+label_info = Label(sortir, text='PNMViewer for Python 3.4', font=('courier', 8), foreground='grey')
 label_info.pack(side='bottom', padx=0, pady=1, fill='both')
 
 frame_left = Frame(sortir, borderwidth=2, relief='groove')
