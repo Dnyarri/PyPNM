@@ -41,6 +41,10 @@ Current PyPNM module read and write capabilities are briefly summarized below.
 | 1 bit ink on/off | P4 Binary PBM | ✅ | ❌ |
 | 1 bit ink on/off | P1 ASCII PBM | ✅ | ❌ |
 
+## Python compatibility
+
+Current version of PyPNM was successfully tested with Python 3.10 and above. However, there is also a [Python 3.4 compatible PyPNM version](https://github.com/Dnyarri/PyPNM/tree/py34/), proven to work with Python 3.4 under Windows XP.
+
 ## Target image representation
 
 Main goal of module under discussion is not just bytes reading and writing but representing image as some logically organized structure for further image editing.
