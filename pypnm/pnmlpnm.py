@@ -96,7 +96,8 @@ controlled by optional `show_chessboard` bool added to arguments.
 Default is `False` (i.e. simply ignoring alpha) for backward compatibility.
 Improved robustness.
 
-1.15.19.10  General branch shortening and more cleanup attempts.
+1.15.19.19  General branch shortening and more cleanup. Minor bogus stuff removed.
+Yet another final version ;-)
 
 """
 
@@ -104,7 +105,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.15.19.10'
+__version__ = '1.15.19.19'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -347,14 +348,14 @@ def list2bin(list_3d: list[list[list[int]]], maxcolors: int, show_chessboard: bo
     else:
         datatype = 'H'
 
-    header = array.array('B', f'{magic}\n{X} {Y}\n{maxcolors}\n'.encode('ascii'))
     content = array.array(datatype, list_1d)
 
     del list_1d  # Cleanup
 
     content.byteswap()  # Critical for 16 bits per channel
 
-    return header.tobytes() + content.tobytes()  # End of 'list2bin' list to PNM conversion function
+    return f'{magic}\n{X} {Y}\n{maxcolors}\n'.encode('ascii') + content.tobytes()
+# End of 'list2bin' list to in-memory PNM conversion function
 
 
 """ ╔══════════╗
@@ -404,7 +405,8 @@ def list2pnm(out_filename: str, list_3d: list[list[list[int]]], maxcolors: int) 
             row_array.byteswap()  # Critical for 16 bits per channel
             file_pnm.write(row_array)  # Adding row bytes array to file
 
-    return None  # End of 'list2pnm' function writing binary PPM/PGM file
+    return None
+# End of 'list2pnm' function writing binary PPM/PGM file
 
 
 """ ╔═══════════════╗
@@ -458,7 +460,8 @@ def list2pnmascii(out_filename: str, list_3d: list[list[list[int]]], maxcolors: 
                         file_pnm.write('\n')  # Writing break to fulfill specs line <= 60 char
                     file_pnm.write(f'{list_3d[y][x][z]} ')  # Writing channel value to file
 
-    return None  # End of 'list2pnmascii' function writing ASCII PPM/PGM file
+    return None
+# End of 'list2pnmascii' function writing ASCII PPM/PGM file
 
 
 """ ╔════════════════════╗
@@ -475,7 +478,8 @@ def create_image(X: int, Y: int, Z: int) -> list[list[list[int]]]:
                     ] for y in range(Y)
                 ]
 
-    return new_image  # End of 'create_image' empty nested 3D list creation
+    return new_image
+# End of 'create_image' empty nested 3D list creation
 
 
 # --------------------------------------------------------------
