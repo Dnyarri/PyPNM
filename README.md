@@ -4,8 +4,6 @@
 
 # PyPNM - Pure Python PPM and PGM image files reading and writing module
 
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pypnm) ![PyPI - Version](https://img.shields.io/pypi/v/pypnm) ![PyPI - Downloads](https://img.shields.io/pypi/dm/pypnm)
-
 > [!NOTE]
 > This is a special version, deliberately made to be compatible with old versions of Python 3. It was successfully tested with Python 3.4 under Windows XP, and may probably work even with something more antique. If you have Python 3.10 or above, switch to [**main** branch](https://github.com/Dnyarri/PyPNM/tree/main/).
 

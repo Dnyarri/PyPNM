@@ -4,8 +4,6 @@
 
 # PyPNM - модуль чтения и записи графических форматов PPM и PGM на чистом Python
 
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pypnm) ![PyPI - Version](https://img.shields.io/pypi/v/pypnm) ![PyPI - Downloads](https://img.shields.io/pypi/dm/pypnm)
-
 > [!NOTE]
 > Это специальная версия, совместимая со старыми версиями Python. Данная версия успешно прошла испытания под Python 3.4 под Windows XP. Если у вас работает Python 3.10 или свежее, вам лучше переключиться на ветку [**main**](https://github.com/Dnyarri/PyPNM/tree/main/), где висит последняя доступная версия.
 
