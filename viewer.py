@@ -2,7 +2,7 @@
 
 """Test shell for `pnmlpnm <https://github.com/Dnyarri/PyPNM/>`_ module - Tkinter-based viewer.
 
-Viewer does not use PPM file directly to display it with Tkinter PhotoImage(file=...) - 
+Viewer does not use PPM file directly to display it with Tkinter PhotoImage(file=...);
 instead, it loads file (in this case - PPM, PGM, or PBM, just because it's a demo for pnmlpnm module anyway),
 then constructs PPM-like bytes data object in memory, and then displays it using Tkinter PhotoImage(data=...).
 For example, it's able to display ascii PGM and PPM, not directly supported by Tkinter,
@@ -142,6 +142,7 @@ def SaveAsAscii():
         │ Converting list to string and saving as "savefilename" │
         └───────────────────────────────────────────────────────-┘ """
     pnmlpnm.list2pnmascii(savefilename, image3D, maxcolors)
+
 
 def SaveAsPNG():
     """Once pressed on Save PNG"""
