@@ -16,7 +16,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.15.10.34'
+__version__ = '1.15.24.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -202,7 +202,7 @@ sortir = Tk()
 
 zoom_factor = 1
 
-sortir.title('PNMViewer')
+sortir.title('PNMViewer for Python 3.4')
 sortir.geometry('+200+100')
 sortir.minsize(360, 210)
 
@@ -210,7 +210,7 @@ sortir.minsize(360, 210)
 icon = PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00')
 sortir.iconphoto(True, icon)
 
-label_info = Label(sortir, text='PNMViewer for Python 3.4', font=('courier', 8), foreground='grey')
+label_info = Label(sortir, text='PNMViewer ' + str(pnmlpnm.__name__) + ' v. ' + str(pnmlpnm.__version__), font=('courier', 8), foreground='grey')
 label_info.pack(side='bottom', padx=0, pady=1, fill='both')
 
 frame_left = Frame(sortir, borderwidth=2, relief='groove')

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 """Functions to read PPM and PGM files to nested 3D list of int and/or write back.
-NOTE: This is special Python 3.4 version!
+
+NOTE: This is special PyPNM build for PyPI, compatible with Python 3.4!
 
 Overview
 ---------
@@ -105,7 +106,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.15.1.34'
+__version__ = '1.15.19.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -189,6 +190,8 @@ def pnm2list(in_filename):
 
             list_1d = array_1d.tolist()
 
+            del array_1d  # Cleanup
+
             list_3d = [
                         [
                             [
@@ -196,6 +199,8 @@ def pnm2list(in_filename):
                             ] for x in range(X)
                         ] for y in range(Y)
                     ]
+
+            del list_1d  # Cleanup
 
         if (magic == 'P3') or (magic == 'P2'):
             """ ┌──────────────────────────┐
@@ -210,6 +215,8 @@ def pnm2list(in_filename):
                             ] for x in range(X)
                         ] for y in range(Y)
                     ]
+
+            del list_1d  # Cleanup
 
     elif full_bytes.startswith((b'P4', b'P1')):
         """ ┌────────────────┐
@@ -269,6 +276,8 @@ def pnm2list(in_filename):
             list_1d = list(str(b''.join(filtered_bytes.split())))[2:-1]  # Slicing off junk chars like 'b', "'"
 
             list_3d = [[[(255 * (1 - int(list_1d[z + x * Z + y * X * Z]))) for z in range(Z)] for x in range(X)] for y in range(Y)]
+
+            del list_1d  # Cleanup
 
     else:
         raise ValueError('Unsupported format')
@@ -346,12 +355,12 @@ def list2bin(list_3d, maxcolors, show_chessboard) -> bytes:
     else:
         datatype = 'H'
 
-    header = array.array('B', (str(magic) + '\n' + str(X) + ' ' + str(Y) + '\n' + str(maxcolors) + '\n').encode('ascii'))
+    # header = array.array('B', (str(magic) + '\n' + str(X) + ' ' + str(Y) + '\n' + str(maxcolors) + '\n').encode('ascii'))
     content = array.array(datatype, list_1d)
 
     content.byteswap()  # Critical for 16 bits per channel
 
-    return (header.tobytes() + content.tobytes())  # End of 'list2bin' list to PNM conversion function
+    return ((str(magic) + '\n' + str(X) + ' ' + str(Y) + '\n' + str(maxcolors) + '\n').encode('ascii') + content.tobytes())  # End of 'list2bin' list to PNM conversion function
 
 
 """ ╔══════════╗
