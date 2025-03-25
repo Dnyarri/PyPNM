@@ -105,7 +105,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.15.19.19'
+__version__ = '1.15.25.7'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -192,7 +192,13 @@ def pnm2list(in_filename: str) -> tuple[int, int, int, int, list[list[list[int]]
 
             del array_1d  # Cleanup
 
-            list_3d = [[[list_1d[z + x * Z + y * X * Z] for z in range(Z)] for x in range(X)] for y in range(Y)]
+            list_3d = [
+                        [
+                            [
+                                list_1d[z + x * Z + y * X * Z] for z in range(Z)
+                            ] for x in range(X)
+                        ] for y in range(Y)
+                    ]
 
             del list_1d  # Cleanup
 
@@ -204,7 +210,13 @@ def pnm2list(in_filename: str) -> tuple[int, int, int, int, list[list[list[int]]
                 └──────────────────────────┘ """
             list_1d = filtered_bytes.split()
 
-            list_3d = [[[int(list_1d[z + x * Z + y * X * Z]) for z in range(Z)] for x in range(X)] for y in range(Y)]
+            list_3d = [
+                        [
+                            [
+                                int(list_1d[z + x * Z + y * X * Z]) for z in range(Z)
+                            ] for x in range(X)
+                        ] for y in range(Y)
+                    ]
 
             del list_1d  # Cleanup
 
@@ -269,7 +281,13 @@ def pnm2list(in_filename: str) -> tuple[int, int, int, int, list[list[list[int]]
             """ Removing any formatting by consecutive split/join, then changing types to turn bit char into int while reshaping to 3D nested list probably is not the fastest solution but I will think about it tomorrow. """
             list_1d = list(str(b''.join(filtered_bytes.split())))[2:-1]  # Slicing off junk chars like 'b', "'"
 
-            list_3d = [[[(255 * (1 - int(list_1d[z + x * Z + y * X * Z]))) for z in range(Z)] for x in range(X)] for y in range(Y)]
+            list_3d = [
+                        [
+                            [
+                                (255 * (1 - int(list_1d[z + x * Z + y * X * Z]))) for z in range(Z)
+                            ] for x in range(X)
+                        ] for y in range(Y)
+                    ]
 
             del list_1d  # Cleanup
 
@@ -277,6 +295,7 @@ def pnm2list(in_filename: str) -> tuple[int, int, int, int, list[list[list[int]]
 
     else:
         raise ValueError(f'Unsupported format {in_filename}: {full_bytes[:32]}')
+# End of pnm2list PNM reading function
 
 
 """ ╔══════════╗
