@@ -4,7 +4,7 @@
 
 # PyPNM - Pure Python PPM and PGM image files reading and writing module
 
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pypnm) ![PyPI - Version](https://img.shields.io/pypi/v/pypnm) ![PyPI - Downloads](https://img.shields.io/pypi/dm/pypnm)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/pypnm)
 
 ## Overview and justification
 
@@ -159,4 +159,4 @@ As a result, you may use *pnmlpnm* and Tkinter to visualize any data that can be
 
 7. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - usage example, contains image filtering application «Averager», implementing non-standard adaptive image averaging. Filter before/after preview based on statically linked PyPNM list2bin code and Tkinter `PhotoImage(data=...)` class. As a result, fully operational pure Python interactive image filtering application ensued.
 
-8. [img2mesh](https://dnyarri.github.io/img2mesh.html) - usage example, programs for converting bitmap height fields to 3D triangle meshes in various formats. 3D conversion modules take x, y, z data as nested list of the same structure, as PyPNM output, that makes building 2D➔3D converted just a matter of pouring data from one module to another.
+8. [img2mesh](https://dnyarri.github.io/img2mesh.html) - usage example, programs for converting bitmap height fields to 3D triangle meshes in various formats. 3D conversion modules take x, y, z data as nested list of the same structure, as PyPNM output, that makes 2D➔3D conversion just a matter of pouring data from one module to another.
