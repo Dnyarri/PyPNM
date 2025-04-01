@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
-"""Functions to read PPM and PGM files to nested 3D list of int and/or write back.
+"""PPM and PGM image files reading, displaying and writing for Python 3.4 - 3.13.
 
-NOTE: This is special PyPNM build for PyPI, compatible with Python 3.4!
+NOTE: This is special extended compatibility `PyPNM build for PyPI <https://pypi.org/project/PyPNM/>`_, tested with Python 3.4 and above.
 
 Overview
 ---------
@@ -65,7 +65,7 @@ for writing data from `list_3d` nested list to ASCII PPM/PGM file `out_filename`
 
 Copyright and redistribution
 -----------------------------
-Written by `Ilya Razmanov <https://dnyarri.github.io/>`_ to provide working with PPM/PGM files
+Written by `Ilya Razmanov <https://dnyarri.github.io/>`_ to facilitate working with PPM/PGM files
 and converting image-like data to PPM/PGM bytes to be displayed with Tkinter `PhotoImage` class.
 
 May be freely used, redistributed and modified.
@@ -80,33 +80,13 @@ References
 
 `PyPNM at PyPI <https://pypi.org/project/PyPNM/>`_
 
-Version history
-----------------
-
-0.11.26.0   Initial working version 26 Nov 2024.
-
-1.12.14.1   Public release at `PyPI <https://pypi.org/project/PyPNM/>`_.
-
-1.13.09.0   Complete rewriting of `pnm2list` using `re` and `array`; PPM and PGM support rewritten.
-
-1.13.10.5   Header pattern seem to comprise all problematic cases; PBM support rewritten.
-
-1.14.08.12  File output rewritten to reduce memory usage; `list2pnm` per row, `list2pnmascii` per sample.
-
-1.15.1.1    Rendering preview for LA and RGBA against chessboard added to `list2bin`,
-controlled by optional `show_chessboard` bool added to arguments.
-Default is `False` (i.e. simply ignoring alpha) for backward compatibility.
-Improved robustness.
-
-1.15.1.34   Special build of 1.15.1.1 version, downgraded to Python 3.4.
-
 """
 
 __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.15.19.34'
+__version__ = '1.16.1.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -355,12 +335,12 @@ def list2bin(list_3d, maxcolors, show_chessboard) -> bytes:
     else:
         datatype = 'H'
 
-    # header = array.array('B', (str(magic) + '\n' + str(X) + ' ' + str(Y) + '\n' + str(maxcolors) + '\n').encode('ascii'))
     content = array.array(datatype, list_1d)
 
     content.byteswap()  # Critical for 16 bits per channel
 
-    return ((str(magic) + '\n' + str(X) + ' ' + str(Y) + '\n' + str(maxcolors) + '\n').encode('ascii') + content.tobytes())  # End of 'list2bin' list to PNM conversion function
+    return b''.join((''.join((str(magic), '\n', str(X), ' ', str(Y), '\n', str(maxcolors), '\n')).encode('ascii'), content.tobytes()))
+# End of 'list2bin' list to in-memory PNM conversion function
 
 
 """ ╔══════════╗
@@ -402,7 +382,7 @@ def list2pnm(out_filename, list_3d, maxcolors):
         datatype = 'H'
 
     with open(out_filename, 'wb') as file_pnm:
-        file_pnm.write(array.array('B', (str(magic) + '\n' + str(X) + ' ' + str(Y) + '\n' + str(maxcolors) + '\n').encode('ascii')))  # Writing PNM header to file
+        file_pnm.write(''.join((str(magic), '\n', str(X), ' ', str(Y), '\n', str(maxcolors), '\n')).encode('ascii'))  # Writing PNM header to file
         for y in range(Y):
             row_1d = [list_3d[y][x][z] for x in range(X) for z in range(Z_READ)]  # Flattening row
             row_array = array.array(datatype, row_1d)  # list[int] to array
@@ -452,7 +432,7 @@ def list2pnmascii(out_filename, list_3d, maxcolors):
         Z_READ = 3  # To skip alpha later
 
     with open(out_filename, 'w') as file_pnm:
-        file_pnm.write(str(magic) + '\n' + str(X) + ' ' + str(Y) + '\n' + str(maxcolors) + '\n')  # Writing file header
+        file_pnm.write(''.join((str(magic), '\n', str(X), ' ', str(Y), '\n', str(maxcolors), '\n')))  # Writing PNM header to file
         sample_count = 0  # Start counting samples to break line <= 60 char
         for y in range(Y):
             for x in range(X):
@@ -460,7 +440,7 @@ def list2pnmascii(out_filename, list_3d, maxcolors):
                     sample_count += 1
                     if (sample_count % 3) == 0:  # 3 must fit any specs for line length
                         file_pnm.write('\n')  # Writing break to fulfill specs line <= 60 char
-                    file_pnm.write(str(list_3d[y][x][z]) + ' ')  # Writing channel value to file
+                    file_pnm.write(''.join((str(list_3d[y][x][z]), ' ')))  # Writing channel value to file
 
     return None  # End of 'list2pnmascii' function writing ASCII PPM/PGM file
 
