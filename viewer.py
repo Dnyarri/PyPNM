@@ -19,7 +19,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.15.10.14'
+__version__ = '1.16.1.22'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -69,7 +69,7 @@ def GetSource():
     """ ┌─────────────────────────────────────────────────────────────────────────┐
         │ Converting list to bytes of PPM-like structure "preview_data" in memory │
         └────────────────────────────────────────────────────────────────────────-┘ """
-    preview_data = pnmlpnm.list2bin(image3D, maxcolors, True)
+    preview_data = pnmlpnm.list2bin(image3D, maxcolors, show_chessboard=True)
 
     """ ┌────────────────────────────────────────────────┐
         │ Now showing "preview_data" bytes using Tkinter │
