@@ -86,7 +86,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.16.1.34'
+__version__ = '1.16.4.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -269,7 +269,7 @@ def pnm2list(in_filename):
     ║ list2bin ║
     ╚══════════╝ """
 
-def list2bin(list_3d, maxcolors, show_chessboard) -> bytes:
+def list2bin(list_3d, maxcolors, show_chessboard=False):
     """Convert nested image data list to PGM P5 or PPM P6 (binary) data structure in memory to be used with Tkinter PhotoImage(data=...).
 
     Based on `Netpbm specifications<https://netpbm.sourceforge.net/doc/>`_.
@@ -291,7 +291,7 @@ def list2bin(list_3d, maxcolors, show_chessboard) -> bytes:
 
     """
 
-    def _chess(x: int, y: int) -> int:
+    def _chess(x: int, y: int):
         """Chessboard pattern, size and color match Photoshop 7.0.
 
         Photoshop chess pattern preset parameters:

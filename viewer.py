@@ -197,7 +197,7 @@ def zoomIn(event=None):
     zoom_factor = min(zoom_factor + 1, 4)  # max zoom 5
     preview = PhotoImage(data=preview_data)
     preview = zoom_do[zoom_factor]
-    zanyato.config(text='Source', image=preview, compound='top')
+    zanyato.config(image=preview, compound='top')
     # updating zoom factor display
     label_zoom.config(text=zoom_show[zoom_factor])
     # reenabling +/- buttons
@@ -213,7 +213,7 @@ def zoomOut(event=None):
     zoom_factor = max(zoom_factor - 1, -4)  # min zoom 1/5
     preview = PhotoImage(data=preview_data)
     preview = zoom_do[zoom_factor]
-    zanyato.config(text='Source', image=preview, compound='top')
+    zanyato.config(image=preview, compound='top')
     # updating zoom factor display
     label_zoom.config(text=zoom_show[zoom_factor])
     # reenabling +/- buttons

@@ -31,4 +31,6 @@ Improved robustness.
 (f-strings replaced with concatenation, type hints removed, *etc.*); `.34` branch split from `main`
 (versioning for this compatibility branch is MAINVERSION.MMsinceJan2024.DD.34)
 
-1.16.1.34  General cleanup, concatenations replaced with join, minor speedup.
+1.16.1.34   General cleanup, concatenations replaced with join, minor speedup.
+
+1.16.4.34   Bugfix.
