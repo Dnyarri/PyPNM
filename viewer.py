@@ -14,7 +14,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.16.3.15'
+__version__ = '1.16.4.8'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -60,7 +60,7 @@ def GetSource(event=None):
         └────────────────────────────────────────────────┘ """
     preview = PhotoImage(data=preview_data)
 
-    zoom_show = {  # What to show below preview
+    zoom_show = {  # Text to show below preview
         -4: 'Zoom 1:5',
         -3: 'Zoom 1:4',
         -2: 'Zoom 1:3',
@@ -71,7 +71,7 @@ def GetSource(event=None):
         3: 'Zoom 4:1',
         4: 'Zoom 5:1',
     }
-    zoom_do = {  # What to do to preview
+    zoom_do = {  # Actions to zoom preview
         -4: preview.subsample(5, 5),
         -3: preview.subsample(4, 4),
         -2: preview.subsample(3, 3),
@@ -84,7 +84,7 @@ def GetSource(event=None):
     }
 
     preview = zoom_do[zoom_factor]  # "zoom" zooms in, "subsample" zooms out
-    zanyato.config(text='Source', image=preview, compound='top', state='normal')
+    zanyato.config(text='Source', font=('helvetica', 8), image=preview, compound='top', state='normal')
     # binding zoom on preview click
     zanyato.bind('<Button-1>', zoomIn)  # left
     zanyato.bind('<Alt-Button-1>', zoomOut)  # left
@@ -160,7 +160,7 @@ def zoomIn(event=None):
     zoom_factor = min(zoom_factor + 1, 4)  # max zoom 5
     preview = PhotoImage(data=preview_data)
     preview = zoom_do[zoom_factor]
-    zanyato.config(text='Source', image=preview, compound='top')
+    zanyato.config(image=preview, compound='top')
     # updating zoom factor display
     label_zoom.config(text=zoom_show[zoom_factor])
     # reenabling +/- buttons
@@ -176,7 +176,7 @@ def zoomOut(event=None):
     zoom_factor = max(zoom_factor - 1, -4)  # min zoom 1/5
     preview = PhotoImage(data=preview_data)
     preview = zoom_do[zoom_factor]
-    zanyato.config(text='Source', image=preview, compound='top')
+    zanyato.config(image=preview, compound='top')
     # updating zoom factor display
     label_zoom.config(text=zoom_show[zoom_factor])
     # reenabling +/- buttons
@@ -223,7 +223,7 @@ butt03.pack(side='top', padx=4, pady=2, fill='both')
 butt99 = Button(frame_left, text='Exit', font=('helvetica', 16), cursor='hand2', justify='center', command=DisMiss)
 butt99.pack(side='bottom', padx=4, pady=[12, 2], fill='both')
 
-zanyato = Label(frame_right, text='Preview area', font=('helvetica', 10), justify='center', borderwidth=2, relief='groove')
+zanyato = Label(frame_right, text='Preview area'.center(16, ' '), font=('helvetica', 16), justify='center', borderwidth=2, relief='groove', state='disabled')
 zanyato.bind('<Button-1>', GetSource)
 zanyato.bind('<Button-2>', GetSource)
 zanyato.bind('<Button-3>', GetSource)
