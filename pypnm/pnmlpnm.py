@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""PPM and PGM image files reading, displaying and writing for Python 3.4 - 3.13.
+"""PPM and PGM image files reading, displaying and writing for Python >=3.4.
 
 NOTE: This is special extended compatibility `PyPNM build for PyPI <https://pypi.org/project/PyPNM/>`_, tested with Python 3.4 and above.
 
@@ -269,7 +269,7 @@ def pnm2list(in_filename):
     ║ list2bin ║
     ╚══════════╝ """
 
-def list2bin(list_3d, maxcolors, show_chessboard=False):
+def list2bin(list_3d, maxcolors, show_chessboard = False):
     """Convert nested image data list to PGM P5 or PPM P6 (binary) data structure in memory to be used with Tkinter PhotoImage(data=...).
 
     Based on `Netpbm specifications<https://netpbm.sourceforge.net/doc/>`_.
@@ -296,7 +296,7 @@ def list2bin(list_3d, maxcolors, show_chessboard=False):
 
         Photoshop chess pattern preset parameters:
         Small: 4 px; Medium: 8 px, Large: 16 px
-        Light: 0.8, 1; Medium: 0.4, 0.6; Dark: 0.2, 0.4 of maxcolors
+        Light: (0.8, 1); Medium: (0.4, 0.6); Dark: (0.2, 0.4) of maxcolors
 
         """
         return int(maxcolors * 0.8) if ((y // 8) % 2) == ((x // 8) % 2) else maxcolors
