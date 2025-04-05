@@ -19,7 +19,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.16.3.15'
+__version__ = '1.16.5.9'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -40,7 +40,7 @@ def DisMiss():
 def GetSource(event=None):
     """Opening source image and redefining other controls state"""
 
-    global zoom_factor, zoom_do, zoom_show, sourcefilename, preview, preview_data
+    global zoom_factor, zoom_do, zoom_show, preview, preview_data
     global X, Y, Z, maxcolors, image3D
     zoom_factor = 0
     sourcefilename = filedialog.askopenfilename(title='Open image file', filetypes=[('Supported formats', '.png .ppm .pgm .pbm'), ('PNG', '.png'), ('PNM', '.ppm .pgm .pbm')])
@@ -70,7 +70,7 @@ def GetSource(event=None):
     """ ┌─────────────────────────────────────────────────────────────────────────┐
         │ Converting list to bytes of PPM-like structure "preview_data" in memory │
         └────────────────────────────────────────────────────────────────────────-┘ """
-    preview_data = pnmlpnm.list2bin(image3D, maxcolors, show_chessboard=True)
+    preview_data = pnmlpnm.list2bin(image3D, maxcolors, show_chessboard = True)
 
     """ ┌────────────────────────────────────────────────┐
         │ Now showing "preview_data" bytes using Tkinter │
@@ -88,7 +88,7 @@ def GetSource(event=None):
         3: 'Zoom 4:1',
         4: 'Zoom 5:1',
     }
-    zoom_do = {  # What to do to preview
+    zoom_do = {  # What to do to preview; "zoom" zooms in, "subsample" zooms out
         -4: preview.subsample(5, 5),
         -3: preview.subsample(4, 4),
         -2: preview.subsample(3, 3),
@@ -100,13 +100,13 @@ def GetSource(event=None):
         4: preview.zoom(5, 5),
     }
 
-    preview = zoom_do[zoom_factor]  # "zoom" zooms in, "subsample" zooms out
-    zanyato.config(text='Source', image=preview, compound='top', state='normal')
+    preview = zoom_do[zoom_factor]
+    zanyato.config(text='Source', font=('helvetica', 8), image=preview, compound='top', foreground='grey')
     # binding zoom on preview click
-    zanyato.bind('<Button-1>', zoomIn)  # left
-    zanyato.bind('<Alt-Button-1>', zoomOut)  # left
-    zanyato.bind('<Button-2>', zoomOut)  # middle
-    zanyato.bind('<Button-3>', zoomOut)  # right
+    zanyato.bind('<Button-1>', zoomIn)  # left click
+    zanyato.bind('<Alt-Button-1>', zoomOut)  # Alt + left click
+    zanyato.bind('<Button-2>', zoomOut)  # middle click
+    zanyato.bind('<Button-3>', zoomOut)  # right click
     # enabling zoom buttons
     butt_plus.config(state='normal', cursor='hand2')
     butt_minus.config(state='normal', cursor='hand2')
@@ -121,7 +121,7 @@ def GetSource(event=None):
 def SaveAsBin():
     """Once pressed on Save binary"""
 
-    # Adjusting "Save to" formats to be displayed according to bitdepth
+    # Adjusting "Save to" formats to be displayed according to channel number
     if Z < 3:
         format = [('Portable grey map', '.pgm')]
         extension = ('Portable grey map', '.pgm')
@@ -149,7 +149,7 @@ def SaveAsBin():
 def SaveAsAscii():
     """Once pressed on Save ASCII"""
 
-    # Adjusting "Save to" formats to be displayed according to bitdepth
+    # Adjusting "Save to" formats to be displayed according to channel number
     if Z < 3:
         format = [('Portable grey map', '.pgm')]
         extension = ('Portable grey map', '.pgm')
@@ -205,7 +205,7 @@ def zoomIn(event=None):
     zoom_factor = min(zoom_factor + 1, 4)  # max zoom 5
     preview = PhotoImage(data=preview_data)
     preview = zoom_do[zoom_factor]
-    zanyato.config(text='Source', image=preview, compound='top')
+    zanyato.config(image=preview, compound='top')
     # updating zoom factor display
     label_zoom.config(text=zoom_show[zoom_factor])
     # reenabling +/- buttons
@@ -221,7 +221,7 @@ def zoomOut(event=None):
     zoom_factor = max(zoom_factor - 1, -4)  # min zoom 1/5
     preview = PhotoImage(data=preview_data)
     preview = zoom_do[zoom_factor]
-    zanyato.config(text='Source', image=preview, compound='top')
+    zanyato.config(image=preview, compound='top')
     # updating zoom factor display
     label_zoom.config(text=zoom_show[zoom_factor])
     # reenabling +/- buttons
@@ -242,7 +242,7 @@ zoom_factor = 0
 
 sortir.title(f'PNMViewer v. {__version__}')
 sortir.geometry('+200+100')
-sortir.minsize(360, 210)
+sortir.minsize(360, 240)
 
 # Main dialog icon is PPM as well!
 icon = PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00')
@@ -271,7 +271,7 @@ butt04.pack(side='top', padx=4, pady=2, fill='both')
 butt99 = Button(frame_left, text='Exit', font=('helvetica', 16), cursor='hand2', justify='center', command=DisMiss)
 butt99.pack(side='bottom', padx=4, pady=[12, 2], fill='both')
 
-zanyato = Label(frame_right, text='Preview area', font=('helvetica', 10), justify='center', borderwidth=2, relief='groove')
+zanyato = Label(frame_right, text='Preview area'.center(16, ' '), font=('helvetica', 16), justify='center', borderwidth=2, relief='groove', foreground='brown', background='light grey')
 zanyato.bind('<Button-1>', GetSource)
 zanyato.bind('<Button-2>', GetSource)
 zanyato.bind('<Button-3>', GetSource)

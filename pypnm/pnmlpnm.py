@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""PPM and PGM image files reading, displaying and writing for Python 3.10 - 3.13.
+"""PPM and PGM image files reading, displaying and writing for Python >= 3.10.
 
 Overview
 ---------
