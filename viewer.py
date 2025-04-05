@@ -14,7 +14,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.16.4.8'
+__version__ = '1.16.5.9'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -33,7 +33,7 @@ def DisMiss():
 def GetSource(event=None):
     """Opening source image and redefining other controls state"""
 
-    global zoom_factor, zoom_do, zoom_show, sourcefilename, preview, preview_data
+    global zoom_factor, zoom_do, zoom_show, preview, preview_data
     global X, Y, Z, maxcolors, image3D
     zoom_factor = 0
     sourcefilename = filedialog.askopenfilename(title='Open PPM/PGM file to view', filetypes=[('Portable map formats', '.ppm .pgm .pbm')])
@@ -71,7 +71,7 @@ def GetSource(event=None):
         3: 'Zoom 4:1',
         4: 'Zoom 5:1',
     }
-    zoom_do = {  # Actions to zoom preview
+    zoom_do = {  # Actions to zoom preview; "zoom" zooms in, "subsample" zooms out
         -4: preview.subsample(5, 5),
         -3: preview.subsample(4, 4),
         -2: preview.subsample(3, 3),
@@ -83,18 +83,19 @@ def GetSource(event=None):
         4: preview.zoom(5, 5),
     }
 
-    preview = zoom_do[zoom_factor]  # "zoom" zooms in, "subsample" zooms out
-    zanyato.config(text='Source', font=('helvetica', 8), image=preview, compound='top', state='normal')
+    preview = zoom_do[zoom_factor]
+    zanyato.config(text='Source', font=('helvetica', 8), image=preview, compound='top', foreground='grey')
     # binding zoom on preview click
-    zanyato.bind('<Button-1>', zoomIn)  # left
-    zanyato.bind('<Alt-Button-1>', zoomOut)  # left
-    zanyato.bind('<Button-2>', zoomOut)  # middle
-    zanyato.bind('<Button-3>', zoomOut)  # right
+    zanyato.bind('<Button-1>', zoomIn)  # left click
+    zanyato.bind('<Alt-Button-1>', zoomOut)  # Alt + left click
+    zanyato.bind('<Button-2>', zoomOut)  # middle click
+    zanyato.bind('<Button-3>', zoomOut)  # right click
     # enabling zoom buttons
     butt_plus.config(state='normal', cursor='hand2')
     butt_minus.config(state='normal', cursor='hand2')
     # updating zoom label display
-    label_zoom.config(text=zoom_show[zoom_factor])  # enabling "Save as..."
+    label_zoom.config(text=zoom_show[zoom_factor])
+    # enabling "Save as..."
     butt02.config(state='normal', cursor='hand2')
     butt03.config(state='normal', cursor='hand2')
 
@@ -102,7 +103,7 @@ def GetSource(event=None):
 def SaveAsBin():
     """Once pressed on Save binary"""
 
-    # Adjusting "Save to" formats to be displayed according to bitdepth
+    # Adjusting "Save to" formats to be displayed according to channel number
     if Z < 3:
         format = [('Portable grey map', '.pgm')]
         extension = ('Portable grey map', '.pgm')
@@ -130,7 +131,7 @@ def SaveAsBin():
 def SaveAsAscii():
     """Once pressed on Save ASCII"""
 
-    # Adjusting "Save to" formats to be displayed according to bitdepth
+    # Adjusting "Save to" formats to be displayed according to channel number
     if Z < 3:
         format = [('Portable grey map', '.pgm')]
         extension = ('Portable grey map', '.pgm')
@@ -223,11 +224,10 @@ butt03.pack(side='top', padx=4, pady=2, fill='both')
 butt99 = Button(frame_left, text='Exit', font=('helvetica', 16), cursor='hand2', justify='center', command=DisMiss)
 butt99.pack(side='bottom', padx=4, pady=[12, 2], fill='both')
 
-zanyato = Label(frame_right, text='Preview area'.center(16, ' '), font=('helvetica', 16), justify='center', borderwidth=2, relief='groove', state='disabled')
+zanyato = Label(frame_right, text='Preview area'.center(16, ' '), font=('helvetica', 16), justify='center', borderwidth=2, relief='groove', foreground='brown', background='light grey')
 zanyato.bind('<Button-1>', GetSource)
 zanyato.bind('<Button-2>', GetSource)
 zanyato.bind('<Button-3>', GetSource)
-zanyato.pack(side='top')
 zanyato.pack(side='top')
 
 frame_zoom = Frame(frame_right, width=300, borderwidth=2, relief='groove')
