@@ -150,4 +150,10 @@
 
 ## Расположение
 
-[The Toad's Slimy Mudhole](https://dnyarri.github.io) - прочие программы на Python того же автора, с иллюстрациями.
+[Dnyarri website](https://dnyarri.github.io) - остальной товар от Жабы Огромной Умственной Силы.
+
+[PyPNM page](https://dnyarri.github.io/pypnm.html) с объяснениями.
+
+[PyPNM source at github](https://github.com/Dnyarri/PyPNM).
+
+[PyPNM source at gitflic mirror](https://gitflic.ru/project/dnyarri/pypnm).
