@@ -34,3 +34,5 @@ Improved robustness.
 1.16.1.34   General cleanup, concatenations replaced with join, minor speedup.
 
 1.16.4.34   Bugfix.
+
+1.16.12.34  Conditional branches shortened, some more RAM cleanup attempts.
