@@ -15,7 +15,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.16.15.17'
+__version__ = '2.16.18.20'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -26,7 +26,7 @@ from tkinter.messagebox import showinfo
 from pypnm import pnmlpnm
 
 
-def DisMiss():
+def DisMiss(event=None):
     """Kill dialog and continue"""
     sortir.destroy()
 
@@ -52,7 +52,7 @@ def ShowMenu(event):
 def ShowInfo():
     """Show program and module version"""
     showinfo(
-        title='Program information',
+        title='General information',
         message=f'PNMViewer ver. {__version__}\nModules:\n{pnmlpnm.__name__} ver. {pnmlpnm.__version__}',
         detail=f'Image: {sourcefilename}\nX={X}, Y={Y}, Z={Z}, maxcolors={maxcolors}',
     )
@@ -249,24 +249,28 @@ sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\
 
 menu01 = Menu(sortir, tearoff=False)  # Main menu, currently one "File" entry
 
-menu01.add_command(label='Open...', state='normal', command=GetSource)
+menu01.add_command(label='Open...', state='normal', accelerator='Ctrl+O', command=GetSource)
+menu01.add_separator()
 menu01.add_command(label='Save binary PNM...', state='disabled', command=SaveAsBin)
 menu01.add_command(label='Save ascii PNM...', state='disabled', command=SaveAsAscii)
 menu01.add_separator()
 menu01.add_command(label='Info', command=ShowInfo)
 menu01.add_separator()
-menu01.add_command(label='Exit', state='normal', command=DisMiss)
+menu01.add_command(label='Exit', state='normal', accelerator='Ctrl+Q', command=DisMiss)
 
 sortir.bind('<Button-3>', ShowMenu)
+sortir.bind_all('<Alt-f>', ShowMenu)
+sortir.bind_all('<Control-o>', GetSource)
+sortir.bind_all('<Control-q>', DisMiss)
 
 frame_img = Frame(sortir, borderwidth=2, relief='groove')
 frame_img.pack(side='top')
 
 zanyato = Label(
     frame_img,
-    text='Preview area.\nDouble click to open,\nRight click for a menu.\nWhen opened,\nCtrl+Click to zoom in,\nAlt+Click to zoom out.',
+    text='Preview area.\n  Double click to open,\n  Right click or Alt+F for a menu.\nWhen opened,\n  Ctrl+Click to zoom in,\n  Alt+Click to zoom out.',
     font=('helvetica', 12),
-    justify='center',
+    justify='left',
     borderwidth=2,
     padx=24,
     pady=24,
