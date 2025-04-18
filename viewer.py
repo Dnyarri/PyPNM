@@ -2,13 +2,16 @@
 
 """Test shell for `PyPNM<https://github.com/Dnyarri/PyPNM/>`_ module - Tkinter-based viewer.
 
-NOTE: This is special Python 3.4 compatible version!
-
-Viewer does not use PPM file directly to display it with Tkinter PhotoImage(file=...) - 
-instead, it loads image file, then constructs PPM-like bytes data object in memory,
-and then displays it using Tkinter PhotoImage(data=...).
+Viewer does not use PPM file directly to display it with Tkinter PhotoImage(file=...) -
+instead, it loads file (in this case - PPM, PGM, or PBM, just because it's a demo for PyPNM module anyway),
+then constructs PPM-like bytes data object in memory, and then displays it using Tkinter PhotoImage(data=...).
 For example, it's able to display ascii PGM and PPM, not directly supported by Tkinter,
 since it recodes them to binary on the fly.
+
+NOTE:
+
+This is special developer edition, including `PNG support<https://gitlab.com/drj11/pypng>`_,
+created deliberately to test LA and RGBA preview.
 
 """
 
@@ -16,7 +19,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.16.15.34'
+__version__ = '2.16.18.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -29,7 +32,7 @@ from pypng import pnglpng
 from pypnm import pnmlpnm
 
 
-def DisMiss():
+def DisMiss(event=None):
     """Kill dialog and continue"""
     sortir.destroy()
 
@@ -57,7 +60,7 @@ def ShowInfo():
     message = ''.join(('PNMViewer ver. ', str(__version__), '\nModules:\n', str(pnmlpnm.__name__), ' ver. ', str(pnmlpnm.__version__), '\n', str(pnglpng.__name__), ' ver. ', str(pnglpng.__version__), '\n', str(pnglpng.png.__name__), ' ver. ', str(pnglpng.png.__version__)))
     detail = ''.join(('Image: ', sourcefilename, '\nX=', str(X), ' Y=', str(Y), ' Z=', str(Z), ' maxcolors=', str(maxcolors)))
     showinfo(
-        title='Program information',
+        title='General information',
         message=message,
         detail=detail,
     )
@@ -294,25 +297,29 @@ sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\
 
 menu01 = Menu(sortir, tearoff=False)  # Main menu, currently one "File" entry
 
-menu01.add_command(label='Open...', state='normal', command=GetSource)
+menu01.add_command(label='Open...', state='normal', accelerator='Ctrl+O', command=GetSource)
+menu01.add_separator()
 menu01.add_command(label='Save binary PNM...', state='disabled', command=SaveAsBin)
 menu01.add_command(label='Save ascii PNM...', state='disabled', command=SaveAsAscii)
 menu01.add_command(label='Save PNG...', state='disabled', command=SaveAsPNG)
 menu01.add_separator()
 menu01.add_command(label='Info', command=ShowInfo)
 menu01.add_separator()
-menu01.add_command(label='Exit', state='normal', command=DisMiss)
+menu01.add_command(label='Exit', state='normal', accelerator='Ctrl+Q', command=DisMiss)
 
 sortir.bind('<Button-3>', ShowMenu)
+sortir.bind_all('<Alt-f>', ShowMenu)
+sortir.bind_all('<Control-o>', GetSource)
+sortir.bind_all('<Control-q>', DisMiss)
 
 frame_img = Frame(sortir, borderwidth=2, relief='groove')
 frame_img.pack(side='top')
 
 zanyato = Label(
     frame_img,
-    text='Preview area.\nDouble click to open,\nRight click for a menu.\nWhen opened,\nCtrl+Click to zoom in,\nAlt+Click to zoom out.',
+    text='Preview area.\n  Double click to open,\n  Right click or Alt+F for a menu.\nWhen opened,\n  Ctrl+Click to zoom in,\n  Alt+Click to zoom out.',
     font=('helvetica', 12),
-    justify='center',
+    justify='left',
     borderwidth=2,
     padx=24,
     pady=24,
