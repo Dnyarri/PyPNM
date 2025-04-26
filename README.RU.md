@@ -169,6 +169,8 @@ main_window.mainloop()
 
 4. [PyPNM для Python 3.4 на Github](https://github.com/Dnyarri/PyPNM/tree/py34/) - содержит пример приложения для просмотра, иллюстрирующий применение `list2bin` для визуализации данных с помощью Tkinter `PhotoImage(data=...), и конверсию изображений между форматами. Данная особая версия была создана специально для обладателей старых версий Python, и прошла валидацию под Python 3.4 под Windows XP. Поскольку в комплект поставки входит [PyPNG](https://gitlab.com/drj11/pypng), вы получаете универсальное смотрело и конвертер для PNG и разнообразных версий PGM и PPM на чистом Python.
 
+5. [PyPNM docs (PDF, 7 страниц)](https://dnyarri.github.io/pypnm/pypnm.pdf).
+
 ## Примеры
 
 1. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - пример применения, масштабирование изображений методами Scale2x и Scale3x на чистом Python, ввод/вывод PNG основан на [PyPNG](https://gitlab.com/drj11/pypng), а PNM - на [PyPNM](https://pypi.org/project/PyPNM/), что делает приложения кросс-платформенными.

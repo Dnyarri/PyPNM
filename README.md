@@ -180,6 +180,8 @@ main_window.mainloop()
 
 4. [PyPNM for Python 3.4 at Github](https://github.com/Dnyarri/PyPNM/tree/py34/) containing example viewer application, illustrating using `list2bin` to produce data for Tkinter `PhotoImage(data=...)` to display, as well as opening/saving various portable map formats. This particular version was tested and shown to work under Python 3.4, Windows XP. This particular distribution also contain [PyPNG](https://gitlab.com/drj11/pypng), providing universal pure Python viewer and converter for PNG and all flavour of PGM and PPM.
 
+5. [PyPNM docs (PDF, 7 pages)](https://dnyarri.github.io/pypnm/pypnm.pdf).
+
 ## Examples
 
 1. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - usage example, pure Python image rescaling applications using Scale2x and Scale3x, PNG I/O is based on [PyPNG](https://gitlab.com/drj11/pypng), and PPM/PGM I/O - on  [PyPNM](https://pypi.org/project/PyPNM/), thus making everything pure Python and therefore cross-platform.
