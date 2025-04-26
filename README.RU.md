@@ -132,6 +132,33 @@
 
 Аналогичным образом, вы можете использовать *pnmlpnm* и Tkinter для визуализации любых данных, которые можно представить в виде RGB или L, без использования больших и сложных внешних библиотек.
 
+## Addendum
+
+Ниже прилагается минимальная, но работающая программа, иллюстрирующая все функции PyPNM: чтение PPM в список, запись списка в бинарный PPM, запись списка в текстовый PPM, и визуализация списка через Tkinter (если у вас нет готового PPM, можете взять любой из [образцов испытаний совместимости](https://github.com/Dnyarri/PyPNM/tree/main/compatibility) в этом репозитории):
+
+```python
+
+#!/usr/bin/env python3
+
+from tkinter import Button, PhotoImage, Tk
+
+from pypnm import pnmlpnm
+
+X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list('example.ppm')  # Open
+pnmlpnm.list2pnm('binary.ppm', image3D, maxcolors)  # Save as binary
+pnmlpnm.list2pnmascii('ascii.ppm', image3D, maxcolors)  # Save as ascii
+
+main_window = Tk()
+main_window.title('PyPNM demo')
+preview_data = pnmlpnm.list2bin(image3D, maxcolors)  # Generating preview bytes from list
+preview = PhotoImage(data=preview_data)  # Generating preview object from bytes
+preview_button = Button(main_window, text='Example\n(click to exit)', 
+                image=preview, compound='top', command=lambda: main_window.destroy())
+preview_button.pack()
+main_window.mainloop()
+
+```
+
 ## Ссылки
 
 1. [Описание форматов Netpbm](https://netpbm.sourceforge.net/doc/).

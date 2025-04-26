@@ -143,6 +143,33 @@ Program **viewer.py** is a small illustrative utility: using *pnmlpnm* package, 
 
 As a result, you may use *pnmlpnm* and Tkinter to visualize any data that can be represented as greyscale or RGB without huge external packages and writing files on disk; all you need is Tkinter, included into standard CPython distributions, and highly compatible pure Python *pnmlpnm.py* taking only 16 kbytes.
 
+## Addendum
+
+Below is a minimal Python program, illustrating all PyPNM functions: it reads PPM file (which you should provide yourself. You may copy [compatibility testing samples](https://github.com/Dnyarri/PyPNM/tree/main/compatibility) from this repository), creating image nested list, writes image list as binary PPM, writes image list as ASCII PPM, and displays list using Tkinter:
+
+```python
+
+#!/usr/bin/env python3
+
+from tkinter import Button, PhotoImage, Tk
+
+from pypnm import pnmlpnm
+
+X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list('example.ppm')  # Open
+pnmlpnm.list2pnm('binary.ppm', image3D, maxcolors)  # Save as binary
+pnmlpnm.list2pnmascii('ascii.ppm', image3D, maxcolors)  # Save as ascii
+
+main_window = Tk()
+main_window.title('PyPNM demo')
+preview_data = pnmlpnm.list2bin(image3D, maxcolors)  # Generating preview bytes from list
+preview = PhotoImage(data=preview_data)  # Generating preview object from bytes
+preview_button = Button(main_window, text='Example\n(click to exit)', 
+                image=preview, compound='top', command=lambda: main_window.destroy())
+preview_button.pack()
+main_window.mainloop()
+
+```
+
 ## References
 
 1. [Netpbm file formats description](https://netpbm.sourceforge.net/doc/).
@@ -163,7 +190,7 @@ As a result, you may use *pnmlpnm* and Tkinter to visualize any data that can be
 
 [Dnyarri website](https://dnyarri.github.io) - other Python freeware by the same author.
 
-[PyPNM page](https://dnyarri.github.io/pypnm.html) with illustrations, explanations etc.
+[PyPNM page](https://dnyarri.github.io/pypnm.html) with explanations etc.
 
 [PyPNM source at github](https://github.com/Dnyarri/PyPNM)
 
