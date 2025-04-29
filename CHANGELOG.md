@@ -28,3 +28,6 @@ Improved robustness.
 Yet another final version 😉
 
 1.16.1.9    General cleanup, minor speedup.
+
+1.16.29.19  Added `list2pnm` function, previous `list2pnm` renamed to `list2pnmbin`.
+New `list2pnm` is a switch between `list2pnmbin` and `list2pnmascii`, controlled with `bin` bool; default is True that provides backward compatibility.
