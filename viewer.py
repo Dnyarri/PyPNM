@@ -19,7 +19,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.16.20.34'
+__version__ = '2.16.28.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -166,8 +166,8 @@ def GetSource(event=None):
     UINormal()
 
 
-def SaveAsBin():
-    """Once pressed on Save binary"""
+def SaveAsPNM(bin):
+    """Once pressed on any of Save PNM"""
 
     # Adjusting "Save to" formats to be displayed according to channel number
     if Z < 3:
@@ -188,41 +188,11 @@ def SaveAsBin():
     if savefilename == '':
         return
 
-    """ ┌───────────────────────────────────────────────────────┐
-        │ Converting list to bytes and saving as "savefilename" │
-        └──────────────────────────────────────────────────────-┘ """
+    """ ┌────────────────────────────────────────────────────┐
+        │ Saving "savefilename" in format depending on "bin" │
+        └───────────────────────────────────────────────────-┘ """
     UIBusy()
-    pnmlpnm.list2pnm(savefilename, image3D, maxcolors)
-    UINormal()
-
-
-def SaveAsAscii():
-    """Once pressed on Save ASCII"""
-
-    # Adjusting "Save to" formats to be displayed according to channel number
-    if Z < 3:
-        format = [('Portable grey map', '.pgm')]
-        extension = ('Portable grey map', '.pgm')
-        filetype = 'PGM'
-    else:
-        format = [('Portable pixel map', '.ppm')]
-        extension = ('Portable pixel map', '.ppm')
-        filetype = 'PPM'
-
-    # Open "Save as..." file
-    savefilename = filedialog.asksaveasfilename(
-        title='Save {ext} file'.format(ext=filetype),
-        filetypes=format,
-        defaultextension=extension,
-    )
-    if savefilename == '':
-        return
-
-    """ ┌────────────────────────────────────────────────────────┐
-        │ Converting list to string and saving as "savefilename" │
-        └───────────────────────────────────────────────────────-┘ """
-    UIBusy()
-    pnmlpnm.list2pnmascii(savefilename, image3D, maxcolors)
+    pnmlpnm.list2pnm(savefilename, image3D, maxcolors, bin)
     UINormal()
 
 
@@ -315,8 +285,8 @@ menu01 = Menu(sortir, tearoff=False)  # Main menu, currently one "File" entry
 
 menu01.add_command(label='Open...', state='normal', accelerator='Ctrl+O', command=GetSource)
 menu01.add_separator()
-menu01.add_command(label='Save binary PNM...', state='disabled', command=SaveAsBin)
-menu01.add_command(label='Save ascii PNM...', state='disabled', command=SaveAsAscii)
+menu01.add_command(label='Save binary PNM...', state='disabled', command=lambda: SaveAsPNM(bin=True))
+menu01.add_command(label='Save ascii PNM...', state='disabled', command=lambda: SaveAsPNM(bin=False))
 menu01.add_command(label='Save PNG...', state='disabled', command=SaveAsPNG)
 menu01.add_separator()
 menu01.add_command(label='Info', command=ShowInfo)
