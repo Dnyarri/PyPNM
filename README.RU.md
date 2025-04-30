@@ -95,7 +95,7 @@
 > [!NOTE]
 > В случае списков с 2 или 4 каналами свежая версия `list2bin` может считать их LA или RGBA картинками, и генерировать для них превью на фоне шахматной паттерны (как Photoshop или GIMP). Поскольку форматы PNM не поддерживают прозрачности, данная картинка на самом деле имеет структуру L или RGB, а паттерну генерирует и подмешивает на лету сама функция `list2bin`. Данное поведение контролируется переменной `show_chessboard`; текущая установка `False` (просто выбрасывает альфа-канал) для совместимости со старыми версиями PyPNM, в которых такой опции не было.
 
-### list2pnm
+### list2pnmbin
 
 `pnmlpnm.list2pnm(out_filename, image3D, maxcolors)`
 
@@ -114,6 +114,19 @@
 - `image3D`   - `Y*X*Z` список (изображение) списков (рядов) списков (пикселей) целых чисел (каналов);
 - `maxcolors` - количество цветов на канал, int;
 - `out_filename` - имя файла PNM.
+
+### list2pnm
+
+`pnmlpnm.list2pnm(out_filename, image3D, maxcolors, bin)`
+
+Запись картинки в бинарный или ASCII файл:
+
+- `image3D`     - `Y*X*Z` список (изображение) списков (рядов) списков (пикселей) целых чисел (каналов);
+- `maxcolors`   - количество цветов на канал, int;
+- `bin`         - переключатель (bool) между раписью двоичного и ASCII файла. Текущее положение True, то есть запись двоичного.
+- `out_filename`    - имя файла PNM.
+
+Note that `list2pnm`, is merely a switch between `list2pnmbin` and `list2pnmascii`, introduced for simplifying writing "Save as..." GUI dialog functions - now you can use one function for all PNM flavours, passing `bin` via lambda, is necessary.
 
 ### create_image
 
@@ -137,8 +150,10 @@
 
 3. [PyPNM на Github](https://github.com/Dnyarri/PyPNM/) - содержит пример приложения для просмотра, иллюстрирующий применение `list2bin` для визуализации данных с помощью Tkinter `PhotoImage(data=...), и конверсию изображений между форматами.
 
-4. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - пример применения, масштабирование изображений методами Scale2x и Scale3x на чистом Python, ввод/вывод PNG основан на [PyPNG](https://gitlab.com/drj11/pypng), а PNM - на [PyPNM](https://pypi.org/project/PyPNM/), что делает приложения кросс-платформенными.
+4. [PyPNM docs (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf)
 
-5. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - пример применения, содержит программу фильтрования изображений «Averager», превью "до и после" основано на статически внедрённом коде PyPNM list2bin и на классе Tkinter `PhotoImage(data=...)`. Таким образом, представлено небольшое, но полноценное интерактивное приложение для фильтрования изображений, реализованное исключительно на Python.
+5. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - пример применения, масштабирование изображений методами Scale2x и Scale3x на чистом Python, ввод/вывод PNG основан на [PyPNG](https://gitlab.com/drj11/pypng), а PNM - на [PyPNM](https://pypi.org/project/PyPNM/), что делает приложения кросс-платформенными.
 
-6. [img2mesh](https://dnyarri.github.io/img2mesh.html) - пример применения, программа конверсии 2D изображений в качестве карт высот в 3D сетку. Модуль построения 3D сетки принимает данные x, y, z в том же формате, которые выводит PyPNM, что делает создание программы для 2D➔3D конверсии вопросом переливания данных из одного модуля в другой.
+6. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - пример применения, содержит программу фильтрования изображений «Averager», превью "до и после" основано на коде PyPNM list2bin и на классе Tkinter `PhotoImage(data=...)`. Таким образом, представлено небольшое, но полноценное интерактивное приложение для фильтрования изображений, реализованное исключительно на Python.
+
+7. [img2mesh](https://dnyarri.github.io/img2mesh.html) - пример применения, программа конверсии 2D изображений в качестве карт высот в 3D сетку. Модуль построения 3D сетки принимает данные x, y, z в том же формате, которые выводит PyPNM, что делает создание программы для 2D➔3D конверсии вопросом переливания данных из одного модуля в другой.
