@@ -35,7 +35,7 @@
 
 ## Совместимость с Python
 
-Текущая версия протестирована под 3.10 и выше. Однако существует версия [PyPNM для Python 3.4](https://github.com/Dnyarri/PyPNM/tree/py34/), успешно протестированная с Python 3.4 под Windows XP.
+Текущая версия протестирована под Python 3.10 и выше. Однако существует версия [PyPNM для Python 3.4](https://github.com/Dnyarri/PyPNM/tree/py34/), успешно протестированная с Python 3.4 под Windows XP.
 
 ## Представление изображения
 
@@ -98,7 +98,7 @@
 > [!NOTE]
 > В случае списков с 2 или 4 каналами свежая версия `list2bin` может считать их LA или RGBA картинками, и генерировать для них превью на фоне шахматной паттерны (как Photoshop или GIMP). Поскольку форматы PNM не поддерживают прозрачности, данная картинка на самом деле имеет структуру L или RGB, а паттерну генерирует и подмешивает на лету сама функция `list2bin`. Данное поведение контролируется переменной `show_chessboard`; текущая установка `False` (просто выбрасывает альфа-канал) для совместимости со старыми версиями PyPNM, в которых такой опции не было.
 
-### list2pnm
+### list2pnmbin
 
 `pnmlpnm.list2pnm(out_filename, image3D, maxcolors)`
 
@@ -118,6 +118,19 @@
 - `maxcolors` - количество цветов на канал, int;
 - `out_filename` - имя файла PNM.
 
+### list2pnm
+
+`pnmlpnm.list2pnm(out_filename, image3D, maxcolors, bin)`
+
+Запись картинки в бинарный или ASCII файл:
+
+- `image3D`     - `Y*X*Z` список (изображение) списков (рядов) списков (пикселей) целых чисел (каналов);
+- `maxcolors`   - количество цветов на канал, int;
+- `bin`         - переключатель (bool) между раписью двоичного и ASCII файла. Текущее положение True, то есть запись двоичного.
+- `out_filename`    - имя файла PNM.
+
+Заметьте, что `list2pnm` представляет собой просто переключатель между `list2pnmbin` and `list2pnmascii`, облегчающий написание функций типа "Save as...", особенно для графических диалогов - можно сохранять разные типы файлов одной функцией, просто передавая `bin` через lambda-функцию.
+
 ### create_image
 
 `image3D = create_image(X, Y, Z)`
@@ -132,33 +145,6 @@
 
 Аналогичным образом, вы можете использовать *pnmlpnm* и Tkinter для визуализации любых данных, которые можно представить в виде RGB или L, без использования больших и сложных внешних библиотек.
 
-## Addendum
-
-Ниже прилагается минимальная, но работающая программа, иллюстрирующая все функции PyPNM: чтение PPM в список, запись списка в бинарный PPM, запись списка в текстовый PPM, и визуализация списка через Tkinter (если у вас нет готового PPM, можете взять любой из [образцов испытаний совместимости](https://github.com/Dnyarri/PyPNM/tree/main/compatibility) в этом репозитории):
-
-```python
-
-#!/usr/bin/env python3
-
-from tkinter import Button, PhotoImage, Tk
-
-from pypnm import pnmlpnm
-
-X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list('example.ppm')  # Open
-pnmlpnm.list2pnm('binary.ppm', image3D, maxcolors)  # Save as binary
-pnmlpnm.list2pnmascii('ascii.ppm', image3D, maxcolors)  # Save as ascii
-
-main_window = Tk()
-main_window.title('PyPNM demo')
-preview_data = pnmlpnm.list2bin(image3D, maxcolors)  # Generating preview bytes from list
-preview = PhotoImage(data=preview_data)  # Generating preview object from bytes
-preview_button = Button(main_window, text='Example\n(click to exit)', 
-                image=preview, compound='top', command=lambda: main_window.destroy())
-preview_button.pack()
-main_window.mainloop()
-
-```
-
 ## Ссылки
 
 1. [Описание форматов Netpbm](https://netpbm.sourceforge.net/doc/).
@@ -167,22 +153,12 @@ main_window.mainloop()
 
 3. [PyPNM на Github](https://github.com/Dnyarri/PyPNM/) - содержит пример приложения для просмотра, иллюстрирующий применение `list2bin` для визуализации данных с помощью Tkinter `PhotoImage(data=...), и конверсию изображений между форматами.
 
-4. [PyPNM для Python 3.4 на Github](https://github.com/Dnyarri/PyPNM/tree/py34/) - содержит пример приложения для просмотра, иллюстрирующий применение `list2bin` для визуализации данных с помощью Tkinter `PhotoImage(data=...), и конверсию изображений между форматами. Данная особая версия была создана специально для обладателей старых версий Python, и прошла валидацию под Python 3.4 под Windows XP. Поскольку в комплект поставки входит [PyPNG](https://gitlab.com/drj11/pypng), вы получаете универсальное смотрело и конвертер для PNG и разнообразных версий PGM и PPM на чистом Python.
+4. [PyPNM ver.34 на Github](https://github.com/Dnyarri/PyPNM/tree/py34) - то же, что и п.3, но работает под Python 3.4.
 
-5. [PyPNM docs (PDF, 7 страниц)](https://dnyarri.github.io/pypnm/pypnm.pdf).
+5. [PyPNM docs (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf)
 
-## Примеры
+6. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - пример применения, масштабирование изображений методами Scale2x и Scale3x на чистом Python, ввод/вывод PNG основан на [PyPNG](https://gitlab.com/drj11/pypng), а PNM - на [PyPNM](https://pypi.org/project/PyPNM/), что делает приложения кросс-платформенными.
 
-1. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - пример применения, масштабирование изображений методами Scale2x и Scale3x на чистом Python, ввод/вывод PNG основан на [PyPNG](https://gitlab.com/drj11/pypng), а PNM - на [PyPNM](https://pypi.org/project/PyPNM/), что делает приложения кросс-платформенными.
+7. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - пример применения, содержит программу фильтрования изображений «Averager», превью "до и после" основано на коде PyPNM list2bin и на классе Tkinter `PhotoImage(data=...)`. Таким образом, представлено небольшое, но полноценное интерактивное приложение для фильтрования изображений, реализованное исключительно на Python.
 
-2. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - пример применения, содержит программу фильтрования изображений «Averager», превью "до и после" основано на статически внедрённом коде PyPNM list2bin и на классе Tkinter `PhotoImage(data=...)`. Таким образом, представлено небольшое, но полноценное интерактивное приложение для фильтрования изображений, реализованное исключительно на Python.
-
-## Расположение
-
-[Dnyarri website](https://dnyarri.github.io) - остальной товар от Жабы Огромной Умственной Силы.
-
-[PyPNM page](https://dnyarri.github.io/pypnm.html) с объяснениями.
-
-[PyPNM source at github](https://github.com/Dnyarri/PyPNM).
-
-[PyPNM source at gitflic mirror](https://gitflic.ru/project/dnyarri/pypnm).
+8. [img2mesh](https://dnyarri.github.io/img2mesh.html) - пример применения, программа конверсии 2D изображений в качестве карт высот в 3D сетку. Модуль построения 3D сетки принимает данные x, y, z в том же формате, которые выводит PyPNM, что делает создание программы для 2D➔3D конверсии вопросом переливания данных из одного модуля в другой.
