@@ -84,7 +84,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.16.29.19'
+__version__ = '1.17.1.1'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -305,8 +305,8 @@ def list2bin(list_3d: list[list[list[int]]], maxcolors: int, show_chessboard: bo
         """Chessboard pattern, size and color match Photoshop 7.0.
 
         Photoshop chess pattern preset parameters:
-        Small: 4 px; Medium: 8 px, Large: 16 px
-        Light: (0.8, 1.0); Medium: (0.4, 0.6); Dark: (0.2, 0.4) of maxcolors
+        - Small: 4 px; Medium: 8 px, Large: 16 px
+        - Light: (0.8, 1.0); Medium: (0.4, 0.6); Dark: (0.2, 0.4) of maxcolors
 
         """
         return int(maxcolors * 0.8) if ((y // 8) % 2) == ((x // 8) % 2) else maxcolors
