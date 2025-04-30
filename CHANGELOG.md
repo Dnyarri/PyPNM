@@ -35,5 +35,5 @@ Improved robustness.
 
 1.16.12.34  Conditional branches shortened, some more RAM cleanup attempts.
 
-1.16.29.34  Added `list2pnm` function, previous `list2pnm` renamed to `list2pnmbin`.
+1.17.1.34   Added `list2pnm` function, previous `list2pnm` renamed to `list2pnmbin`.
 New `list2pnm` is a switch between `list2pnmbin` and `list2pnmascii`, controlled with `bin` bool; default is True that provides backward compatibility.
