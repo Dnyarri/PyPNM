@@ -25,6 +25,7 @@ __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
 from pathlib import Path
+from platform import python_version
 from tkinter import Button, Frame, Label, Menu, PhotoImage, Tk, filedialog
 from tkinter.messagebox import showinfo
 
@@ -58,7 +59,7 @@ def ShowInfo():
     """Show program and module version"""
     showinfo(
         title='General information',
-        message=f'PNMViewer ver. {__version__}\nModules:\n{pnmlpnm.__name__} ver. {pnmlpnm.__version__}\n{pnglpng.__name__} ver. {pnglpng.__version__}\n{pnglpng.png.__name__} ver. {pnglpng.png.__version__}',
+        message=f'PNMViewer ver. {__version__}\nPython: {python_version()}\nModules:\n{pnmlpnm.__name__} ver. {pnmlpnm.__version__}\n{pnglpng.__name__} ver. {pnglpng.__version__}\n{pnglpng.png.__name__} ver. {pnglpng.png.__version__}',
         detail=f'Image: {sourcefilename}\nX={X}, Y={Y}, Z={Z}, maxcolors={maxcolors}',
     )
 
