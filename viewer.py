@@ -19,12 +19,13 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.17.1.34'
+__version__ = '2.17.4.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
 from pathlib import Path
+from platform import python_version
 from tkinter import Button, Frame, Label, Menu, PhotoImage, Tk, filedialog
 from tkinter.messagebox import showinfo
 
@@ -60,6 +61,8 @@ def ShowInfo():
         (
             'PNMViewer ver. ',
             str(__version__),
+            '\nPython: ',
+            python_version(),
             '\nModules:\n',
             str(pnmlpnm.__name__),
             ' ver. ',

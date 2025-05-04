@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 """PPM and PGM image files reading, displaying and writing for Python >=3.4.
+-----------------------------------------------------------------------------
 
 NOTE: This is special extended compatibility `PyPNM build for PyPI<https://pypi.org/project/PyPNM/>`_, tested with Python 3.4 and above.
 
@@ -47,7 +48,7 @@ After `from pypnm import pnmlpnm`, use something like:
 for reading data from PPM/PGM, where:
 
     - `X`, `Y`, `Z`:     image dimensions (int);
-    - `maxcolors`:       number of colors per channel for current image (int);
+    - `maxcolors`:       maximum of color per channel for current image (int);
     - `list_3d`:         image pixel data as list(list(list(int)));
 
 and:
@@ -86,13 +87,14 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.17.1.34'
+__version__ = '1.17.4.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
 import array
 import re
+from platform import python_version_tuple
 
 """ ╔══════════╗
     ║ pnm2list ║
@@ -109,7 +111,7 @@ def pnm2list(in_filename):
     for reading data from PPM/PGM, where:
 
         - `X`, `Y`, `Z`:    image dimensions (int);
-        - `maxcolors`:      number of colors per channel for current image (int);
+        - `maxcolors`:      maximum of color per channel for current image (int), 255 for 8 bit and 65535 for 16 bit;
         - `list_3d`:        image pixel data as list(list(list(int)));
         - `in_filename`:    PPM/PGM file name (str).
 
@@ -160,13 +162,10 @@ def pnm2list(in_filename):
                 │ IF Binary continuous tone │
                 └───────────────────────────┘ """
             if maxcolors < 256:
-                datatype = 'B'
+                array_1d = array.array('B', filtered_bytes)
             else:
-                datatype = 'H'
-
-            array_1d = array.array(datatype, filtered_bytes)
-
-            array_1d.byteswap()  # Critical for 16 bits per channel
+                array_1d = array.array('H', filtered_bytes)
+                array_1d.byteswap()  # Critical for 16 bits per channel
 
             list_1d = array_1d.tolist()
 
@@ -279,9 +278,11 @@ def list2bin(list_3d, maxcolors, show_chessboard=False):
     where:
 
         - `list_3d`:    Y * X * Z list (image) of lists (rows) of lists (pixels) of ints (channel values);
-        - `maxcolors`:  number of colors per channel for current image (int);
+        - `maxcolors`:  maximum of color per channel for current image (int);
         - `show_chessboard`:    optional bool, set `True` to show LA and RGBA images against chessboard pattern; `False` or missing show existing L or RGB data for transparent areas as opaque. Default is `False` for backward compatibility.
         - `image_bytes`:    PNM-structured binary data.
+
+    Warning: Forces 8 bpc output for compatibility with old Tkinter versions.
 
     """
 
@@ -321,18 +322,29 @@ def list2bin(list_3d, maxcolors, show_chessboard=False):
 
     del list_3d  # Cleanup
 
-    if maxcolors < 256:
-        datatype = 'B'
-    else:
-        datatype = 'H'
+    if int(python_version_tuple()[1]) > 10:
+        """ ┌────────────────────────────────────────────┐
+            │ Caculating preview as is for Python > 3.10 │
+            └────────────────────────────────────────────┘ """
+        preview_maxcolors = maxcolors
+        if maxcolors < 256:
+            content = array.array('B', list_1d)  # Bytes
+        else:
+            content = array.array('H', list_1d)  # Doubles
+            content.byteswap()  # Critical for 16 bits per channel
 
-    content = array.array(datatype, list_1d)
+    else:
+        preview_maxcolors = 255
+        if maxcolors != 255:
+            """ ┌────────────────────────────────────────────────┐
+                │ Force preview 8 bit/channel for Python <= 3.10 │
+                └────────────────────────────────────────────────┘ """
+            list_1d = map(lambda channel: (preview_maxcolors * channel) // maxcolors, list_1d)
+        content = array.array('B', list_1d)
 
     del list_1d  # Cleanup
 
-    content.byteswap()  # Critical for 16 bits per channel
-
-    return b''.join((''.join((str(magic), '\n', str(X), ' ', str(Y), '\n', str(maxcolors), '\n')).encode('ascii'), content.tobytes()))
+    return b''.join((''.join((str(magic), '\n', str(X), ' ', str(Y), '\n', str(preview_maxcolors), '\n')).encode('ascii'), content.tobytes()))
 
 
 # End of 'list2bin' list to in-memory PNM conversion function
@@ -353,7 +365,7 @@ def list2pnmbin(out_filename, list_3d, maxcolors):
     where:
 
         - `list_3d`:    X * Y * Z list (image) of lists (rows) of lists (pixels) of ints (channels);
-        - `maxcolors`:  number of colors per channel for current image (int);
+        - `maxcolors`:  maximum of color per channel for current image (int);
         - `out_filename`:   PNM file name.
 
     """
@@ -407,7 +419,7 @@ def list2pnmascii(out_filename, list_3d, maxcolors):
     where:
 
     - `list_3d`:    Y * X * Z list (image) of lists (rows) of lists (pixels) of ints (channels);
-    - `maxcolors`:  number of colors per channel for current image (int);
+    - `maxcolors`:  maximum of color per channel for current image (int);
     - `out_filename`:   PNM file name.
 
     """
@@ -456,7 +468,7 @@ def list2pnm(out_filename, list_3d, maxcolors, bin=True):
     where:
 
         - `list_3d`:    X * Y * Z list (image) of lists (rows) of lists (pixels) of ints (channels);
-        - `maxcolors`:  number of colors per channel for current image (int);
+        - `maxcolors`:  maximum of color per channel for current image (int);
         - `bin`:        whether output file is binary (bool);
         - `out_filename`:   PNM file name.
 
