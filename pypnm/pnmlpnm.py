@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-"""PPM and PGM image files reading, displaying and writing for Python >= 3.10.
+"""PPM and PGM image files reading, displaying and writing for Python >= 3.11.
+-------------------------------------------------------------------------------
 
 Overview
 ---------
@@ -45,7 +46,7 @@ After `from pypnm import pnmlpnm`, use something like:
 for reading data from PPM/PGM, where:
 
     - `X`, `Y`, `Z`:     image dimensions (int);
-    - `maxcolors`:       number of colors per channel for current image (int);
+    - `maxcolors`:       maximum of color per channel for current image (int);
     - `list_3d`:         image pixel data as list(list(list(int)));
 
 and:
@@ -84,7 +85,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.17.1.1'
+__version__ = '1.17.4.21'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -107,7 +108,7 @@ def pnm2list(in_filename: str) -> tuple[int, int, int, int, list[list[list[int]]
     for reading data from PPM/PGM, where:
 
         - `X`, `Y`, `Z`:    image dimensions (int);
-        - `maxcolors`:      number of colors per channel for current image (int);
+        - `maxcolors`:      maximum of color per channel for current image (int), 255 for 8 bit and 65535 for 16 bit;
         - `list_3d`:        image pixel data as list(list(list(int)));
         - `in_filename`:    PPM/PGM file name (str).
 
@@ -158,13 +159,10 @@ def pnm2list(in_filename: str) -> tuple[int, int, int, int, list[list[list[int]]
                 │ IF Binary continuous tone │
                 └───────────────────────────┘ """
             if maxcolors < 256:
-                datatype = 'B'
+                array_1d = array.array('B', filtered_bytes)
             else:
-                datatype = 'H'
-
-            array_1d = array.array(datatype, filtered_bytes)
-
-            array_1d.byteswap()  # Critical for 16 bits per channel
+                array_1d = array.array('H', filtered_bytes)
+                array_1d.byteswap()  # Critical for 16 bits per channel
 
             list_1d = array_1d.tolist()
 
@@ -295,7 +293,7 @@ def list2bin(list_3d: list[list[list[int]]], maxcolors: int, show_chessboard: bo
     where:
 
         - `list_3d`:    Y * X * Z list (image) of lists (rows) of lists (pixels) of ints (channel values);
-        - `maxcolors`:  number of colors per channel for current image (int);
+        - `maxcolors`:  maximum of color per channel for current image (int);
         - `show_chessboard`:    optional bool, set `True` to show LA and RGBA images against chessboard pattern; `False` or missing show existing L or RGB data for transparent areas as opaque. Default is `False` for backward compatibility.
         - `image_bytes`:    PNM-structured binary data.
 
@@ -339,15 +337,12 @@ def list2bin(list_3d: list[list[list[int]]], maxcolors: int, show_chessboard: bo
     del list_3d  # Cleanup
 
     if maxcolors < 256:
-        datatype = 'B'
+        content = array.array('B', list_1d)  # Bytes
     else:
-        datatype = 'H'
-
-    content = array.array(datatype, list_1d)
+        content = array.array('H', list_1d)  # Doubles
+        content.byteswap()  # Critical for 16 bits per channel
 
     del list_1d  # Cleanup
-
-    content.byteswap()  # Critical for 16 bits per channel
 
     return b''.join((f'{magic}\n{X} {Y}\n{maxcolors}\n'.encode('ascii'), content.tobytes()))
 
@@ -370,7 +365,7 @@ def list2pnmbin(out_filename: str, list_3d: list[list[list[int]]], maxcolors: in
     where:
 
         - `list_3d`:    X * Y * Z list (image) of lists (rows) of lists (pixels) of ints (channels);
-        - `maxcolors`:  number of colors per channel for current image (int);
+        - `maxcolors`:  maximum of color per channel for current image (int);
         - `out_filename`:   PNM file name.
 
     """
@@ -424,7 +419,7 @@ def list2pnmascii(out_filename: str, list_3d: list[list[list[int]]], maxcolors: 
     where:
 
     - `list_3d`:    Y * X * Z list (image) of lists (rows) of lists (pixels) of ints (channels);
-    - `maxcolors`:  number of colors per channel for current image (int);
+    - `maxcolors`:  maximum of color per channel for current image (int);
     - `out_filename`:   PNM file name.
 
     """
@@ -473,7 +468,7 @@ def list2pnm(out_filename: str, list_3d: list[list[list[int]]], maxcolors: int, 
     where:
 
         - `list_3d`:    X * Y * Z list (image) of lists (rows) of lists (pixels) of ints (channels);
-        - `maxcolors`:  number of colors per channel for current image (int);
+        - `maxcolors`:  maximum of color per channel for current image (int);
         - `bin`:        whether output file is binary (bool);
         - `out_filename`:   PNM file name.
 

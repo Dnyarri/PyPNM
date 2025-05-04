@@ -20,6 +20,7 @@ __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
+from platform import python_version
 from tkinter import Button, Frame, Label, Menu, PhotoImage, Tk, filedialog
 from tkinter.messagebox import showinfo
 
@@ -52,7 +53,7 @@ def ShowInfo():
     """Show program and module version"""
     showinfo(
         title='General information',
-        message=f'PNMViewer ver. {__version__}\nModules:\n{pnmlpnm.__name__} ver. {pnmlpnm.__version__}',
+        message=f'PNMViewer ver. {__version__}\nPython: {python_version()}\nModules:\n{pnmlpnm.__name__} ver. {pnmlpnm.__version__}',
         detail=f'Image: {sourcefilename}\nX={X}, Y={Y}, Z={Z}, maxcolors={maxcolors}',
     )
 
