@@ -29,5 +29,7 @@ Yet another final version 😉
 
 1.16.1.9    General cleanup, minor speedup.
 
-1.17.1.1    Added `list2pnm` function, previous `list2pnm` renamed to `list2pnmbin`.
+1.17.1.1    1 May 2025 "Mayday": Added `list2pnm` function, previous `list2pnm` renamed to `list2pnmbin`.
 New `list2pnm` is a switch between `list2pnmbin` and `list2pnmascii`, controlled with `bin` bool; default is True that provides backward compatibility.
+
+1.17.9.1    9 May 2025 "Victory": Optimizations.
