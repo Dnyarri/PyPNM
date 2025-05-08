@@ -87,7 +87,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '1.17.4.34'
+__version__ = '1.17.9.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -245,7 +245,7 @@ def pnm2list(in_filename):
                 │ IF ASCII 1 Bit/pixel │
                 └──────────────────────┘ """
 
-            """ Removing any formatting by consecutive split/join, then changing types to turn bit char into int while reshaping to 3D nested list probably is not the fastest solution but I will think about it tomorrow. """
+            # Removing any formatting by consecutive split/join, then changing types to turn bit char into int while reshaping to 3D nested list probably is not the fastest solution but I will think about it tomorrow.
             list_1d = list(str(b''.join(filtered_bytes.split())))[2:-1]  # Slicing off junk chars like 'b', "'"
 
             list_3d = [[[(255 * (1 - int(list_1d[z + x * Z + y * X * Z]))) for z in range(Z)] for x in range(X)] for y in range(Y)]
@@ -323,9 +323,9 @@ def list2bin(list_3d, maxcolors, show_chessboard=False):
     del list_3d  # Cleanup
 
     if int(python_version_tuple()[1]) > 10:
-        """ ┌────────────────────────────────────────────┐
-            │ Caculating preview as is for Python > 3.10 │
-            └────────────────────────────────────────────┘ """
+        """ ┌─────────────────────────────────────────────┐
+            │ Calculating preview as is for Python > 3.10 │
+            └─────────────────────────────────────────────┘ """
         preview_maxcolors = maxcolors
         if maxcolors < 256:
             content = array.array('B', list_1d)  # Bytes
@@ -401,7 +401,7 @@ def list2pnmbin(out_filename, list_3d, maxcolors):
     return None
 
 
-# End of 'list2pnm' function writing binary PPM/PGM file
+# End of 'list2pnmbin' function writing binary PPM/PGM file
 
 
 """ ╔═══════════════╗
@@ -418,9 +418,9 @@ def list2pnmascii(out_filename, list_3d, maxcolors):
 
     where:
 
-    - `list_3d`:    Y * X * Z list (image) of lists (rows) of lists (pixels) of ints (channels);
-    - `maxcolors`:  maximum of color per channel for current image (int);
-    - `out_filename`:   PNM file name.
+        - `list_3d`:    Y * X * Z list (image) of lists (rows) of lists (pixels) of ints (channels);
+        - `maxcolors`:  maximum of color per channel for current image (int);
+        - `out_filename`:   PNM file name.
 
     """
 

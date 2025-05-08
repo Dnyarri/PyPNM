@@ -35,5 +35,10 @@ Improved robustness.
 
 1.16.12.34  Conditional branches shortened, some more RAM cleanup attempts.
 
-1.17.1.34   Added `list2pnm` function, previous `list2pnm` renamed to `list2pnmbin`.
-New `list2pnm` is a switch between `list2pnmbin` and `list2pnmascii`, controlled with `bin` bool; default is True that provides backward compatibility.
+1.17.1.34   1 May 2025 "Mayday" release: Added `list2pnm` function,
+previous `list2pnm` renamed to `list2pnmbin`.
+New `list2pnm` is a switch between `list2pnmbin` and `list2pnmascii`, controlled with `bin` bool;
+default is True that provides backward compatibility.
+
+1.17.9.34   9 May 2025 "Victory" release: Forced 8-bit output for `list2bin` under old Python.
+Some optimizations.
