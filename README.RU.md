@@ -157,8 +157,8 @@
 
 5. [PyPNM docs (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf)
 
-6. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - пример применения, масштабирование изображений методами Scale2x и Scale3x на чистом Python, ввод/вывод PNG основан на [PyPNG](https://gitlab.com/drj11/pypng), а PNM - на [PyPNM](https://pypi.org/project/PyPNM/), что делает приложения кросс-платформенными.
+6. [PixelArtScaling](https://dnyarri.github.io/scalenx.html) - пример применения, масштабирование изображений методами Scale2x и Scale3x на чистом Python, ввод/вывод PNG основан на [PyPNG](https://gitlab.com/drj11/pypng), а PNM - на [PyPNM](https://pypi.org/project/PyPNM/), что делает приложения кросс-платформенными.
 
-7. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - пример применения, содержит программу фильтрования изображений «Averager», превью "до и после" основано на коде PyPNM list2bin и на классе Tkinter `PhotoImage(data=...)`. Таким образом, представлено небольшое, но полноценное интерактивное приложение для фильтрования изображений, реализованное исключительно на Python.
+7. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - пример применения, содержит программу фильтрования изображений «Averager», превью "до и после" основано на коде PyPNM list2bin и на классе Tkinter `PhotoImage(data=...)`. Таким образом, представлено небольшое, но вполне полноценное интерактивное приложение для фильтрования изображений, реализованное исключительно на Python.
 
-8. [img2mesh](https://dnyarri.github.io/img2mesh.html) - пример применения, программа конверсии 2D изображений в качестве карт высот в 3D сетку. Модуль построения 3D сетки принимает данные x, y, z в том же формате, которые выводит PyPNM, что делает создание программы для 2D➔3D конверсии вопросом переливания данных из одного модуля в другой.
+8. [Dnyarri website - больше программ на Python](https://dnyarri.github.io/) и остальной товар от Жабы Огромной Умственной Силы.

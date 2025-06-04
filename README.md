@@ -169,8 +169,10 @@ As a result, you may use *pnmlpnm* and Tkinter to visualize any data that can be
 
 5. [PyPNM docs (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf)
 
-6. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - usage example, pure Python image rescaling applications using Scale2x and Scale3x, PNG I/O is based on [PyPNG](https://gitlab.com/drj11/pypng), and PPM/PGM I/O - on  [PyPNM](https://pypi.org/project/PyPNM/), thus making everything pure Python and therefore cross-platform.
+### Related
 
-7. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - usage example, contains image filtering application «Averager», implementing non-standard adaptive image averaging. Filter before/after preview based on PyPNM list2bin code and Tkinter `PhotoImage(data=...)` class. As a result, fully operational pure Python interactive image filtering application ensued.
+[PixelArtScaling](https://dnyarri.github.io/scalenx.html) - usage example, pure Python image rescaling applications using Scale2x and Scale3x methods; PNG I/O is based on [PyPNG](https://gitlab.com/drj11/pypng), and PPM/PGM I/O - on  [PyPNM](https://pypi.org/project/PyPNM/), thus making everything pure Python and therefore cross-platform.
 
-8. [img2mesh](https://dnyarri.github.io/img2mesh.html) - usage example, programs for converting bitmap height fields to 3D triangle meshes in various formats. 3D conversion modules take x, y, z data as nested list of the same structure, as PyPNM output, that makes building 2D➔3D converted just a matter of pouring data from one module to another.
+[POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - usage example, contains image filtering application «Averager», implementing non-standard adaptive image averaging. Filter before/after preview based on PyPNM list2bin code and Tkinter `PhotoImage(data=...)` class. As a result, fully operational pure Python interactive image filtering application ensued.
+
+[Dnyarri website - more Python freeware](https://dnyarri.github.io/) by the same author.
