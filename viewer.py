@@ -55,7 +55,7 @@ def ShowMenu(event):
     menu01.post(event.x_root, event.y_root)
 
 
-def ShowInfo():
+def ShowInfo(event=None):
     """Show program and module version"""
     showinfo(
         title='General information',
@@ -135,6 +135,7 @@ def GetSource(event=None):
     zanyato.bind('<Alt-Button-1>', zoomOut)  # Alt + left click
     zanyato.bind('<Double-Alt-Button-1>', zoomOut)  # Alt + left click too fast
     sortir.bind_all('<MouseWheel>', zoomWheel)  # Wheel
+    sortir.bind_all('<Control-i>', ShowInfo)
     # enabling zoom buttons
     butt_plus.config(state='normal', cursor='hand2')
     butt_minus.config(state='normal', cursor='hand2')
