@@ -271,7 +271,7 @@ menu01.add_command(label='Save binary PNM...', state='disabled', command=lambda:
 menu01.add_command(label='Save ascii PNM...', state='disabled', command=lambda: SaveAsPNM(bin=False))
 menu01.add_command(label='Save PNG...', state='disabled', command=SaveAsPNG)
 menu01.add_separator()
-menu01.add_command(label='Info', command=ShowInfo)
+menu01.add_command(label='Info', accelerator='Ctrl+I', command=ShowInfo)
 menu01.add_separator()
 menu01.add_command(label='Exit', state='normal', accelerator='Ctrl+Q', command=DisMiss)
 
