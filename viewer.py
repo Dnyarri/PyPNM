@@ -15,7 +15,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.17.9.1'
+__version__ = '2.19.1.7'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -27,30 +27,30 @@ from tkinter.messagebox import showinfo
 from pypnm import pnmlpnm
 
 
-def DisMiss(event=None):
+def DisMiss(event=None) -> None:
     """Kill dialog and continue"""
     sortir.destroy()
 
 
-def UINormal():
+def UINormal() -> None:
     """Normal UI state"""
     zanyato.config(state='normal')
     sortir.update()
 
 
-def UIBusy():
+def UIBusy() -> None:
     """Busy UI state"""
     zanyato.config(state='disabled')
     sortir.update()
 
 
-def ShowMenu(event):
+def ShowMenu(event) -> None:
     """Pop menu up (or sort of drop it down)"""
     menu01.post(event.x_root, event.y_root)
 
 
-def ShowInfo(event=None):
-    """Show program and module version"""
+def ShowInfo(event=None) -> None:
+    """Show program and module version, and image data"""
     showinfo(
         title='General information',
         message=f'PNMViewer ver. {__version__}\nPython: {python_version()}\nModules:\n{pnmlpnm.__name__} ver. {pnmlpnm.__version__}',
@@ -58,9 +58,8 @@ def ShowInfo(event=None):
     )
 
 
-def GetSource(event=None):
+def GetSource(event=None) -> None:
     """Opening source image and redefining other controls state"""
-
     global zoom_factor, zoom_do, zoom_show, preview, preview_data
     global X, Y, Z, maxcolors, image3D, sourcefilename
     zoom_factor = 0
@@ -133,10 +132,8 @@ def GetSource(event=None):
     UINormal()
 
 
-def SaveAsPNM(bin: bool):
+def SaveAsPNM(bin: bool) -> None:
     """Once pressed on any of Save PNM"""
-
-    # Adjusting "Save to" formats to be displayed according to channel number
     if Z < 3:
         format = [('Portable grey map', '.pgm')]
         extension = ('Portable grey map', '.pgm')
@@ -163,7 +160,8 @@ def SaveAsPNM(bin: bool):
     UINormal()
 
 
-def zoomIn(event=None):
+def zoomIn(event=None) -> None:
+    """Zooming preview in"""
     global zoom_factor, preview
     zoom_factor = min(zoom_factor + 1, 4)  # max zoom 5
     preview = PhotoImage(data=preview_data)
@@ -179,7 +177,8 @@ def zoomIn(event=None):
         butt_plus.config(state='normal', cursor='hand2')
 
 
-def zoomOut(event=None):
+def zoomOut(event=None) -> None:
+    """Zooming preview out"""
     global zoom_factor, preview
     zoom_factor = max(zoom_factor - 1, -4)  # min zoom 1/5
     preview = PhotoImage(data=preview_data)
@@ -195,7 +194,8 @@ def zoomOut(event=None):
         butt_minus.config(state='normal', cursor='hand2')
 
 
-def zoomWheel(event):
+def zoomWheel(event) -> None:
+    """Starting zoomIn or zoomOut by mouse wheel"""
     if event.delta < 0:
         zoomOut()
     if event.delta > 0:
@@ -206,7 +206,6 @@ def zoomWheel(event):
     ║ Main body ║
     ╚═══════════╝ """
 
-# Starting values
 zoom_factor = 0
 sourcefilename = X = Y = Z = maxcolors = None
 
