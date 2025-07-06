@@ -99,7 +99,7 @@ read data from PPM/PGM file to nested image data list, where:
 
 Convert nested image data list to PGM P5 or PPM P6 (binary) data structure in memory, where:
 
-- `image3D`   - `Y*X*Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
+- `image3D`   - `Y * X * Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
 - `maxcolors` - number of colors per channel for current image (int);
 - `show_chessboard` - optional bool, set `True` to show LA and RGBA images against chessboard pattern; `False` or missing show existing L or RGB data for transparent areas as opaque. Default is `False` for backward compatibility;
 - `image_bytes` - PNM-structured binary data.
@@ -116,7 +116,7 @@ Note that Tkinter used for Python 3.10 displays some hight-color images incorrec
 
 Write PGM P5 or PPM P6 (binary) file from nested image data list, where:
 
-- `image3D`   - `Y*X*Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
+- `image3D`   - `Y * X * Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
 - `maxcolors` - number of colors per channel for current image (int);
 - `out_filename` - PNM file name.
 
@@ -126,7 +126,7 @@ Write PGM P5 or PPM P6 (binary) file from nested image data list, where:
 
 Write PGM P2 or PPM P3 (ASCII text) file from nested image data list, where:
 
-- `image3D`   - `Y*X*Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
+- `image3D`   - `Y * X * Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
 - `maxcolors` - number of colors per channel for current image (int);
 - `out_filename` - PNM file name.
 
@@ -136,18 +136,18 @@ Write PGM P2 or PPM P3 (ASCII text) file from nested image data list, where:
 
 Write either binary or ASCII file from nested image data list, where:
 
-- `image3D`   - `Y*X*Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
+- `image3D`   - `Y * X * Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
 - `maxcolors` - number of colors per channel for current image (int);
 - `bin` - switch defining whether to write binary file or ASCII (bool). Default is True, meaning binary output, to provide backward compatibility.
 - `out_filename` - Name of PNM file to be written.
 
-Note that `list2pnm`, is merely a switch between `list2pnmbin` and `list2pnmascii`, introduced for simplifying writing "Save as..." GUI dialog functions - now you can use one function for all PNM flavours, passing `bin` via lambda, is necessary.
+Note that `list2pnm` is merely a switch between `list2pnmbin` and `list2pnmascii`, introduced for simplifying writing "Save as..." GUI dialog functions - now you can use one function for all PNM flavours, passing `bin` via lambda, if necessary. Default is `bin = True`.
 
 ### create_image
 
 `image3D = create_image(X, Y, Z)`
 
-Create empty 3D nested list of `X*Y*Z` sizes.
+Create empty 3D nested list of `X * Y * Z` sizes.
 
 ## viewer.py
 
