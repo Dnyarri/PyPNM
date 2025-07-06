@@ -175,6 +175,12 @@ As a result, you may use *pnmlpnm* and Tkinter to visualize any data that can be
 
 [PixelArtScaling](https://dnyarri.github.io/scalenx.html) - usage example, pure Python image rescaling applications using Scale2x and Scale3x methods; PNG I/O is based on [PyPNG](https://gitlab.com/drj11/pypng), and PPM/PGM I/O - on  [PyPNM](https://pypi.org/project/PyPNM/), thus making everything pure Python and therefore cross-platform.
 
-[POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - usage example, contains image filtering application «Averager», implementing non-standard adaptive image averaging. Filter before/after preview based on PyPNM list2bin code and Tkinter `PhotoImage(data=...)` class. As a result, fully operational pure Python interactive image filtering application ensued.
+[«Averager»](https://dnyarri.github.io/povthread.html#averager) - usage example, image filtering application implementing non-standard adaptive image averaging. Filter before/after preview based on PyPNM list2bin code and Tkinter `PhotoImage(data=...)` class. As a result, fully operational pure Python interactive image filtering application ensued.
+
+| Fig. 2. *Pure Python image filtering application, largely based on PyPNM* |
+| :---: |
+| [![Pure Python image adaptive averaging application, largely based on PyPNM](https://dnyarri.github.io/thread/ave.png "Pure Python image filtering application, largely based on PyPNM")](https://dnyarri.github.io/povthread.html#averager) |
+
+---
 
 [Dnyarri website - more Python freeware](https://dnyarri.github.io/) by the same author.

@@ -141,7 +141,9 @@
 
 Программа **viewer.py** представляет собой небольшой иллюстративный пример использования PyPNM: с помощью *pnmlpnm* она читает разные форматы файлов PGM и PPM, и позволяет сохранять их в другом формате PGM/PNM, например, позволяет прочитать текстовый PPM и записать изображение в двоичный PPM, или наоборот. Также эта программа отодражает изображения с помощью *pnmlpnm* и Tkinter. Это не ошибка - программа не скармливает PPM-файл Tkinter напрямую; вместо этого с помощью *pnmlpnm* она раскрывает изображение в трёхмерный список, затем с помощью *pnmlpnm* генерирует из этого списка байты PNM `preview_data = pnmlpnm.list2bin(image3D, maxcolors)`, а только после этого передаёт эти байты в Tkinter `preview = PhotoImage(data=preview_data)` (именно *data=*, а не *file=*). Таким образом программа отображает, например, текстовые PNM, которые сам Tkinter не поддерживает.
 
-[![Пример отрисовки текстового ppm с помощью viewer.py](https://dnyarri.github.io/pypnm/viewer.png)](https://dnyarri.github.io/pypnm.html)
+| Рис. 1. *Пример отрисовки текстового .ppm с помощью Viewer.py* |
+| :---: |
+| [![Пример отрисовки текстового .ppm с помощью Viewer.py](https://dnyarri.github.io/pypnm/viewer.png "Пример отрисовки текстового .ppm с помощью Viewer.py")](https://dnyarri.github.io/pypnm.html) |
 
 Аналогичным образом, вы можете использовать *pnmlpnm* и Tkinter для визуализации любых данных, которые можно представить в виде RGB или L, без использования больших и сложных внешних библиотек.
 
@@ -157,8 +159,16 @@
 
 5. [PyPNM docs (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf)
 
-6. [PixelArtScaling](https://dnyarri.github.io/scalenx.html) - пример применения, масштабирование изображений методами Scale2x и Scale3x на чистом Python, ввод/вывод PNG основан на [PyPNG](https://gitlab.com/drj11/pypng), а PNM - на [PyPNM](https://pypi.org/project/PyPNM/), что делает приложения кросс-платформенными.
+## Родственное
 
-7. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - пример применения, содержит программу фильтрования изображений «Averager», превью "до и после" основано на коде PyPNM list2bin и на классе Tkinter `PhotoImage(data=...)`. Таким образом, представлено небольшое, но вполне полноценное интерактивное приложение для фильтрования изображений, реализованное исключительно на Python.
+[PixelArtScaling](https://dnyarri.github.io/scalenx.html) - пример применения, масштабирование изображений методами Scale2x и Scale3x на чистом Python, ввод/вывод PNG основан на [PyPNG](https://gitlab.com/drj11/pypng), а PNM - на [PyPNM](https://pypi.org/project/PyPNM/), что делает приложения кросс-платформенными.
 
-8. [Dnyarri website - больше программ на Python](https://dnyarri.github.io/) и остальной товар от Жабы Огромной Умственной Силы.
+[«Averager»](https://dnyarri.github.io/povthread.html#averager) - пример применения, программа фильтрования изображений, превью "до и после" основано на коде PyPNM list2bin и на классе Tkinter `PhotoImage(data=...)`. Таким образом, представлено небольшое, но вполне полноценное интерактивное приложение для фильтрования изображений, реализованное исключительно на Python.
+
+| Рис. 2. *Приложение для фильтрования изображений, изрядно основанное на использовании PyPNM* |
+| :---: |
+| [![Пример приложения для фильтрования изображений с применением PyPNM](https://dnyarri.github.io/thread/ave.png "Пример приложения для фильтрования изображений с применением PyPNM")](https://dnyarri.github.io/povthread.html#averager) |
+
+---
+
+[Dnyarri website - больше программ на Python](https://dnyarri.github.io/) и остальной товар от Жабы Огромной Умственной Силы.
