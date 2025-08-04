@@ -19,14 +19,17 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.17.9.1'
+__version__ = '2.20.4.18'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
 from pathlib import Path
 from platform import python_version
-from tkinter import Button, Frame, Label, Menu, PhotoImage, Tk, filedialog
+from sys import argv
+from time import ctime  # Used to show file info only
+from tkinter import Button, Frame, Label, Menu, PhotoImage, Tk
+from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import showinfo
 
 from pypng import pnglpng
@@ -36,6 +39,15 @@ from pypnm import pnmlpnm
 def DisMiss(event=None):
     """Kill dialog and continue"""
     sortir.destroy()
+
+
+def BindAll() -> None:
+    """Binding events needed even with no image open"""
+    sortir.bind_all('<Button-3>', ShowMenu)
+    sortir.bind_all('<Alt-f>', ShowMenu)
+    sortir.bind_all('<Control-o>', GetSource)
+    sortir.bind_all('<Control-q>', DisMiss)
+    sortir.bind_all('<Control-i>', ShowInfo)
 
 
 def UINormal():
@@ -60,7 +72,7 @@ def ShowInfo(event=None):
     showinfo(
         title='General information',
         message=f'PNMViewer ver. {__version__}\nPython: {python_version()}\nModules:\n{pnmlpnm.__name__} ver. {pnmlpnm.__version__}\n{pnglpng.__name__} ver. {pnglpng.__version__}\n{pnglpng.png.__name__} ver. {pnglpng.png.__version__}',
-        detail=f'Image: {sourcefilename}\nX={X}, Y={Y}, Z={Z}, maxcolors={maxcolors}',
+        detail=f'File:\n{sourcefilename}\nSize: {(Path(sourcefilename).stat().st_size / 1024):.2f} kb\nCreated: {ctime(Path(sourcefilename).stat().st_birthtime)}\nModified: {ctime(Path(sourcefilename).stat().st_mtime)}\n\nImage: X={X}, Y={Y}, Z={Z}, maxcolors={maxcolors}',
     )
 
 
@@ -68,12 +80,17 @@ def GetSource(event=None):
     """Opening source image and redefining other controls state"""
 
     global zoom_factor, zoom_do, zoom_show, preview, preview_data
-    global X, Y, Z, maxcolors, image3D, sourcefilename
+    global X, Y, Z, maxcolors, image3D, sourcefilename, filename_from_command
     zoom_factor = 0
 
-    sourcefilename = filedialog.askopenfilename(title='Open image file', filetypes=[('Supported formats', '.png .ppm .pgm .pbm'), ('PNG', '.png'), ('PNM', '.ppm .pgm .pbm')])
-    if sourcefilename == '':
-        return
+    # ↓ Trying to receive file name from command line, if None, opening GUI
+    if filename_from_command is None:
+        sourcefilename = askopenfilename(title='Open image file', filetypes=[('Supported formats', '.png .ppm .pgm .pbm'), ('PNG', '.png'), ('PNM', '.ppm .pgm .pbm')])
+        if sourcefilename == '':
+            return
+    else:
+        sourcefilename = filename_from_command
+        filename_from_command = None  # Removing file name after first open
 
     UIBusy()
 
@@ -103,6 +120,8 @@ def GetSource(event=None):
         │ Now showing "preview_data" bytes using Tkinter │
         └────────────────────────────────────────────────┘ """
     preview = PhotoImage(data=preview_data)
+    # ↓ Adding filename to window title a-la Photoshop
+    sortir.title(f'PNMViewer: {Path(sourcefilename).name}')
 
     zoom_show = {  # What to show below preview
         -4: 'Zoom 1:5',
@@ -135,7 +154,6 @@ def GetSource(event=None):
     zanyato.bind('<Alt-Button-1>', zoomOut)  # Alt + left click
     zanyato.bind('<Double-Alt-Button-1>', zoomOut)  # Alt + left click too fast
     sortir.bind_all('<MouseWheel>', zoomWheel)  # Wheel
-    sortir.bind_all('<Control-i>', ShowInfo)
     # enabling zoom buttons
     butt_plus.config(state='normal', cursor='hand2')
     butt_minus.config(state='normal', cursor='hand2')
@@ -163,7 +181,7 @@ def SaveAsPNM(bin: bool):
         filetype = 'PPM'
 
     # Open "Save as..." file
-    savefilename = filedialog.asksaveasfilename(
+    savefilename = asksaveasfilename(
         title=f'Save {filetype} file',
         filetypes=format,
         defaultextension=extension,
@@ -183,7 +201,7 @@ def SaveAsPNG():
     """Once pressed on Save PNG"""
 
     # Open "Save as..." file
-    savefilename = filedialog.asksaveasfilename(
+    savefilename = asksaveasfilename(
         title='Save PNG file',
         filetypes=[('Portable network graphics', '.png')],
         defaultextension=('Portable network graphics', '.png'),
@@ -275,11 +293,6 @@ menu01.add_command(label='Info', accelerator='Ctrl+I', command=ShowInfo)
 menu01.add_separator()
 menu01.add_command(label='Exit', state='normal', accelerator='Ctrl+Q', command=DisMiss)
 
-sortir.bind('<Button-3>', ShowMenu)
-sortir.bind_all('<Alt-f>', ShowMenu)
-sortir.bind_all('<Control-o>', GetSource)
-sortir.bind_all('<Control-q>', DisMiss)
-
 frame_img = Frame(sortir, borderwidth=2, relief='groove')
 frame_img.pack(side='top')
 
@@ -310,5 +323,20 @@ butt_minus.pack(side='right', padx=0, pady=0, fill='both')
 
 label_zoom = Label(frame_zoom, text='Zoom 1:1', font=('courier', 8), state='disabled')
 label_zoom.pack(side='left', anchor='n', padx=2, pady=0, fill='both')
+
+BindAll()
+
+# ↓ Command line part
+if len(argv) == 2:
+    try_to_open = argv[1]
+    if Path(try_to_open).exists() and Path(try_to_open).is_file() and (Path(try_to_open).suffix in ('.ppm', '.pgm', '.pbm', '.png')):
+        filename_from_command = str(Path(try_to_open).resolve())
+        GetSource()
+    else:
+        filename_from_command = None
+    sortir.focus_force()  # Otherwise loses focus when run from command line
+else:
+    filename_from_command = None
+    sortir.focus_force()  # Otherwise loses focus when run from command line
 
 sortir.mainloop()
