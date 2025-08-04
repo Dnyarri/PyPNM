@@ -47,7 +47,6 @@ def BindAll() -> None:
     sortir.bind_all('<Alt-f>', ShowMenu)
     sortir.bind_all('<Control-o>', GetSource)
     sortir.bind_all('<Control-q>', DisMiss)
-    sortir.bind_all('<Control-i>', ShowInfo)
 
 
 def UINormal():
@@ -154,6 +153,7 @@ def GetSource(event=None):
     zanyato.bind('<Alt-Button-1>', zoomOut)  # Alt + left click
     zanyato.bind('<Double-Alt-Button-1>', zoomOut)  # Alt + left click too fast
     sortir.bind_all('<MouseWheel>', zoomWheel)  # Wheel
+    sortir.bind_all('<Control-i>', ShowInfo)
     # enabling zoom buttons
     butt_plus.config(state='normal', cursor='hand2')
     butt_minus.config(state='normal', cursor='hand2')
@@ -163,6 +163,7 @@ def GetSource(event=None):
     menu01.entryconfig('Save binary PNM...', state='normal')  # Instead of name numbers from 0 may be used
     menu01.entryconfig('Save ascii PNM...', state='normal')
     menu01.entryconfig('Save PNG...', state='normal')
+    menu01.entryconfig('Info', state='normal')
 
     UINormal()
 
@@ -289,7 +290,7 @@ menu01.add_command(label='Save binary PNM...', state='disabled', command=lambda:
 menu01.add_command(label='Save ascii PNM...', state='disabled', command=lambda: SaveAsPNM(bin=False))
 menu01.add_command(label='Save PNG...', state='disabled', command=SaveAsPNG)
 menu01.add_separator()
-menu01.add_command(label='Info', accelerator='Ctrl+I', command=ShowInfo)
+menu01.add_command(label='Info', state='disabled', accelerator='Ctrl+I', command=ShowInfo)
 menu01.add_separator()
 menu01.add_command(label='Exit', state='normal', accelerator='Ctrl+Q', command=DisMiss)
 
