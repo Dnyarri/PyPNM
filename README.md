@@ -5,7 +5,7 @@
 # PyPNM - Pure Python PPM and PGM image files reading and writing module
 
 > [!NOTE]
-> This is a special version, deliberately made to be compatible with old versions of Python 3. It was successfully tested with Python 3.4 under Windows XP, and may probably work even with something more antique. If you have Python 3.11 or above, switch to [**main** branch](https://github.com/Dnyarri/PyPNM/tree/main/).
+> This is a special version, deliberately made to be compatible with old versions of Python 3. It was successfully tested with Python 3.4 under Windows XP, and may probably work even with something more antique. If you have Python 3.11 or above, it is highly recommended to switch to [**main** branch](https://github.com/Dnyarri/PyPNM/tree/main/).
 
 ## Overview and justification
 
@@ -71,13 +71,13 @@ then in your program import section:
 
 `from pypnm import pnmlpnm`
 
-then use functions as described in section *"pnmlpnm.py functions"* below.
+then use functions as described below.
 
-In case you downloaded file **pnmlpnm.py** from Github or somewhere else as plain .py file and not a package, simply put this file into your program folder, then use `import pnmlpnm`.
+In case you downloaded file *pnmlpnm.py* from Github or somewhere else as plain .py file and not a package, simply put this file into your program folder, then use `import pnmlpnm`.
 
 ## pnmlpnm.py
 
-Module file **pnmlpnm.py** contains 100% pure Python implementation of everything one may need to read/write a variety of PGM and PPM files. I/O functions are written as functions/procedures, as simple as possible, and listed below:
+Module file *pnmlpnm.py* contains 100% pure Python implementation of everything one may need to read/write a variety of PGM and PPM files. I/O functions are written as functions/procedures, as simple as possible, and listed below:
 
 - **pnm2list**  - reading binary or ascii RGB PPM or L PGM file and returning image data as nested list of int.
 - **list2bin**  - getting image data as nested list of int and creating binary PPM (P6) or PGM (P5) data structure in memory. Suitable for generating data to display with Tkinter.
@@ -160,7 +160,15 @@ Program **viewer.py** is a small illustrative utility: using *pnmlpnm* package, 
 
 [![Example of ascii ppm opened in viewer.py and converted to binary ppm on the fly to be rendered with Tkinter](https://dnyarri.github.io/pypnm/viewer34.png)](https://dnyarri.github.io/pypnm.html)
 
-As a result, you may use *pnmlpnm* and Tkinter to visualize any data that can be represented as greyscale or RGB without huge external packages and writing files on disk; all you need is Tkinter, included into standard CPython distributions, and highly compatible pure Python *pnmlpnm.py* taking only 16 kbytes.
+Beside having simple yet fully functional GUI with mouse events handling a-la Photoshop, *viewer.py* is also capable to process command line arguments like
+
+`py -3.4 viewer.py filename.ppm`
+
+for opening files. In theory, you may even register it as system viewer for PPM, PGM and PBM files.
+
+## Conclusion
+
+Using *PyPNM* and Tkinter you may easily visualize any data that can be represented as greyscale or RGB images (images first and foremost), without large external packages and writing files on disk. Nested list data structures used by PyPNM are well suited for nested loop/map image processing.
 
 ## References
 
@@ -174,6 +182,6 @@ As a result, you may use *pnmlpnm* and Tkinter to visualize any data that can be
 
 5. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - usage example, pure Python image rescaling applications using Scale2x and Scale3x, PNG I/O is based on [PyPNG](https://gitlab.com/drj11/pypng), and PPM/PGM I/O - on  [PyPNM](https://pypi.org/project/PyPNM/), thus making everything pure Python and therefore cross-platform.
 
-6. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - usage example, contains image filtering application «Averager», implementing non-standard adaptive image averaging. Filter before/after preview based on PyPNM list2bin code and Tkinter `PhotoImage(data=...)` class. As a result, fully operational pure Python interactive image filtering application ensued.
+6. [POVRay Thread: Linen and Stitch](https://dnyarri.github.io/povthread.html) - usage example, contains image filtering application [«Averager»](https://dnyarri.github.io/povthread.html#averager), implementing non-standard adaptive image averaging. Filter before/after preview based on PyPNM list2bin code and Tkinter `PhotoImage(data=...)` class. Filtering itself largely utilize the fact that nested lists, produced by PyPNM, may be easily processed with one-loop-fits-all algorithms regardless of color mode. As a result, fully operational pure Python interactive image filtering application ensued.
 
 7. [img2mesh](https://dnyarri.github.io/img2mesh.html) - usage example, programs for converting bitmap height fields to 3D triangle meshes in various formats. 3D conversion modules take x, y, z data as nested list of the same structure, as PyPNM output, that makes building 2D➔3D converted just a matter of pouring data from one module to another.
