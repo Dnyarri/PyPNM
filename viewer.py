@@ -15,13 +15,13 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.20.4.20'
+__version__ = '2.20.6.8'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
 from pathlib import Path
-from platform import python_version
+from platform import python_version, python_version_tuple
 from sys import argv
 from time import ctime  # Used to show file info only
 from tkinter import Button, Frame, Label, Menu, PhotoImage, Tk
@@ -62,11 +62,15 @@ def ShowMenu(event) -> None:
 
 
 def ShowInfo(event=None) -> None:
-    """Show program and module version, and image data"""
+    """Show program and module version, and image info"""
+    file_size = Path(sourcefilename).stat().st_size
+    file_size_str = f'{file_size / 1024:.2f} Kb' if (file_size > 1024) else f'{file_size} bytes'
+    creation_str = f'{ctime(Path(sourcefilename).stat().st_ctime)}' if int(python_version_tuple()[1]) < 12 else f'{ctime(Path(sourcefilename).stat().st_birthtime)}'
+    modification_str = ctime(Path(sourcefilename).stat().st_mtime)
     showinfo(
         title='General information',
         message=f'PNMViewer ver. {__version__}\nPython: {python_version()}\nModules:\n{pnmlpnm.__name__} ver. {pnmlpnm.__version__}',
-        detail=f'File:\n{sourcefilename}\nSize: {(Path(sourcefilename).stat().st_size / 1024):.2f} kb\nCreated: {ctime(Path(sourcefilename).stat().st_birthtime)}\nModified: {ctime(Path(sourcefilename).stat().st_mtime)}\n\nImage: X={X}, Y={Y}, Z={Z}, maxcolors={maxcolors}',
+        detail=f'File:\n{sourcefilename}\nSize: {file_size_str}\nCreated: {creation_str}\nModified: {modification_str}\n\nImage properties:\nWidth: {X} px\nHeight: {Y} px\nChannels: {Z} channels\nColor depth: {maxcolors + 1} gradations/channel',
     )
 
 
