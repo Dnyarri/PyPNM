@@ -71,7 +71,7 @@ In case you downloaded file **pnmlpnm.py** from Github or somewhere else as plai
 
 ## pnmlpnm.py
 
-Main module file **pnmlpnm.py** contains 100% pure Python implementation of everything one may need to read/write a variety of PGM and PPM files. I/O functions are written as functions/procedures, as simple as possible, and listed below:
+Main module file [**pnmlpnm.py**](https://github.com/Dnyarri/PyPNM/blob/main/pypnm/pnmlpnm.py) contains 100% pure Python implementation of everything one may need to read/write a variety of PGM and PPM files. I/O functions are written as functions/procedures, as simple as possible, and listed below:
 
 - **pnm2list**  - reading binary or ASCII RGB PPM or L PGM file and returning image data as nested list of int.
 - **list2bin**  - getting image data as nested list of int and creating binary PPM (P6) or PGM (P5) data structure in memory. Suitable for generating data to display with Tkinter.
@@ -151,7 +151,7 @@ Create empty 3D nested list of `X * Y * Z` sizes.
 
 ## viewer.py
 
-Program **viewer.py** is a small illustrative utility: using *PyPNM* package, it reads different flavours of PGM and PPM files, and allows saving them as different types of PGM/PNM, i.e. it can read ASCII PPM and write it as binary PPM or vs. Also this program shows images using *PyPNM* and Tkinter. No, there is no mistake: it does not feed PPM files to Tkinter directly. Instead, it uses nested 3D list data loaded using *PyPNM* to generate in-memory bytes object of PPM structure using `preview_data = pnmlpnm.list2bin(image3D, maxcolors)`, and then feeds this in-memory bytes object to Tkinter as `preview = PhotoImage(data=preview_data)` (note using *data=*, not *file=*). This way it shows, for example, ASCII PPM which Tkinter itself cannot handle.
+Program [**viewer.py**](https://github.com/Dnyarri/PyPNM/blob/main/viewer.py) is a small illustrative utility: using *PyPNM* package, it reads different flavours of PGM and PPM files, and allows saving them as different types of PGM/PNM, i.e. it can read ASCII PPM and write it as binary PPM or vs. Also this program shows images using *PyPNM* and Tkinter. No, there is no mistake: it does not feed PPM files to Tkinter directly. Instead, it uses nested 3D list data loaded using *PyPNM* to generate in-memory bytes object of PPM structure using `preview_data = pnmlpnm.list2bin(image3D, maxcolors)`, and then feeds this in-memory bytes object to Tkinter as `preview = PhotoImage(data=preview_data)` (note using *data=*, not *file=*). This way it displays, for example, ASCII PPM which Tkinter itself cannot handle.
 
 | Fig. 1. *Example of ASCII PPM opened in Viewer.py* |
 | :---: |
