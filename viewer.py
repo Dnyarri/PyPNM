@@ -280,7 +280,6 @@ sourcefilename = X = Y = Z = maxcolors = None
 sortir = Tk()
 
 sortir.title('PNMViewer')
-sortir.geometry('+200+100')
 sortir.minsize(128, 128)
 
 # Main dialog icon is PPM as well!
@@ -315,6 +314,7 @@ zanyato = Label(
     cursor='arrow',
 )
 zanyato.bind('<Double-Button-1>', GetSource)
+frame_img.bind('<Double-Button-1>', GetSource)
 zanyato.pack(side='top', padx=0, pady=(0, 2))
 
 frame_zoom = Frame(frame_img, width=300, borderwidth=2, relief='groove')
@@ -330,6 +330,10 @@ label_zoom = Label(frame_zoom, text='Zoom 1:1', font=('courier', 8), state='disa
 label_zoom.pack(side='left', anchor='n', padx=2, pady=0, fill='both')
 
 BindAll()
+
+# ↓ Center window horizontally, +100 vertically
+sortir.update()
+sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
 
 # ↓ Command line part
 if len(argv) == 2:
