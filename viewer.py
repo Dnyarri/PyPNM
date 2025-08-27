@@ -19,7 +19,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.20.4.18'
+__version__ = '2.20.16.14'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -35,14 +35,20 @@ from tkinter.messagebox import showinfo
 from pypng import pnglpng
 from pypnm import pnmlpnm
 
+""" ╔══════════════════════════════════╗
+    ║ GUI events and functions thereof ║
+    ╚══════════════════════════════════╝ """
+
 
 def DisMiss(event=None):
     """Kill dialog and continue"""
+
     sortir.destroy()
 
 
 def BindAll() -> None:
     """Binding events needed even with no image open"""
+
     sortir.bind_all('<Button-3>', ShowMenu)
     sortir.bind_all('<Alt-f>', ShowMenu)
     sortir.bind_all('<Control-o>', GetSource)
@@ -51,44 +57,48 @@ def BindAll() -> None:
 
 def UINormal():
     """Normal UI state"""
+
     zanyato.config(state='normal')
     sortir.update()
 
 
 def UIBusy():
     """Busy UI state"""
+
     zanyato.config(state='disabled')
     sortir.update()
 
 
 def ShowMenu(event):
     """Pop menu up (or sort of drop it down)"""
+
     menu01.post(event.x_root, event.y_root)
 
 
 def ShowInfo(event=None):
     """Show program and module version, and image info"""
+
     file_size = Path(sourcefilename).stat().st_size
-    file_size_str = f'{file_size / 1024:.2f} Kb' if (file_size > 1024) else f'{file_size} bytes'
+    file_size_str = f'{file_size / 1048576:.2f} Mb' if (file_size > 1048576) else f'{file_size / 1024:.2f} Kb' if (file_size > 1024) else f'{file_size} bytes'
     creation_str = f'{ctime(Path(sourcefilename).stat().st_ctime)}' if int(python_version_tuple()[1]) < 12 else f'{ctime(Path(sourcefilename).stat().st_birthtime)}'
     modification_str = ctime(Path(sourcefilename).stat().st_mtime)
     showinfo(
         title='General information',
         message=f'PNMViewer ver. {__version__}\nPython: {python_version()}\nModules:\n{pnmlpnm.__name__} ver. {pnmlpnm.__version__}\n{pnglpng.__name__} ver. {pnglpng.__version__}\n{pnglpng.png.__name__} ver. {pnglpng.png.__version__}',
-        detail=f'File:\n{sourcefilename}\nSize: {file_size_str}\nCreated: {creation_str}\nModified: {modification_str}\n\nImage properties:\nWidth: {X} px\nHeight: {Y} px\nChannels: {Z} channels\nColor depth: {maxcolors + 1} gradations/channel',
+        detail=f'File properties:\n{sourcefilename}\nSize: {file_size_str}\nCreated: {creation_str}\nModified: {modification_str}\n\nImage properties:\nWidth: {X} px\nHeight: {Y} px\nChannels: {Z} channel{"s" if Z > 1 else ""}\nColor depth: {maxcolors + 1} gradations/channel',
     )
 
 
 def GetSource(event=None):
-    """Opening source image and redefining other controls state"""
+    """Open source image and redefine other controls state"""
 
     global zoom_factor, zoom_do, zoom_show, preview, preview_data
-    global X, Y, Z, maxcolors, image3D, sourcefilename, filename_from_command
+    global X, Y, Z, maxcolors, image3D, info, sourcefilename, filename_from_command
     zoom_factor = 0
 
     # ↓ Trying to receive file name from command line, if None, opening GUI
     if filename_from_command is None:
-        sourcefilename = askopenfilename(title='Open image file', filetypes=[('Supported formats', '.png .ppm .pgm .pbm'), ('PNG', '.png'), ('PNM', '.ppm .pgm .pbm')])
+        sourcefilename = askopenfilename(title='Open image file', filetypes=[('Supported formats', '.png .ppm .pgm .pbm'), ('Portable network graphics', '.png'), ('Portable network map', '.ppm .pgm .pbm')])
         if sourcefilename == '':
             return
     else:
@@ -97,36 +107,27 @@ def GetSource(event=None):
 
     UIBusy()
 
-    """ ┌────────────────────────────────────────┐
-        │ Loading file, converting data to list. │
-        │  NOTE: maxcolors, image3D are GLOBALS! │
-        │  They are used during save!            │
-        └────────────────────────────────────────┘ """
-
+    # ↓ Loading file, converting data to list.
+    #   NOTE: maxcolors, image3D, info are GLOBALS!
+    #   They are used during save!
     if Path(sourcefilename).suffix == '.png':
-        # Reading image as list
         X, Y, Z, maxcolors, image3D, info = pnglpng.png2list(sourcefilename)
 
     elif Path(sourcefilename).suffix in ('.ppm', '.pgm', '.pbm'):
-        # Reading image as list
         X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(sourcefilename)
-
+        # ↓ Creating dummy info, containing bpc value required to Save As PNG properly
+        info = {'bitdepth': 16} if maxcolors > 255 else {'bitdepth': 8}
     else:
         raise ValueError('Extension not recognized')
 
-    """ ┌─────────────────────────────────────────────────────────────────────────┐
-        │ Converting list to bytes of PPM-like structure "preview_data" in memory │
-        └────────────────────────────────────────────────────────────────────────-┘ """
+    # ↓ Converting list to bytes of PPM-like structure "preview_data" in memory
     preview_data = pnmlpnm.list2bin(image3D, maxcolors, show_chessboard=True)
-
-    """ ┌────────────────────────────────────────────────┐
-        │ Now showing "preview_data" bytes using Tkinter │
-        └────────────────────────────────────────────────┘ """
+    # ↓ Now showing "preview_data" bytes using Tkinter
     preview = PhotoImage(data=preview_data)
     # ↓ Adding filename to window title a-la Photoshop
     sortir.title(f'PNMViewer: {Path(sourcefilename).name}')
-
-    zoom_show = {  # What to show below preview
+    # ↓ Dictionary of zoom label texts
+    zoom_show = {
         -4: 'Zoom 1:5',
         -3: 'Zoom 1:4',
         -2: 'Zoom 1:3',
@@ -137,7 +138,8 @@ def GetSource(event=None):
         3: 'Zoom 4:1',
         4: 'Zoom 5:1',
     }
-    zoom_do = {  # What to do to preview; "zoom" zooms in, "subsample" zooms out
+    # ↓ Dictionary of zoom functions, corresponding to "zoom_show" above
+    zoom_do = {
         -4: preview.subsample(5, 5),
         -3: preview.subsample(4, 4),
         -2: preview.subsample(3, 3),
@@ -149,54 +151,67 @@ def GetSource(event=None):
         4: preview.zoom(5, 5),
     }
 
+    # ↓ attempt to calculate zoom to fit
+    #   GUI X extra = 16 px, GUI Y extra = 63 px
+    screen_width = sortir.winfo_screenwidth()
+    screen_height = sortir.winfo_screenheight()
+    if X + 16 > screen_width or Y + 64 > screen_height:
+        zoom_factor = -(max((X + 16) // screen_width, (Y + 64) // screen_height))
+
     preview = zoom_do[zoom_factor]
     zanyato.config(image=preview, compound='none', borderwidth=1, background=zanyato.master['background'])
-    # binding zoom on preview click
+    # ↓ binding on preview click
     zanyato.bind('<Control-Button-1>', zoomIn)  # Ctrl + left click
     zanyato.bind('<Double-Control-Button-1>', zoomIn)  # Ctrl + left click too fast
     zanyato.bind('<Alt-Button-1>', zoomOut)  # Alt + left click
     zanyato.bind('<Double-Alt-Button-1>', zoomOut)  # Alt + left click too fast
     sortir.bind_all('<MouseWheel>', zoomWheel)  # Wheel
     sortir.bind_all('<Control-i>', ShowInfo)
-    # enabling zoom buttons
+    # ↓ enabling zoom buttons
     butt_plus.config(state='normal', cursor='hand2')
     butt_minus.config(state='normal', cursor='hand2')
-    # updating zoom label display
+    # ↓ updating zoom label display
     label_zoom.config(text=zoom_show[zoom_factor])
-    # enabling "Save as..."
+    # ↓ enabling "Save as..."
     menu01.entryconfig('Save binary PNM...', state='normal')  # Instead of name numbers from 0 may be used
     menu01.entryconfig('Save ascii PNM...', state='normal')
     menu01.entryconfig('Save PNG...', state='normal')
     menu01.entryconfig('Info', state='normal')
-
     UINormal()
+    sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+{(sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32}')
 
 
 def SaveAsPNM(bin: bool):
     """Once pressed on any of Save PNM"""
 
-    # Adjusting "Save to" formats to be displayed according to channel number
+    # ↓ Adjusting "Save to" formats to be displayed according to channel number
     if Z < 3:
         format = [('Portable grey map', '.pgm')]
-        extension = ('Portable grey map', '.pgm')
-        filetype = 'PGM'
+        extension = '.pgm'
+        filetype = 'pgm'
     else:
         format = [('Portable pixel map', '.ppm')]
-        extension = ('Portable pixel map', '.ppm')
-        filetype = 'PPM'
+        extension = '.ppm'
+        filetype = 'ppm'
 
-    # Open "Save as..." file
+    # ↓ Figuring out suggested file name based on saving in source/different format
+    if Path(sourcefilename).suffix.lower() in ('.ppm', '.pgm'):
+        proposed_name = Path(sourcefilename).stem + f' copy.{filetype}'
+    else:
+        proposed_name = Path(sourcefilename).stem + f'.{filetype}'
+
+    # ↓ Open "Save as..." file
     savefilename = asksaveasfilename(
-        title=f'Save {filetype} file',
+        title=f'Save {filetype.upper()} file',
         filetypes=format,
         defaultextension=extension,
+        initialdir=Path(sourcefilename).parent,
+        initialfile=proposed_name,
     )
     if savefilename == '':
         return
 
-    """ ┌────────────────────────────────────────────────────┐
-        │ Saving "savefilename" in format depending on "bin" │
-        └───────────────────────────────────────────────────-┘ """
+    # ↓ Saving "savefilename" in PNM format depending on "bin"
     UIBusy()
     pnmlpnm.list2pnm(savefilename, image3D, maxcolors, bin)
     UINormal()
@@ -205,40 +220,40 @@ def SaveAsPNM(bin: bool):
 def SaveAsPNG():
     """Once pressed on Save PNG"""
 
-    # Open "Save as..." file
+    # ↓ Figuring out suggested file name based on saving in source/different format
+    if Path(sourcefilename).suffix.lower() == '.png':
+        proposed_name = Path(sourcefilename).stem + ' copy.png'
+    else:
+        proposed_name = Path(sourcefilename).stem + '.png'
+
+    # ↓ Open "Save as..." file
     savefilename = asksaveasfilename(
         title='Save PNG file',
         filetypes=[('Portable network graphics', '.png')],
-        defaultextension=('Portable network graphics', '.png'),
+        defaultextension='.png',
+        initialdir=Path(sourcefilename).parent,
+        initialfile=proposed_name,
     )
     if savefilename == '':
         return
 
-    # Creating dummy info
-    info = {}
-    # Fixing color mode. The rest is fixed with pnglpng v. 25.01.07.
-    if maxcolors > 255:
-        info['bitdepth'] = 16
-    else:
-        info['bitdepth'] = 8
-
-    """ ┌───────────────────────────────────┐
-        │ Feeding list to PyPNG via pnglpng │
-        └──────────────────────────────────-┘ """
+    # ↓ Feeding list to PyPNG via pnglpng
     UIBusy()
     pnglpng.list2png(savefilename, image3D, info)
     UINormal()
 
 
 def zoomIn(event=None):
+    """Zoom preview in"""
+
     global zoom_factor, preview
     zoom_factor = min(zoom_factor + 1, 4)  # max zoom 5
     preview = PhotoImage(data=preview_data)
     preview = zoom_do[zoom_factor]
     zanyato.config(image=preview, compound='none')
-    # updating zoom factor display
+    # ↓ updating zoom factor display
     label_zoom.config(text=zoom_show[zoom_factor])
-    # reenabling +/- buttons
+    # ↓ reenabling +/- buttons
     butt_minus.config(state='normal', cursor='hand2')
     if zoom_factor == 4:  # max zoom 5
         butt_plus.config(state='disabled', cursor='arrow')
@@ -247,14 +262,16 @@ def zoomIn(event=None):
 
 
 def zoomOut(event=None):
+    """Zoom preview out"""
+
     global zoom_factor, preview
     zoom_factor = max(zoom_factor - 1, -4)  # min zoom 1/5
     preview = PhotoImage(data=preview_data)
     preview = zoom_do[zoom_factor]
     zanyato.config(image=preview, compound='none')
-    # updating zoom factor display
+    # ↓ updating zoom factor display
     label_zoom.config(text=zoom_show[zoom_factor])
-    # reenabling +/- buttons
+    # ↓ reenabling +/- buttons
     butt_plus.config(state='normal', cursor='hand2')
     if zoom_factor == -4:  # min zoom 1/5
         butt_minus.config(state='disabled', cursor='arrow')
@@ -263,6 +280,8 @@ def zoomOut(event=None):
 
 
 def zoomWheel(event):
+    """zoomIn or zoomOut by mouse wheel"""
+
     if event.delta < 0:
         zoomOut()
     if event.delta > 0:
@@ -273,20 +292,16 @@ def zoomWheel(event):
     ║ Main body ║
     ╚═══════════╝ """
 
-# Starting values
 zoom_factor = 0
 sourcefilename = X = Y = Z = maxcolors = None
 
 sortir = Tk()
-
 sortir.title('PNMViewer')
 sortir.minsize(128, 128)
-
-# Main dialog icon is PPM as well!
 sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00'))
 
-menu01 = Menu(sortir, tearoff=False)  # Main menu, currently one "File" entry
-
+# ↓ Main menu, currently one "File" entry
+menu01 = Menu(sortir, tearoff=False)
 menu01.add_command(label='Open...', state='normal', accelerator='Ctrl+O', command=GetSource)
 menu01.add_separator()
 menu01.add_command(label='Save binary PNM...', state='disabled', command=lambda: SaveAsPNM(bin=True))
@@ -298,7 +313,7 @@ menu01.add_separator()
 menu01.add_command(label='Exit', state='normal', accelerator='Ctrl+Q', command=DisMiss)
 
 frame_img = Frame(sortir, borderwidth=2, relief='groove')
-frame_img.pack(side='top')
+frame_img.pack(side='top', anchor='center', expand=True)
 
 zanyato = Label(
     frame_img,
@@ -331,9 +346,9 @@ label_zoom.pack(side='left', anchor='n', padx=2, pady=0, fill='both')
 
 BindAll()
 
-# ↓ Center window horizontally, +100 vertically
+# ↓ Center window, +32 vertically
 sortir.update()
-sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+100')
+sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+{(sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32}')
 
 # ↓ Command line part
 if len(argv) == 2:
