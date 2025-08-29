@@ -85,7 +85,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.20.15.19'
+__version__ = '2.20.29.20'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -416,7 +416,7 @@ def list2pnmbin(out_filename: str, list_3d: list[list[list[int]]], maxcolors: in
 
     Usage:
 
-        `pnmlpnm.list2pnm(out_filename, list_3d, maxcolors)`
+        `pnmlpnm.list2pnmbin(out_filename, list_3d, maxcolors)`
 
     where:
 
