@@ -8,9 +8,9 @@
 
 ## Overview and justification
 
-PPM ([Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html)) and PGM ([Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html)) (particular cases of PNM format group) are simplest file formats for RGB and L images, correspondingly. Paradoxically, this simplicity lead to some adverse consequences:
+PPM ([Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html)) and PGM ([Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html)) (particular cases of PNM format group) are simplest file formats for RGB and L images, correspondingly. As usual for this decaying Universe, this simplicity lead to some adverse consequences:
 
-- lack of strict official specification. Instead, you may find words like "usual" in format description. Surely, there is someone who implement this part of image format in unprohibited, yet a totally unusual way.
+- lack of strict official specification. Instead, you may find words like "usual" in format description. Surely, there is always someone who implement this part of image format in unprohibited, yet a totally unusual way.
 
 - unwillingness of many software developers to provide any good support for simple and open format. It took years for almighty Adobe Photoshop developers to include PNM module in distribution rather than count on third-party developers, and surely (see above) they took their chance to implement a separator scheme nobody else uses. What as to PNM support in Python, say, Pillow... sorry, I promised not to mention Pillow anywhere ladies and children are allowed to read it.
 
@@ -18,11 +18,11 @@ As a result, novice Python user (like me) may find it difficult to get reliable 
 
 ## Objectives
 
-1. Obtain suitable facility for visualization of image-like data (images first and foremost), existing in form of 3D nested lists, via Tkinter `PhotoImage(data=...)` method.
+1. Obtaining suitable facility for visualization of image-like data (images first and foremost), existing in form of 3D nested lists, via Tkinter `PhotoImage(data=...)` method.
 
-2. Obtain simple and compact cross-platform module for reading PPM and PGM files as 3D nested lists for further processing with Python, and subsequent writing of processed 3D nested lists data to PPM or PGM files.
+2. Obtaining simple and compact cross-platform module for reading PPM and PGM files as 3D nested lists for further processing with Python, and subsequent writing of processed 3D nested lists data to PPM or PGM files.
 
-To accomplish this, current PyPNM module was developed, combining input/output functions for 8-bits and 16-bits per channel binary and ASCII [Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html) and [Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html) files, i.e. P2, P5, P3 and P6 PNM file types. All color depth ranges supported directly, without limitations and without dancing with tambourine and proclaiming it to be a novel method.
+To accomplish this, current PyPNM module was developed, combining input/output functions for 8-bits and 16-bits per channel binary and ASCII [Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html) and [Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html) files, *i.e.* P2, P5, P3 and P6 PNM file types. All color depth ranges supported directly, without limitations and without dancing with tambourine and proclaiming it to be a novel method.
 
 ## Format compatibility
 
@@ -49,7 +49,7 @@ Current version of PyPNM was successfully tested with Python 3.10 and above. How
 
 Main goal of module under discussion is not just bytes reading and writing but representing image as some logically organized structure for further image editing.
 
-Is seems logical to represent an RGB image as nested 3D structure - (X, Y)-sized matrix of three-component RGB vectors. Since in Python list seem to be about the only variant for mutable structures like that, it is suitable to represent image as `list(list(list(int)))` structure. Therefore, it would be convenient to have module read/write image data to/from such a structure.
+Is seems logical to represent an RGB image as nested 3D structure - (X, Y)-sized matrix of three-component RGB vectors. Since in Python list seem to be about the only variant for mutable structures like that, it is suitable to represent image as `list(list(list(int)))` structure. Therefore, it would be convenient to have module read/write image data from/to such a structure.
 
 Note that for L images memory structure is still `list(list(list(int)))`, with innermost list having only one component, thus enabling further image editing with the same nested Y, X, Z loop regardless of color mode.
 
@@ -151,7 +151,7 @@ Create empty 3D nested list of `X * Y * Z` sizes.
 
 ## viewer.py
 
-Program [**viewer.py**](https://github.com/Dnyarri/PyPNM/blob/main/viewer.py) is a small illustrative utility: using *PyPNM* package, it reads different flavours of PGM and PPM files, and allows saving them as different types of PGM/PNM, i.e. it can read ASCII PPM and write it as binary PPM or vs. Also this program shows images using *PyPNM* and Tkinter. No, there is no mistake: it does not feed PPM files to Tkinter directly. Instead, it uses nested 3D list data loaded using *PyPNM* to generate in-memory bytes object of PPM structure using `preview_data = pnmlpnm.list2bin(image3D, maxcolors)`, and then feeds this in-memory bytes object to Tkinter as `preview = PhotoImage(data=preview_data)` (note using *data=*, not *file=*). This way it displays, for example, ASCII PPM which Tkinter itself cannot handle.
+Program [**viewer.py**](https://github.com/Dnyarri/PyPNM/blob/main/viewer.py) is a small illustrative utility: using *PyPNM* package, it reads different flavours of PGM and PPM files, and allows saving them as different types of PGM/PNM, *i.e.* it can read ASCII PPM and write it as binary PPM or vs. Also this program shows images using *PyPNM* and Tkinter. No, there is no mistake: it does not feed PPM files to Tkinter directly. Instead, it uses nested 3D list data loaded using *PyPNM* to generate in-memory bytes object of PPM structure using `preview_data = pnmlpnm.list2bin(image3D, maxcolors)`, and then feeds this in-memory bytes object to Tkinter as `preview = PhotoImage(data=preview_data)` (note using *data=*, not *file=*). This way it displays, for example, ASCII PPM which Tkinter itself cannot handle.
 
 | Fig. 1. *Example of ASCII PPM opened in Viewer.py* |
 | :---: |
