@@ -169,7 +169,7 @@ Using *PyPNM* and Tkinter you may easily visualize any data that can be represen
 
 ## References
 
-1. [Netpbm file formats description](https://netpbm.sourceforge.net/doc/).
+1. [Netpbm file formats specifications](https://netpbm.sourceforge.net/doc/) followed in the course of PyPNM development.
 
 2. [PyPNM at PyPI](https://pypi.org/project/PyPNM/) - installing PyPN with `pip`. Does not contain viewer example etc., only core converter module, but provides regular `pip`-driven automated updates.
 
@@ -177,7 +177,7 @@ Using *PyPNM* and Tkinter you may easily visualize any data that can be represen
 
 4. [PyPNM ver.34 at Github](https://github.com/Dnyarri/PyPNM/tree/py34) - same as [3], but compatible with Python 3.4.
 
-5. [PyPNM docs (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf)
+5. [PyPNM docs (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf). While current documentation was written for 9 May "Victory" version, it remains valid for 2 Sep "Victory II" release since it involves total inner optimization without changing input/output format.
 
 ### Related
 
