@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-"""PPM and PGM image files reading, displaying and writing for Python >= 3.11.
--------------------------------------------------------------------------------
+"""PPM and PGM image files reading, displaying and writing for Python > 3.10.
+------------------------------------------------------------------------------
 
 Overview
 ---------
@@ -9,18 +9,18 @@ Overview
 PyPNM module is a pack of functions for dealing with PPM and PGM image files.
 Functions included are:
 
-- pnm2list: reading binary or ascii RGB PPM or L PGM file and returning image data
+- `pnm2list`: reading binary or ascii RGB PPM or L PGM file and returning image data
 as nested list of int.
-- list2bin: getting image data as nested list of int and creating binary PPM (P6) or PGM (P5)
+- `list2bin`: getting image data as nested list of int and creating binary PPM (P6) or PGM (P5)
 data structure in memory. Suitable for generating data to display with
 Tkinter `PhotoImage(data=...)` class.
-- list2pnmbin: getting image data as nested list of int and writing binary PPM (P6) or PGM (P5) image file.
+- `list2pnmbin`: getting image data as nested list of int and writing binary PPM (P6) or PGM (P5) image file.
 Note that bytes generations procedure is optimized to save memory while working with large files and
 therefore is different from that used in `list2bin`.
-- list2pnmascii: alternative function to write ASCII PPM (P3) or PGM (P2) files.
-- list2pnm: getting image data as nested list of int and writing either binary or ASCII PNM
+- `list2pnmascii`: alternative function to write ASCII PPM (P3) or PGM (P2) files.
+- `list2pnm`: getting image data as nested list of int and writing either binary or ASCII PNM
 depending on `bin` argument value.
-- create_image: creating empty nested 3D list for image representation.
+- `create_image`: creating empty nested 3D list for image representation.
 Not used within this particular module but often needed by programs this module is supposed to be used with.
 
 Installation
@@ -65,19 +65,20 @@ where `bin` is a bool switch defining where resulting file will be binary or ASC
 Copyright and redistribution
 -----------------------------
 
-Written by `Ilya Razmanov<https://dnyarri.github.io/>`_ to facilitate working with PPM/PGM files
-and displaying arbitrary image-like data with Tkinter `PhotoImage` class.
+Written by `Ilya Razmanov<https://dnyarri.github.io/>`_ aka Ilyich the Toad
+to facilitate working with PPM/PGM files and displaying arbitrary image-like data
+with Tkinter `PhotoImage` class.
 
 May be freely used, redistributed and modified.
-In case of introducing useful modifications, please report to the developer.
+In case of introducing useful modifications, report to the developer at once.
 
 References
 -----------
 
-1. `Netpbm specifications <https://netpbm.sourceforge.net/doc/>`_
-2. `PyPNM at GitHub <https://github.com/Dnyarri/PyPNM/>`_
-3. `PyPNM at PyPI <https://pypi.org/project/PyPNM/>`_
-4. `PyPNM Documentation <https://dnyarri.github.io/pypnm/pypnm.pdf>`_
+1. Netpbm specifications: https://netpbm.sourceforge.net/doc/
+2. PyPNM at GitHub: https://github.com/Dnyarri/PyPNM/
+3. PyPNM at PyPI: https://pypi.org/project/PyPNM/
+4. PyPNM Documentation: https://dnyarri.github.io/pypnm/pypnm.pdf
 
 """
 
@@ -85,7 +86,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.20.29.20'
+__version__ = '2.21.2.2'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -100,7 +101,6 @@ from re import search, sub
     ║ WARNING: internal functions  ║
     ║ do not perform format check! ║
     ╚══════════════════════════════╝ """
-
 
 def pnm2list(in_filename: str) -> tuple[int, int, int, int, list[list[list[int]]]]:
     """Read PGM or PPM file to nested image data list.
@@ -337,15 +337,12 @@ def pnm2list(in_filename: str) -> tuple[int, int, int, int, list[list[list[int]]
         return _p1(in_filename)
     else:
         raise ValueError(f'Header {beginnings} is not in P1:P6 range')
-
-
-# End of pnm2list PNM reading function
+# ↑ End of pnm2list PNM reading function
 
 
 """ ╔══════════╗
     ║ list2bin ║
     ╚══════════╝ """
-
 
 def list2bin(list_3d: list[list[list[int]]], maxcolors: int, show_chessboard: bool = False) -> bytes:
     """Convert nested image data list to PGM P5 or PPM P6 (binary) data structure in memory to be used with Tkinter PhotoImage(data=...).
@@ -401,15 +398,12 @@ def list2bin(list_3d: list[list[list[int]]], maxcolors: int, show_chessboard: bo
         content.byteswap()  # Critical for 16 bits per channel
 
     return b''.join((f'{magic}\n{X} {Y}\n{maxcolors}\n'.encode('ascii'), content.tobytes()))
-
-
-# End of 'list2bin' list to in-memory PNM conversion function
+# ↑ End of 'list2bin' list to in-memory PNM conversion function
 
 
 """ ╔═════════════╗
     ║ list2pnmbin ║
     ╚═════════════╝ """
-
 
 def list2pnmbin(out_filename: str, list_3d: list[list[list[int]]], maxcolors: int) -> None:
     """Write binary PNM `out_filename` file; writing performed per row to reduce RAM usage.
@@ -446,15 +440,12 @@ def list2pnmbin(out_filename: str, list_3d: list[list[list[int]]], maxcolors: in
             file_pnm.write(row_array)  # Writing row bytes array to file
 
     return None
-
-
-# End of 'list2pnmbin' function writing binary PPM/PGM file
+# ↑ End of 'list2pnmbin' function writing binary PPM/PGM file
 
 
 """ ╔═══════════════╗
     ║ list2pnmascii ║
     ╚═══════════════╝ """
-
 
 def list2pnmascii(out_filename: str, list_3d: list[list[list[int]]], maxcolors: int) -> None:
     """Write ASCII PNM `out_filename` file; writing performed per sample to reduce RAM usage.
@@ -495,15 +486,12 @@ def list2pnmascii(out_filename: str, list_3d: list[list[list[int]]], maxcolors: 
                     file_pnm.write(f'{list_3d[y][x][z]} ')  # Writing channel value to file
 
     return None
-
-
-# End of 'list2pnmascii' function writing ASCII PPM/PGM file
+# ↑ End of 'list2pnmascii' function writing ASCII PPM/PGM file
 
 
 """ ╔══════════╗
     ║ list2pnm ║
     ╚══════════╝ """
-
 
 def list2pnm(out_filename: str, list_3d: list[list[list[int]]], maxcolors: int, bin: bool = True) -> None:
     """Write PNM `out_filename` file using either `list2pnmbin` or `list2pnmascii` depending on `bin` switch.
@@ -520,21 +508,19 @@ def list2pnm(out_filename: str, list_3d: list[list[list[int]]], maxcolors: int, 
         - `out_filename`:   PNM file name.
 
     """
+
     if bin:
         list2pnmbin(out_filename, list_3d, maxcolors)
     else:
         list2pnmascii(out_filename, list_3d, maxcolors)
 
     return None
-
-
-# End of 'list2pnm' switch function writing any type of PPM/PGM file
+# ↑ End of 'list2pnm' switch function writing any type of PPM/PGM file
 
 
 """ ╔════════════════════╗
     ║ Create empty image ║
     ╚════════════════════╝ """
-
 
 def create_image(X: int, Y: int, Z: int) -> list[list[list[int]]]:
     """Create empty 3D nested list of X * Y * Z size."""
@@ -542,12 +528,8 @@ def create_image(X: int, Y: int, Z: int) -> list[list[list[int]]]:
     new_image = [[[0 for z in range(Z)] for x in range(X)] for y in range(Y)]
 
     return new_image
+# ↑ End of 'create_image' empty nested 3D list creation
 
-
-# End of 'create_image' empty nested 3D list creation
-
-
-# --------------------------------------------------------------
-
+# ↓ Dummy stub for standalone execution attempt
 if __name__ == '__main__':
     print(f'Module PyPNM {__version__} to be imported, not run as standalone!')

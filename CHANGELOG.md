@@ -26,13 +26,13 @@ Yet another final version 😉
 - 1.16.1.9    General cleanup, minor speedup.
 - 1.17.1.1    1 May 2025 "Mayday": Added `list2pnm` function, previous `list2pnm` renamed to `list2pnmbin`.
 New `list2pnm` is a switch between `list2pnmbin` and `list2pnmascii`, controlled with `bin` bool; default is True that provides backward compatibility.
-- **1.17.9.1**    **9 May** 2025 "**Victory**": Optimizations.
+- 1.17.9.1    **9 May** 2025 "**Victory**": Optimizations.
 
 ### Version 2
 
-2.20.14.34  2 Sep 2025 "Victory II": substantional changes aimed to save resources:
+2.21.2.2    **2 Sep** 2025 "**Victory II**": substantial changes aimed to save resources:
 
 - `mmap` introduced for reading to remove intermediates for `re`.
 - generators are widely used for writing.
 
-API remain the same.
+Module input/output remains the same as for 1.17.9.34 "Victory".

@@ -177,7 +177,7 @@ Using *PyPNM* and Tkinter you may easily visualize any data that can be represen
 
 4. [PyPNM ver.34 at Github](https://github.com/Dnyarri/PyPNM/tree/py34) - same as [3], but compatible with Python 3.4.
 
-5. [PyPNM docs (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf). While current documentation was written for 9 May "Victory" version, it remains valid for 2 Sep "Victory II" release since it involves total inner optimization without changing input/output format.
+5. [PyPNM docs (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf). While current documentation was written for 9 May 2025 "Victory" version, it remains valid for 2 Sep 2025 "Victory II" release since it involves total inner optimization without changing input/output format.
 
 ### Related
 

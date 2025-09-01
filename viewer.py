@@ -15,7 +15,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.20.16.12'
+__version__ = '2.21.2.2'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -53,14 +53,14 @@ def BindAll() -> None:
 def UINormal() -> None:
     """Normal UI state"""
 
-    zanyato.config(state='normal')
+    zanyato['state'] = 'normal'
     sortir.update()
 
 
 def UIBusy() -> None:
     """Busy UI state"""
 
-    zanyato.config(state='disabled')
+    zanyato['state'] = 'disabled'
     sortir.update()
 
 
