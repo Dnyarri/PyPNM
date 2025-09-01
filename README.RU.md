@@ -167,7 +167,7 @@ Current PyPNM version is maximal backward compatibility build, created for PyPI 
 
 3. [PyPNM на Github](https://github.com/Dnyarri/PyPNM/) - содержит пример приложения для просмотра, иллюстрирующий применение `list2bin` для визуализации данных с помощью Tkinter `PhotoImage(data=...), и конверсию изображений между форматами.
 
-4. [PyPNM docs (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf)
+4. [PyPNM docs (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf). Текущая версия документации относится к выпуску 9 мая 2025 года "Victory", но, поскольку капитальная модернизация, проведённая в версии 2 сентября 2025 года "Victory II", не затрагивает структуру ввода и вывода, документация действительна и для новых версий. Новая версия делает всё то же самое, просто старается жрать меньше ресурсов.
 
 5. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - пример применения, масштабирование изображений методами Scale2x и Scale3x на чистом Python, ввод/вывод PNG основан на [PyPNG](https://gitlab.com/drj11/pypng), а PNM - на [PyPNM](https://pypi.org/project/PyPNM/), что делает приложения кросс-платформенными.
 
