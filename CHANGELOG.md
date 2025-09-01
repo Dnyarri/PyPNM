@@ -31,14 +31,14 @@ Improved robustness.
 - 1.16.12.34  Conditional branches shortened, some more RAM cleanup attempts.
 - 1.17.1.34   1 May 2025 "Mayday": Added `list2pnm` function, previous `list2pnm` renamed to `list2pnmbin`.
 New `list2pnm` is a switch between `list2pnmbin` and `list2pnmascii`, controlled with `bin` bool; default is True that provides backward compatibility.
-- **1.17.9.34**   **9 May** 2025 "**Victory**": Forced 8-bit output for `list2bin` under old Python. Some optimizations.
+- 1.17.9.34   **9 May** 2025 "**Victory**": Forced 8-bit output for `list2bin` under old Python. Some optimizations.
 [PyPNM 1.17.9.34.post2 "Victory"](https://pypi.org/project/PyPNM/1.17.9.34.post2/) will be the last one in ver. 1 series.
 
 ### Version 2
 
-**2.20.14.34**  **2 Sep** 2025 "**Victory II**": substantial changes aimed to save resources:
+2.21.2.34   **2 Sep** 2025 "**Victory II**": substantial changes aimed to save resources:
 
 - `mmap` introduced for reading to remove intermediates for `re`.
 - generators are used for writing wherever possible.
 
-Module API remain the same.
+Module input/output remains the same as for 1.17.9.34 "Victory".
