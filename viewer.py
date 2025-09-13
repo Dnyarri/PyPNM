@@ -19,7 +19,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.21.2.34'
+__version__ = '2.21.12.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -102,7 +102,7 @@ def GetSource(event=None):
     sourcedir = '' if sourcefilename is None else str(Path(sourcefilename).parent)
     # ↓ Trying to receive file name from command line, if None, opening GUI
     if filename_from_command is None:
-        sourcefilename = askopenfilename(title='Open image file', filetypes=[('Supported formats', '.png .ppm .pgm .pbm'), ('Portable network graphics', '.png'), ('Portable network map', '.ppm .pgm .pbm')], initialdir=sourcedir)
+        sourcefilename = askopenfilename(title='Open image file', filetypes=[('Supported formats', '.png .ppm .pgm .pbm .pnm'), ('Portable network graphics', '.png'), ('Portable any map', '.ppm .pgm .pbm .pnm')], initialdir=sourcedir)
         if sourcefilename == '':
             return
     else:
@@ -117,7 +117,7 @@ def GetSource(event=None):
     if Path(sourcefilename).suffix == '.png':
         X, Y, Z, maxcolors, image3D, info = pnglpng.png2list(sourcefilename)
 
-    elif Path(sourcefilename).suffix in ('.ppm', '.pgm', '.pbm'):
+    elif Path(sourcefilename).suffix in ('.ppm', '.pgm', '.pbm', '.pnm'):
         X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(sourcefilename)
         # ↓ Creating dummy info, containing bpc value required to Save As PNG properly
         info = {'bitdepth': 16} if maxcolors > 255 else {'bitdepth': 8}
@@ -179,7 +179,7 @@ def GetSource(event=None):
     label_zoom.config(text=zoom_show[zoom_factor])
     # ↓ enabling "Save as..."
     menu01.entryconfig('Save binary PNM...', state='normal')  # Instead of name numbers from 0 may be used
-    menu01.entryconfig('Save ascii PNM...', state='normal')
+    menu01.entryconfig('Save ASCII PNM...', state='normal')
     menu01.entryconfig('Save PNG...', state='normal')
     menu01.entryconfig('Info', state='normal')
     UINormal()
@@ -200,7 +200,7 @@ def SaveAsPNM(bin):
         filetype = 'ppm'
 
     # ↓ Figuring out suggested file name based on saving in source/different format
-    if Path(sourcefilename).suffix.lower() in ('.ppm', '.pgm'):
+    if Path(sourcefilename).suffix.lower() in ('.ppm', '.pgm', '.pnm'):
         proposed_name = Path(sourcefilename).stem + ' copy.{0}'.format(filetype)
     else:
         proposed_name = Path(sourcefilename).stem + '.{0}'.format(filetype)
@@ -312,7 +312,7 @@ menu01 = Menu(sortir, tearoff=False)
 menu01.add_command(label='Open...', state='normal', accelerator='Ctrl+O', command=GetSource)
 menu01.add_separator()
 menu01.add_command(label='Save binary PNM...', state='disabled', command=lambda: SaveAsPNM(bin=True))
-menu01.add_command(label='Save ascii PNM...', state='disabled', command=lambda: SaveAsPNM(bin=False))
+menu01.add_command(label='Save ASCII PNM...', state='disabled', command=lambda: SaveAsPNM(bin=False))
 menu01.add_command(label='Save PNG...', state='disabled', command=SaveAsPNG)
 menu01.add_separator()
 menu01.add_command(label='Info', state='disabled', accelerator='Ctrl+I', command=ShowInfo)
@@ -360,7 +360,7 @@ sortir.geometry('+{}+{}'.format((sortir.winfo_screenwidth() - sortir.winfo_width
 # ↓ Command line part
 if len(argv) == 2:
     try_to_open = argv[1]
-    if Path(try_to_open).exists() and Path(try_to_open).is_file() and (Path(try_to_open).suffix in ('.ppm', '.pgm', '.pbm', '.png')):
+    if Path(try_to_open).exists() and Path(try_to_open).is_file() and (Path(try_to_open).suffix in ('.ppm', '.pgm', '.pbm', '.pnm', '.png')):
         filename_from_command = str(Path(try_to_open).resolve())
         GetSource()
     else:
