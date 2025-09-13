@@ -15,7 +15,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.21.2.2'
+__version__ = '2.21.12.21'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -93,7 +93,7 @@ def GetSource(event=None) -> None:
 
     # ↓ Trying to receive file name from command line, if None, opening GUI
     if filename_from_command is None:
-        sourcefilename = askopenfilename(title='Open PPM/PGM file to view', filetypes=[('Portable network map', '.ppm .pgm .pbm')])
+        sourcefilename = askopenfilename(title='Open PPM/PGM file to view', filetypes=[('Portable any map', '.ppm .pgm .pbm .pnm')])
         if sourcefilename == '':
             return
     else:
@@ -160,7 +160,7 @@ def GetSource(event=None) -> None:
     label_zoom.config(text=zoom_show[zoom_factor])
     # ↓ enabling "Save as..."
     menu01.entryconfig('Save binary PNM...', state='normal')  # Instead of name numbers from 0 may be used
-    menu01.entryconfig('Save ascii PNM...', state='normal')
+    menu01.entryconfig('Save ASCII PNM...', state='normal')
     menu01.entryconfig('Info', state='normal')
     UINormal()
     sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+{(sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32}')
@@ -259,7 +259,7 @@ menu01 = Menu(sortir, tearoff=False)
 menu01.add_command(label='Open...', state='normal', accelerator='Ctrl+O', command=GetSource)
 menu01.add_separator()
 menu01.add_command(label='Save binary PNM...', state='disabled', command=lambda: SaveAsPNM(bin=True))
-menu01.add_command(label='Save ascii PNM...', state='disabled', command=lambda: SaveAsPNM(bin=False))
+menu01.add_command(label='Save ASCII PNM...', state='disabled', command=lambda: SaveAsPNM(bin=False))
 menu01.add_separator()
 menu01.add_command(label='Info', accelerator='Ctrl+I', state='disabled', command=ShowInfo)
 menu01.add_separator()
@@ -306,7 +306,7 @@ sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+{(
 # ↓ Command line part
 if len(argv) == 2:
     try_to_open = argv[1]
-    if Path(try_to_open).exists() and Path(try_to_open).is_file() and (Path(try_to_open).suffix in ('.ppm', '.pgm', '.pbm')):
+    if Path(try_to_open).exists() and Path(try_to_open).is_file() and (Path(try_to_open).suffix in ('.ppm', '.pgm', '.pbm', '.pnm')):
         filename_from_command = str(Path(try_to_open).resolve())
         GetSource()
     else:
