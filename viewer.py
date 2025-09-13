@@ -98,7 +98,7 @@ def GetSource(event=None):
 
     # ↓ Trying to receive file name from command line, if None, opening GUI
     if filename_from_command is None:
-        sourcefilename = askopenfilename(title='Open image file', filetypes=[('Supported formats', '.png .ppm .pgm .pbm'), ('Portable network graphics', '.png'), ('Portable network map', '.ppm .pgm .pbm')])
+        sourcefilename = askopenfilename(title='Open image file', filetypes=[('Supported formats', '.png .ppm .pgm .pbm .pnm'), ('Portable network graphics', '.png'), ('Portable any map', '.ppm .pgm .pbm .pnm')])
         if sourcefilename == '':
             return
     else:
@@ -113,7 +113,7 @@ def GetSource(event=None):
     if Path(sourcefilename).suffix == '.png':
         X, Y, Z, maxcolors, image3D, info = pnglpng.png2list(sourcefilename)
 
-    elif Path(sourcefilename).suffix in ('.ppm', '.pgm', '.pbm'):
+    elif Path(sourcefilename).suffix in ('.ppm', '.pgm', '.pbm', '.pnm'):
         X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(sourcefilename)
         # ↓ Creating dummy info, containing bpc value required to Save As PNG properly
         info = {'bitdepth': 16} if maxcolors > 255 else {'bitdepth': 8}
@@ -195,7 +195,7 @@ def SaveAsPNM(bin: bool):
         filetype = 'ppm'
 
     # ↓ Figuring out suggested file name based on saving in source/different format
-    if Path(sourcefilename).suffix.lower() in ('.ppm', '.pgm'):
+    if Path(sourcefilename).suffix.lower() in ('.ppm', '.pgm', '.pnm'):
         proposed_name = Path(sourcefilename).stem + f' copy.{filetype}'
     else:
         proposed_name = Path(sourcefilename).stem + f'.{filetype}'
@@ -353,7 +353,7 @@ sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+{(
 # ↓ Command line part
 if len(argv) == 2:
     try_to_open = argv[1]
-    if Path(try_to_open).exists() and Path(try_to_open).is_file() and (Path(try_to_open).suffix in ('.ppm', '.pgm', '.pbm', '.png')):
+    if Path(try_to_open).exists() and Path(try_to_open).is_file() and (Path(try_to_open).suffix in ('.ppm', '.pgm', '.pbm', '.pnm', '.png')):
         filename_from_command = str(Path(try_to_open).resolve())
         GetSource()
     else:
