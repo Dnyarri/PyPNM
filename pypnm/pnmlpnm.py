@@ -343,7 +343,7 @@ def pnm2list(in_filename):
     elif beginnings.startswith(b'P1'):  # ASCII PBM
         return _p1(in_filename)
     else:
-        raise ValueError('Header is not in P1:P6 range')
+        raise ValueError('Header {} is not in P1:P6 range'.format(beginnings))
 # ↑ End of pnm2list PNM reading function
 
 
