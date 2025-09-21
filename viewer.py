@@ -19,7 +19,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.21.12.34'
+__version__ = '2.21.21.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -165,6 +165,7 @@ def GetSource(event=None):
 
     preview = zoom_do[zoom_factor]
     zanyato.config(image=preview, compound='none', borderwidth=1, background=zanyato.master['background'])
+    zanyato.pack_configure(pady=max(0, 16 - (preview.height() // 2)))
     # ↓ binding on preview click
     zanyato.bind('<Control-Button-1>', zoomIn)  # Ctrl + left click
     zanyato.bind('<Double-Control-Button-1>', zoomIn)  # Ctrl + left click too fast
@@ -256,6 +257,7 @@ def zoomIn(event=None):
     preview = PhotoImage(data=preview_data)
     preview = zoom_do[zoom_factor]
     zanyato.config(image=preview, compound='none')
+    zanyato.pack_configure(pady=max(0, 16 - (preview.height() // 2)))
     # ↓ updating zoom factor display
     label_zoom.config(text=zoom_show[zoom_factor])
     # ↓ reenabling +/- buttons
@@ -274,6 +276,7 @@ def zoomOut(event=None):
     preview = PhotoImage(data=preview_data)
     preview = zoom_do[zoom_factor]
     zanyato.config(image=preview, compound='none')
+    zanyato.pack_configure(pady=max(0, 16 - (preview.height() // 2)))
     # ↓ updating zoom factor display
     label_zoom.config(text=zoom_show[zoom_factor])
     # ↓ reenabling +/- buttons
