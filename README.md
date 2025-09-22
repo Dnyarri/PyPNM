@@ -163,6 +163,9 @@ Beside having simple yet fully functional GUI with mouse events handling a-la Ph
 
 for opening files. In theory, you may even register it as system viewer for PPM, PGM and PBM files.
 
+> [!NOTE]
+> Since Viewer version 2.21.22.23 "Export via Tkinter..." option added to main menu, allowing to export opened image using Tkinter native `PhotoImage.write` method. This option added only to illustrate Tkinter limitations. For example, 16 bit per channel images, saved this way, become 8 bpc due to Tkinter internal limitations.
+
 ## Conclusion
 
 Using *PyPNM* and Tkinter you may easily visualize any data that can be represented as greyscale or RGB images (images first and foremost), without large external packages and writing files on disk. Nested list data structures used by PyPNM are well suited for arbitrary color mode image processing using nested loop/map .

@@ -15,7 +15,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.21.21.21'
+__version__ = '2.21.22.23'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -162,6 +162,7 @@ def GetSource(event=None) -> None:
     # ↓ enabling "Save as..."
     menu01.entryconfig('Save binary PNM...', state='normal')  # Instead of name numbers from 0 may be used
     menu01.entryconfig('Save ASCII PNM...', state='normal')
+    menu01.entryconfig('Export via Tkinter...', state='normal')
     menu01.entryconfig('Info', state='normal')
     UINormal()
     sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+{(sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32}')
@@ -169,6 +170,8 @@ def GetSource(event=None) -> None:
 
 def SaveAsPNM(bin: bool) -> None:
     """Once pressed on any of Save PNM"""
+
+    global sourcefilename
 
     # ↓ Adjusting "Save to" formats to be displayed according to channel number
     if Z < 3:
@@ -194,6 +197,54 @@ def SaveAsPNM(bin: bool) -> None:
     # ↓ Saving "savefilename" in PNM format depending on "bin" value
     UIBusy()
     pnmlpnm.list2pnm(savefilename, image3D, maxcolors, bin)
+    # ↓ Changing filename to new saved one
+    sourcefilename = savefilename
+    sortir.title(f'PNMViewer: {Path(sourcefilename).name}')
+    UINormal()
+
+
+def ExportPhotoImage() -> None:
+    """Use Tkinter PhotoImage.write to export image.
+
+    This function writes Tkinter PhotoImage object to file.
+    It does not create editable 3D list as PyPNM does. It just dumps.
+    All Tkinter limitations apply, like color depth ones.
+
+    """
+
+    if Z == 1:
+        format_list = [('Portable network graphics', '.png'), ('Graphics interchange format', '.gif'), ('Portable any map', '.pnm')]
+        proposed_name = Path(sourcefilename).stem + '.png'
+    elif Z == 3:
+        format_list = [('Portable network graphics', '.png'), ('Portable any map', '.pnm')]
+        proposed_name = Path(sourcefilename).stem + '.png'
+    else:
+        format_list = [('Portable network graphics', '.png')]
+        proposed_name = Path(sourcefilename).stem + '.png'
+
+    # ↓ Open "Save as..." file
+    savefilename = asksaveasfilename(
+        title='Export via Tinter',
+        filetypes=format_list,
+        defaultextension='.png',
+        initialdir=Path(sourcefilename).parent,
+        initialfile=proposed_name,
+    )
+    if savefilename == '':
+        return
+    UIBusy()
+
+    # ↓ Recreates preview_data from global image3D,
+    #   does not show it but feeds to Tkinter to create and
+    #   dump PhotoImage.
+    preview_data = pnmlpnm.list2bin(image3D, maxcolors)
+    preview_dump = PhotoImage(data=preview_data)
+    if Path(savefilename).suffix in ('.pgm', '.ppm', '.pnm'):
+        preview_dump.write(savefilename, format='ppm')
+    elif Path(savefilename).suffix == '.gif':
+        preview_dump.write(savefilename, format='gif')
+    else:
+        preview_dump.write(savefilename, format='png')
     UINormal()
 
 
@@ -253,7 +304,6 @@ sourcefilename = X = Y = Z = maxcolors = None
 
 sortir = Tk()
 sortir.title('PNMViewer')
-sortir.geometry('+200+100')
 sortir.minsize(128, 128)
 sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00'))
 
@@ -263,6 +313,7 @@ menu01.add_command(label='Open...', state='normal', accelerator='Ctrl+O', comman
 menu01.add_separator()
 menu01.add_command(label='Save binary PNM...', state='disabled', command=lambda: SaveAsPNM(bin=True))
 menu01.add_command(label='Save ASCII PNM...', state='disabled', command=lambda: SaveAsPNM(bin=False))
+menu01.add_command(label='Export via Tkinter...', state='disabled', command=ExportPhotoImage)
 menu01.add_separator()
 menu01.add_command(label='Info', accelerator='Ctrl+I', state='disabled', command=ShowInfo)
 menu01.add_separator()
