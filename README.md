@@ -8,6 +8,14 @@
 
 ## Overview and justification
 
+PyPNM is a pure Python module for
+
+- reading PPM and PGM image files (both 8 and 16 bits per channel color depth) to image 3D integer lists for further editing;
+
+- displaying 3D lists thus obtained by converting to Tkinter-compatible data in memory, and subsequent
+
+- writing edited image 3D lists to disk as PPM or PGM files, either binary or ASCII.
+
 PPM ([Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html)) and PGM ([Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html)) (particular cases of PNM format group) are simplest file formats for RGB and L images, correspondingly. As usual for this decaying Universe, this simplicity lead to some adverse consequences:
 
 - lack of strict official specification. Instead, you may find words like "usual" in format description. Surely, there is always someone who implement this part of image format in unprohibited, yet a totally unusual way.
@@ -186,7 +194,7 @@ Using *PyPNM* and Tkinter you may easily visualize any data that can be represen
 
 [PixelArtScaling](https://dnyarri.github.io/scalenx.html) - usage example, pure Python image rescaling applications using Scale2x and Scale3x methods; PNG I/O is based on [PyPNG](https://gitlab.com/drj11/pypng), and PPM/PGM I/O - on  [PyPNM](https://pypi.org/project/PyPNM/), thus making everything pure Python and therefore cross-platform.
 
-[«Averager»](https://dnyarri.github.io/povthread.html#averager), non-standard adaptive image average filtering example, written completely in pure Python. Filter before/after preview based on PyPNM `list2bin` code and Tkinter `PhotoImage(data=...)` class. Filtering itself largely utilize the fact that nested lists, produced by PyPNM, may be easily processed with one-loop-fits-all algorithms regardless of color mode. As a result, fully operational pure Python interactive image filtering application ensued.
+[«Averager»](https://dnyarri.github.io/povthread.html#averager), non-standard adaptive image average filtering application, written completely in pure Python. Filter before/after preview based on PyPNM `list2bin` code and Tkinter `PhotoImage(data=...)` class. Filtering itself largely utilize the fact that nested lists, produced by PyPNM, may be easily processed with one-loop-fits-all algorithms regardless of color mode. As a result, fully operational pure Python interactive image filtering application ensued.
 
 | Fig. 2. *Pure Python image filtering application, largely based on PyPNM* |
 | :---: |
