@@ -15,7 +15,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.21.22.23'
+__version__ = '2.23.7.23'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -239,9 +239,9 @@ def ExportPhotoImage() -> None:
     #   dump PhotoImage.
     preview_data = pnmlpnm.list2bin(image3D, maxcolors)
     preview_dump = PhotoImage(data=preview_data)
-    if Path(savefilename).suffix in ('.pgm', '.ppm', '.pnm'):
+    if Path(savefilename).suffix.lower() in ('.pgm', '.ppm', '.pnm'):
         preview_dump.write(savefilename, format='ppm')
-    elif Path(savefilename).suffix == '.gif':
+    elif Path(savefilename).suffix.lower() == '.gif':
         preview_dump.write(savefilename, format='gif')
     else:
         preview_dump.write(savefilename, format='png')
@@ -360,7 +360,7 @@ sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+{(
 # ↓ Command line part
 if len(argv) == 2:
     try_to_open = argv[1]
-    if Path(try_to_open).exists() and Path(try_to_open).is_file() and (Path(try_to_open).suffix in ('.ppm', '.pgm', '.pbm', '.pnm')):
+    if Path(try_to_open).exists() and Path(try_to_open).is_file() and (Path(try_to_open).suffix.lower() in ('.ppm', '.pgm', '.pbm', '.pnm')):
         filename_from_command = str(Path(try_to_open).resolve())
         GetSource()
     else:
