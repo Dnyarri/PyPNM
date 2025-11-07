@@ -19,7 +19,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.21.21.34'
+__version__ = '2.23.7.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -114,10 +114,10 @@ def GetSource(event=None):
     # ↓ Loading file, converting data to list.
     #   NOTE: maxcolors, image3D,info are GLOBALS!
     #   They are used during save!
-    if Path(sourcefilename).suffix == '.png':
+    if Path(sourcefilename).suffix.lower() == '.png':
         X, Y, Z, maxcolors, image3D, info = pnglpng.png2list(sourcefilename)
 
-    elif Path(sourcefilename).suffix in ('.ppm', '.pgm', '.pbm', '.pnm'):
+    elif Path(sourcefilename).suffix.lower() in ('.ppm', '.pgm', '.pbm', '.pnm'):
         X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(sourcefilename)
         # ↓ Creating dummy info, containing bpc value required to Save As PNG properly
         info = {'bitdepth': 16} if maxcolors > 255 else {'bitdepth': 8}
@@ -363,7 +363,7 @@ sortir.geometry('+{}+{}'.format((sortir.winfo_screenwidth() - sortir.winfo_width
 # ↓ Command line part
 if len(argv) == 2:
     try_to_open = argv[1]
-    if Path(try_to_open).exists() and Path(try_to_open).is_file() and (Path(try_to_open).suffix in ('.ppm', '.pgm', '.pbm', '.pnm', '.png')):
+    if Path(try_to_open).exists() and Path(try_to_open).is_file() and (Path(try_to_open).suffix.lower() in ('.ppm', '.pgm', '.pbm', '.pnm', '.png')):
         filename_from_command = str(Path(try_to_open).resolve())
         GetSource()
     else:
