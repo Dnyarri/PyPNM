@@ -43,3 +43,5 @@ New `list2pnm` is a switch between `list2pnmbin` and `list2pnmascii`, controlled
   Module input/output remains the same as for 1.17.9.34 "Victory".
 
 - 2.21.3.4      3 Sep 2025 "Victory II" update mostly consist of more friendly help.
+
+- 2.21.3.4.post3  More ReST-compliant docstrings.

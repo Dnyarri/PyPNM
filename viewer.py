@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 
-"""Test shell for `PyPNM<https://github.com/Dnyarri/PyPNM/>`_ module - Tkinter-based viewer.
+"""Test shell for `PyPNM for Python >= 3.4`_ module - a Tkinter-based viewer.
 
-Viewer does not use PPM file directly to display it with Tkinter PhotoImage(file=...) -
-instead, it loads image file, then constructs PPM-like bytes data object in memory,
-and then displays it using Tkinter PhotoImage(data=...).
-For example, it's able to display ascii PGM and PPM, not directly supported by Tkinter,
+Viewer does not use PNM file directly to display it with Tkinter ``PhotoImage(file=...)`` -
+instead, it loads image file, then constructs PNM-like bytes data object in memory,
+and then displays it using Tkinter ``PhotoImage(data=...)``.
+For example, it's able to display ASCII PGM and PPM, not supported by Tkinter,
 since it recodes them to binary on the fly.
 
 NOTE:
 
-This is special extended compatibility edition, tested with Python 3.4 under Windows XP,
-including `PNG support<https://gitlab.com/drj11/pypng>`_.
+This is special extended compatibility edition, tested with **Python 3.4**
+under Windows XP 32-bit, including PNG support with `PyPNG`_.
+
+.. _PyPNM for Python >= 3.4: https://github.com/Dnyarri/PyPNM/tree/py34
+
+.. _PyPNG: https://gitlab.com/drj11/pypng
+
 
 """
 
@@ -19,7 +24,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.23.7.34'
+__version__ = '2.23.11.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
