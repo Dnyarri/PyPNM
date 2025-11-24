@@ -30,12 +30,14 @@ New `list2pnm` is a switch between `list2pnmbin` and `list2pnmascii`, controlled
 
 ### Version 2
 
-- 2.21.2.2      **2 Sep** 2025 "**Victory II**": substantial changes aimed to save resources:
-  - `mmap` introduced for reading to remove intermediates of `re`.
-  - generators are widely used for writing.
+- 2.21.2.2    **2 Sep 2025** "**Victory II**": substantial changes aimed to save resources:
+  - for reading, `mmap` introduced to remove intermediates of `re`.
+  - for writing, generators are widely used.
 
-  Module input/output remains the same as for 1.17.9.34 "Victory".
+  Module input/output structure remains the same as for 1.17.9.34 "Victory".
 
-- 2.21.3.12     3 Sep 2025 "Victory II" update mostly consist of more friendly help.
+- 2.21.3.12   **3 Sep 2025** "**Victory II**" update mostly consist of more friendly help.
 
-- 2.23.13.13    ReST-compliant docstrings.
+- 2.23.13.13  ReST-compliant docstrings.
+
+- 2.23.23.23  Even more developer-friendly docstrings.
