@@ -47,3 +47,5 @@ New `list2pnm` is a switch between `list2pnmbin` and `list2pnmascii`, controlled
 - 2.21.3.4.post3  More ReST-compliant docstrings.
 
 - 2.21.3.4.post4  Even more developer-friendly docstrings.
+
+- 2.21.3.4.post5 Compatibility list extended.
