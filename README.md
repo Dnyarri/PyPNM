@@ -192,14 +192,16 @@ Using *PyPNM* and Tkinter you may easily visualize any data that can be represen
 
 ### Related
 
-[PixelArtScaling](https://dnyarri.github.io/scalenx.html "Scale2x, Scale3x, Scale2xSFX and Scale2xSFX in pure Python") - usage example, pure Python image rescaling applications using Scale2x and Scale3x methods; PNG I/O is based on [PyPNG](https://gitlab.com/drj11/pypng "Pure Python PNG reading and writing module"), on-screen preview and PPM/PGM I/O - on [PyPNM](https://pypi.org/project/PyPNM/ "Pure Python PNM reading, displaying and writing module"), thus making everything pure Python and therefore cross-platform.
+[**PixelArtScaling**](https://dnyarri.github.io/scalenx.html "Scale2x, Scale3x, Scale2xSFX and Scale3xSFX in pure Python") - usage example, pure Python implementation of Scale2x, Scale3x, Scale2xSFX and Scale3xSFX image rescaling methods; PNG I/O is based on [PyPNG](https://gitlab.com/drj11/pypng "Pure Python PNG reading and writing module"), on-screen preview and PPM/PGM I/O - on [PyPNM](https://pypi.org/project/PyPNM/ "Pure Python PNM reading, displaying and writing module"), thus making everything pure Python and therefore cross-platform.
 
-[«Averager»](https://dnyarri.github.io/povthread.html#averager "Pure Python image filtering application, largely based on PyPNM"), non-standard adaptive image average filtering application, written completely in pure Python. Filter before/after preview based on PyPNM `list2bin` code and Tkinter `PhotoImage(data=...)` class. Filtering itself largely utilize the fact that nested lists, produced by PyPNM, may be easily processed with one-loop-fits-all algorithms regardless of color mode. As a result, fully operational pure Python interactive image filtering application ensued.
+[**Averager**](https://dnyarri.github.io/povthread.html#averager "Pure Python image filtering application, largely based on PyPNM"), non-standard adaptive image average filtering application, written completely in pure Python. Filter before/after preview based on PyPNM `list2bin` code and Tkinter `PhotoImage(data=...)` class. Filtering itself largely utilize the fact that nested lists, produced by PyPNM, may be easily processed with one-loop-fits-all algorithms regardless of color mode. As a result, fully operational pure Python interactive image filtering application ensued.
 
 | Fig. 2. *Pure Python image filtering application, largely based on PyPNM* |
 | :---: |
 | [![Pure Python image adaptive averaging application, largely based on PyPNM](https://dnyarri.github.io/thread/ave.png "Pure Python image filtering application, largely based on PyPNM")](https://dnyarri.github.io/povthread.html#averager "Pure Python image filtering application, largely based on PyPNM") |
 
+[**imin** Bilinear and barycentric image interpolation module](https://dnyarri.github.io/imin.html "Bilinear and barycentric image interpolation, main applications are largely based on PyPNM"), written completely in pure Python. Sample applications are largely based on PyPNM. As with "Averager" above, the module itself utilizes the fact that nested lists, produced by PyPNM, are easy to process using the same map() for any color mode.
+
 ---
 
-[Dnyarri website - more Python freeware](https://dnyarri.github.io/ "The Toad's Slimy Mudhole - Python freeware for POV-Ray and other 3D, Scale2x, Scale3x, Scale2xSFX, Scale2xSFX, PPM and PGM image support, bilinear and barycentric image interpolation, and batch processing") by the same author.
+[Dnyarri website - more Python freeware for image processing, 3D, and batch automation](https://dnyarri.github.io "The Toad's Slimy Mudhole - Python freeware for POV-Ray and other 3D, Scale2x, Scale3x, Scale2xSFX, Scale3xSFX, PPM and PGM image support, bilinear and barycentric image interpolation, and batch processing") by the same author.
