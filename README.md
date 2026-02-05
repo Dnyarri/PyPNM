@@ -1,28 +1,28 @@
 
-| 【EN】 | [〖RU〗](README.RU.md "Приблизительно тот же трёп, но по-русски") |
+| 【EN】 | [〖RU〗](README.RU.md "PyPNM description in Russian") |
 | ---- | ---- |
 
 # PyPNM - Pure Python PPM and PGM image files reading and writing module
 
-![PyPI - Downloads](https://img.shields.io/pypi/dm/pypnm)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/pypnm)](https://pypi.org/project/PyPNM/)
 
 ## Overview and justification
 
 PyPNM is a pure Python module for
 
-- reading PPM and PGM image files (both 8 and 16 bits per channel color depth) to image 3D integer lists for further editing;
+- reading PPM and PGM image files (both 8 and 16 bits per channel color depth) to image 3D nested integer lists for further editing/processing;
 
-- displaying 3D lists thus obtained by converting to Tkinter-compatible data in memory, and subsequent
+- displaying 3D nested lists thus obtained by converting to Tkinter-compatible data in memory, and subsequent
 
-- writing edited image 3D lists to disk as PPM or PGM files, either binary or ASCII.
+- writing edited image 3D nested lists to disk as PPM or PGM files, either binary or ASCII.
 
 PPM ([Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html "Portable Pixel Map format specs")) and PGM ([Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html "Portable Gray Map format specs")) (particular cases of PNM format group) are simplest file formats for RGB and L images, correspondingly. As usual for this decaying Universe, this simplicity lead to some adverse consequences:
 
 - lack of strict official specification. Instead, you may find words like "usual" in format description. Surely, there is always someone who implement this part of image format in unprohibited, yet a totally unusual way.
 
-- unwillingness of many software developers to provide any good support for simple and open format. It took years for almighty Adobe Photoshop developers to include PNM module in distribution rather than count on third-party developers, and surely (see above) they took their chance to implement a separator scheme nobody else uses. What as to PNM support in Python, say, Pillow... sorry, I promised not to mention Pillow anywhere ladies and children are allowed to read it.
+- unwillingness of many software developers to provide any good support for simple and open format. It took years for almighty Adobe Photoshop developers to include PNM module in distribution rather than count on third-party developers, and surely (see above) they took their chance to implement a separator scheme nobody else uses. What as to PNM support in Python, say, Pillow, it normally is rather incomplete or completely missing when it comes to 16 bits per channel modes, and requires special measures when some limited support exist.
 
-As a result, novice Python user (like me) may find it difficult to get reliable input/output modules for PPM and PGM image formats.
+As a result, novice Python user (like me) may find it difficult to get reliable and robust input/output modules for PPM and PGM image formats.
 
 ## Objectives
 
@@ -176,31 +176,43 @@ for opening files. In theory, you may even register it as system viewer for PPM,
 
 ## Conclusion
 
-Using *PyPNM* and Tkinter you may easily visualize any data that can be represented as greyscale or RGB images (images first and foremost), without large external packages and writing files on disk. Nested list data structures used by PyPNM are well suited for arbitrary color mode image processing using nested loop/map .
+Using *PyPNM* and Tkinter you may easily visualize any data that can be represented as greyscale or RGB images (images first and foremost), without large external packages and writing files on disk.
+
+*PyPNM* provides easy reading and writing PPM and PGM files in both 8 bit per channel and 16 bit per channel color depths, as well as reading 1 bit per channel PBM files.
+
+Nested list data structures used by *PyPNM* are well suited for arbitrary color mode image processing using nested loop/map.
 
 ## References
 
-1. [Netpbm file formats specifications](https://netpbm.sourceforge.net/doc/ "Original specifications for PPM, PGM and PBM files formats") followed in the course of PyPNM development.
+1. [Netpbm file formats specifications](https://netpbm.sourceforge.net/doc/ "Original specifications for PPM, PGM and PBM files formats") strictly followed in the course of PyPNM development.
 
 2. [PyPNM at PyPI](https://pypi.org/project/PyPNM/ "Pure Python PNM reading, displaying and writing module for Python >= 3.4") - installing PyPN with `pip`. Does not contain viewer example etc., only core converter module, but provides regular `pip`-driven automated updates.
 
-3. [PyPNM at Github](https://github.com/Dnyarri/PyPNM/ "Pure Python PNM reading, displaying and writing module for Python >= 3.11") containing example viewer application, illustrating using `list2bin` to produce data for Tkinter `PhotoImage(data=...)` to display, as well as opening/saving various portable map formats.
+3. [PyPNM at Github](https://github.com/Dnyarri/PyPNM/ "Pure Python PNM reading, displaying and writing module for Python >= 3.11") containing both PyPNM module and example viewer application, illustrating using `list2bin` to produce data for Tkinter `PhotoImage(data=...)` to display, as well as opening/saving various portable map formats.
 
-4. [PyPNM ver.34 at Github](https://github.com/Dnyarri/PyPNM/tree/py34 "Pure Python PNM reading, displaying and writing module for Python >= 3.4") - same as [3], but compatible with Python 3.4.
+4. [PyPNM ver *.34 at Github](https://github.com/Dnyarri/PyPNM/tree/py34 "Pure Python PNM reading, displaying and writing module for Python >= 3.4") - same as [3] above, but compatible with Python 3.4.
 
 5. [PyPNM docs (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf "PyPNM docs (PDF)"). While current documentation was written for 9 May 2025 "Victory" version, it remains valid for 2 Sep 2025 "Victory II" release since the latter involves total inner optimization without changing input/output format.
 
-### Related
+## Examples
 
-[**PixelArtScaling**](https://dnyarri.github.io/scalenx.html "Scale2x, Scale3x, Scale2xSFX and Scale3xSFX in pure Python") - usage example, pure Python implementation of Scale2x, Scale3x, Scale2xSFX and Scale3xSFX image rescaling methods; PNG I/O is based on [PyPNG](https://gitlab.com/drj11/pypng "Pure Python PNG reading and writing module"), on-screen preview and PPM/PGM I/O - on [PyPNM](https://pypi.org/project/PyPNM/ "Pure Python PNM reading, displaying and writing module"), thus making everything pure Python and therefore cross-platform.
+[**PixelArtScaling**](https://dnyarri.github.io/scalenx.html "Scale2x, Scale3x, Scale2xSFX and Scale3xSFX in pure Python") - usage example, pure Python implementation of Scale2x, Scale3x, Scale2xSFX and Scale3xSFX image rescaling methods. Since ScaleNx methods are based on whole pixel comparison, image representation as nested list, provided by PyPNM, perfectly fits ScaleNx module algorithm. In main programs PNG I/O is based on [PyPNG](https://gitlab.com/drj11/pypng "Pure Python PNG reading and writing module"), on-screen preview and PPM/PGM I/O - on [PyPNM](https://pypi.org/project/PyPNM/ "Pure Python PNM reading, displaying and writing module"), thus making entire project pure Python and therefore cross-platform.
 
-[**Averager**](https://dnyarri.github.io/povthread.html#averager "Pure Python image filtering application, largely based on PyPNM"), non-standard adaptive image average filtering application, written completely in pure Python. Filter before/after preview based on PyPNM `list2bin` code and Tkinter `PhotoImage(data=...)` class. Filtering itself largely utilize the fact that nested lists, produced by PyPNM, may be easily processed with one-loop-fits-all algorithms regardless of color mode. As a result, fully operational pure Python interactive image filtering application ensued.
+[**Averager**](https://dnyarri.github.io/povthread.html#averager "Pure Python image filtering application, largely based on PyPNM"), non-standard adaptive image average filtering application, written entirely in Python.
 
 | Fig. 2. *Pure Python image filtering application, largely based on PyPNM* |
 | :---: |
 | [![Pure Python image adaptive averaging application, largely based on PyPNM](https://dnyarri.github.io/thread/ave.png "Pure Python image filtering application, largely based on PyPNM")](https://dnyarri.github.io/povthread.html#averager "Pure Python image filtering application, largely based on PyPNM") |
 
-[**imin** Bilinear and barycentric image interpolation module](https://dnyarri.github.io/imin.html "Bilinear and barycentric image interpolation, main applications are largely based on PyPNM"), written completely in pure Python. Sample applications are largely based on PyPNM. As with "Averager" above, the module itself utilizes the fact that nested lists, produced by PyPNM, are easy to process using the same map() for any color mode.
+Filter before/after preview based on PyPNM `list2bin` code and Tkinter `PhotoImage(data=...)` class. Filtering itself largely utilize the fact that nested lists, produced by PyPNM, may be easily processed with one-loop-fits-all algorithms regardless of color mode. As a result, fully operational pure Python interactive image filtering application ensued.
+
+[**imin** Bilinear and barycentric image interpolation module](https://dnyarri.github.io/imin.html "Bilinear and barycentric image interpolation, main applications are largely based on PyPNM"), written entirely in Python. Sample applications are largely based on PyPNM.
+
+| Fig. 3. *Pure Python image displacing/distorting application, largely based on PyPNM* |
+| :---: |
+| [![Pure Python image displacing and deformation application, largely based on PyPNM](https://dnyarri.github.io/imin/anigui.png "Pure Python image filtering application, largely based on PyPNM")](https://dnyarri.github.io/imin.html "Pure Python image filtering application, largely based on PyPNM") |
+
+As with "Averager" above, the module itself utilizes the fact that pixels represented as nested lists, produced by PyPNM, are easy to process using the same `map()` for any color mode.
 
 ---
 
