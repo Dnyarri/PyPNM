@@ -1,4 +1,13 @@
+# Folders, produced by Python here, there, and everywhere
 __pycache__/
-.vscode
+
+# Folders, produced by "python -m build"
+*.egg-info/
+dist/
+
+# Folder, produced by VSCode
+.vscode/
+
+# All sorts of junk produced by me, forgotten but not gone
 dev*
 pypng

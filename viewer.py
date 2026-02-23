@@ -2,21 +2,23 @@
 
 """Test shell for `PyPNM for Python >= 3.11`_ module - a Tkinter-based viewer.
 
-Viewer does not use PNM file directly to display it with Tkinter ``PhotoImage(file=...)`` -
-instead, it loads image file, then constructs PNM-like bytes data object in memory,
+Viewer does not use PNM file directly to display it with
+Tkinter ``PhotoImage(file=...)`` - instead, it loads image file,
+then constructs PNM-like bytes data object in memory,
 and then displays it using Tkinter ``PhotoImage(data=...)``.
-For example, it's able to display ASCII PGM and PPM, not supported by Tkinter,
-since it recodes them to binary on the fly.
+
+For example, it's able to display ASCII PGM and PPM,
+not supported by Tkinter, since it recodes them to binary on the fly.
 
 .. _PyPNM for Python >= 3.11: https://github.com/Dnyarri/PyPNM
 
 """
 
 __author__ = 'Ilya Razmanov'
-__copyright__ = '(c) 2025 Ilya Razmanov'
+__copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.23.13.13'
+__version__ = '2.26.23.23'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -29,7 +31,7 @@ from tkinter import Button, Frame, Label, Menu, PhotoImage, Tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import showinfo
 
-from pypnm import pnmlpnm
+import pypnm  # import whole module to display version info
 
 """ ╔══════════════════════════════════╗
     ║ GUI events and functions thereof ║
@@ -80,7 +82,7 @@ def ShowInfo(event=None) -> None:
     modification_str = ctime(Path(sourcefilename).stat().st_mtime)
     showinfo(
         title='General information',
-        message=f'PNMViewer ver. {__version__}\nPython: {python_version()}\nModules:\n{pnmlpnm.__name__} ver. {pnmlpnm.__version__}',
+        message=f'PNMViewer ver. {__version__}\nPython: {python_version()}\nModules:\n{pypnm.__name__} ver. {pypnm.__version__}',
         detail=f'File properties:\n{sourcefilename}\nSize: {file_size_str}\nCreated: {creation_str}\nModified: {modification_str}\n\nImage properties:\nWidth: {X} px\nHeight: {Y} px\nChannels: {Z} channel{"s" if Z > 1 else ""}\nColor depth: {maxcolors + 1} gradations/channel',
     )
 
@@ -106,9 +108,9 @@ def GetSource(event=None) -> None:
     # ↓ Loading file, converting data to list.
     #   NOTE: maxcolors, image3D are GLOBALS!
     #   They are used during save!
-    X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(sourcefilename)
+    X, Y, Z, maxcolors, image3D = pypnm.pnm2list(sourcefilename)
     # ↓ Converting list to bytes of PPM-like structure "preview_data" in memory
-    preview_data = pnmlpnm.list2bin(image3D, maxcolors)
+    preview_data = pypnm.list2bin(image3D, maxcolors)
     # ↓ Now showing "preview_data" bytes using Tkinter
     preview = PhotoImage(data=preview_data)
     # ↓ Adding filename to window title a-la Photoshop
@@ -197,7 +199,7 @@ def SaveAsPNM(bin: bool) -> None:
 
     # ↓ Saving "savefilename" in PNM format depending on "bin" value
     UIBusy()
-    pnmlpnm.list2pnm(savefilename, image3D, maxcolors, bin)
+    pypnm.list2pnm(savefilename, image3D, maxcolors, bin)
     # ↓ Changing filename to new saved one
     sourcefilename = savefilename
     sortir.title(f'PNMViewer: {Path(sourcefilename).name}')
@@ -238,7 +240,7 @@ def ExportPhotoImage() -> None:
     # ↓ Recreates preview_data from global image3D,
     #   does not show it but feeds to Tkinter to create and
     #   dump PhotoImage.
-    preview_data = pnmlpnm.list2bin(image3D, maxcolors)
+    preview_data = pypnm.list2bin(image3D, maxcolors)
     preview_dump = PhotoImage(data=preview_data)
     if Path(savefilename).suffix.lower() in ('.pgm', '.ppm', '.pnm'):
         preview_dump.write(savefilename, format='ppm')

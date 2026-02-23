@@ -41,3 +41,6 @@ New `list2pnm` is a switch between `list2pnmbin` and `list2pnmascii`, controlled
 - 2.23.13.13  ReST-compliant docstrings.
 
 - 2.23.23.23  Even more developer-friendly docstrings.
+
+- 2.26.23.23  More suitable import scheme like
+  `from pypnm import list2bin, list2pnm, pnm2list`

@@ -20,7 +20,9 @@ PPM ([Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html "Portable 
 
 - lack of strict official specification. Instead, you may find words like "usual" in format description. Surely, there is always someone who implement this part of image format in unprohibited, yet a totally unusual way.
 
-- unwillingness of many software developers to provide any good support for simple and open format. It took years for almighty Adobe Photoshop developers to include PNM module in distribution rather than count on third-party developers, and surely (see above) they took their chance to implement a separator scheme nobody else uses. What as to PNM support in Python, say, Pillow, it normally is rather incomplete or completely missing when it comes to 16 bits per channel modes, and requires special measures when some limited support exist.
+- unwillingness of many software developers to provide any good support for simple and open format. It took years for almighty Adobe Photoshop developers to include PNM module in distribution rather than count on third-party developers, and surely (see above) they took their chance to implement a header scheme nobody else uses.
+
+  What as to PNM support in Python, say, Pillow, it normally is rather incomplete or completely missing when it comes to 16 bits per channel modes, and requires special measures when some limited support exist.
 
 As a result, novice Python user (like me) may find it difficult to get reliable and robust input/output modules for PPM and PGM image formats.
 
@@ -30,7 +32,9 @@ As a result, novice Python user (like me) may find it difficult to get reliable 
 
 2. Obtaining simple and compact cross-platform module for reading PPM and PGM files as 3D nested lists for further processing with Python, and subsequent writing of processed 3D nested lists data to PPM or PGM files.
 
-To accomplish this, current PyPNM module was developed, combining input/output functions for 8-bits and 16-bits per channel binary and ASCII [Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html "Portable Gray Map specification") and [Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html "Portable Pixel Map specification") files, *i.e.* P2, P5, P3 and P6 PNM file types. All color depth ranges supported directly, without limitations and without dancing with tambourine and proclaiming it to be a novel method.
+To accomplish this, current PyPNM module was developed, combining input/output functions for 8-bits and 16-bits per channel binary and ASCII [Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html "Portable Gray Map specification") and [Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html "Portable Pixel Map specification") files, *i.e.* P2, P5, P3 and P6 PNM file types.
+
+All color depth ranges supported directly, without limitations and without dancing with tambourine and proclaiming it to be a novel method.
 
 ## Format compatibility
 
@@ -61,40 +65,79 @@ Is seems logical to represent an RGB image as nested 3D structure - (X, Y)-sized
 
 Note that for L images memory structure is still `list(list(list(int)))`, with innermost list having only one component, thus enabling further image editing with the same nested Y, X, Z loop regardless of color mode.
 
-Note that for the same reason when reading 1 bit PBM files into image this module promotes data to 8 bit L, inverting values and multiplying by 255, so that source 1 (ink on) is changed to 0 (black), and source 0 (ink off) is changed to 255 (white).
+Note that since main PyPNM purpose is facilitating image editing, when reading 1-bit PBM files into image this module promotes data to 8-bit L, inverting values and multiplying by 255, so that source 1 (ink on) is changed to 0 (black), and source 0 (ink off) is changed to 255 (white) - since any palette-based images, 1-bit included, are next to useless for general image processing (try to imagine 1-bit Gaussian blur, for example), and have to be converted to smooth color for that, conversion is performed by PyPNM automatically.
 
 ## Installation
 
-In case of installing using pip:
+In case of installing from PyPI via `pip`:
 
-`pip install PyPNM`
+```console
+python -m pip install --upgrade PyPNM
+```
 
-then in your program import section:
+## Usage
 
-`from pypnm import pnmlpnm`
+Since version 2.26.23.23 recommended import is:
 
-then use functions as described below.
+```python
+import pypnm
+```
 
-In case you downloaded file **pnmlpnm.py** from Github or somewhere else as plain .py file and not a package, simply put this file into your program folder, then use `import pnmlpnm`.
+then use functions as described in section [*"Functions description"*](#functions-description), or just take a look at [*"Usage example"*](#usage-example) section below.
 
-## pnmlpnm.py
+Note that legacy import schemes like
 
-Main module file [**pnmlpnm.py**](https://github.com/Dnyarri/PyPNM/blob/main/pypnm/pnmlpnm.py) contains 100% pure Python implementation of everything one may need to read/write a variety of PGM and PPM files. I/O functions are written as functions/procedures, as simple as possible, and listed below:
+```python
+from pypnm import pnmlpnm
+```
+
+are still working.
+
+## Usage example
+
+Below is a minimal Python program, illustrating all PyPNM functions at once: reading PPM file (small collection of compatibility testing samples is included into current Git repository) to image nested list, writing image list to disk as binary PPM, writing image list as ASCII PPM, and displaying image list using Tkinter:
+
+```python
+#!/usr/bin/env python3
+
+from tkinter import Button, PhotoImage, Tk
+
+from pypnm import list2bin, list2pnm, pnm2list
+
+X, Y, Z, maxcolors, image3D = pnm2list('example.ppm')  # Open "example.ppm"
+list2pnm('binary.ppm', image3D, maxcolors, bin=True)  # Save as binary pnm
+list2pnm('ascii.ppm', image3D, maxcolors, bin=False)  # Save as ascii pnm
+
+main_window = Tk()
+main_window.title('PyPNM demo')
+preview_data = list2bin(image3D, maxcolors)  # Image list 🡢 preview bytes
+preview = PhotoImage(data=preview_data)  # Preview bytes 🡢 PhotoImage object
+preview_button = Button(main_window, text='Example\n(click to exit)', image=preview,
+    compound='top', command=lambda: main_window.destroy())  # Showing PhotoImage
+preview_button.pack()
+main_window.mainloop()
+
+```
+
+With a fistful of code for widgets and events this simplistic program may be easily turned into a rather functional application (see [Viewer.py](#viewerpy) below).
+
+## Functions description
+
+PyPNM module contains 100% pure Python implementation of everything one may need to read and write a variety of PGM and PPM files, as well as to display corresponding image data. No non-standard dependencies used, no extra downloads needed, no dependency version conflicts expected. All the functionality is provided as functions/procedures, as simple as possible; main functions are listed below:
 
 - **pnm2list**  - reading binary or ASCII RGB PPM or L PGM file and returning image data as nested list of int.
 - **list2bin**  - getting image data as nested list of int and creating binary PPM (P6) or PGM (P5) data structure in memory. Suitable for generating data to display with Tkinter.
-- **list2pnmbin**  - getting image data as nested list of int and writing binary PPM (P6) or PGM (P5) file.
-- **list2pnmascii** - alternative function to write ASCII PPM (P3) or PGM (P2) files.
 - **list2pnm** - getting image data as nested list of int and writing either binary or ASCII file depending on `bin` argument.
-- **create_image** - creating empty nested 3D list for image representation. Not used within this particular module but often needed by programs this module is supposed to be used with.
 
-Detailed functions arguments description is provided below as well as in docstrings.
+Detailed functions arguments description is provided below, as well as in module docstrings and [PyPNM documentation bedside book (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf).
 
 ### pnm2list
 
-`X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(in_filename)`
+```python
+X, Y, Z, maxcolors, image3D = pypnm.pnm2list(in_filename)
+```
 
-read data from PPM/PGM file to nested image data list, where:
+Read data from PPM/PGM file to nested image data list, where:
 
 - `X, Y, Z`   - image sizes (int);
 - `maxcolors` - number of colors per channel for current image (int);
@@ -103,63 +146,44 @@ read data from PPM/PGM file to nested image data list, where:
 
 ### list2bin
 
-`image_bytes = pnmlpnm.list2bin(image3D, maxcolors, show_chessboard)`
+```python
+image_bytes = pypnm.list2bin(image3D, maxcolors, show_chessboard)
+```
 
 Convert nested image data list to PGM P5 or PPM P6 (binary) data structure in memory, where:
 
 - `image3D`   - `Y * X * Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
 - `maxcolors` - number of colors per channel for current image (int);
-- `show_chessboard` - optional bool, set `True` to show LA and RGBA images against chessboard pattern; `False` or missing show existing L or RGB data for transparent areas as opaque. Default is `False` for backward compatibility;
+- `show_chessboard` - optional bool, set `True` to show LA and RGBA images against chessboard pattern; `False` or missing show existing L or RGB data for transparent areas as opaque.
+
+   Default is `False` for backward compatibility;
+
 - `image_bytes` - PNM-structured binary data.
 
 `image_bytes` object thus obtained is well compatible with Tkinter `PhotoImage(data=...)` method and therefore may be used to (and actually was developed for) visualize any data represented as image-like 3D list.
-
-> [!NOTE]
-> When encountering image list with 2 or 4 channels, current version of `list2bin` may treat it as LA or RGBA image correspondingly, and generate image preview for Tkinter as transparent over chessboard background (like Photoshop or GIMP). Since PNM images do not have transparency, this preview is actually either L or RGB, with image mixed with chessboard background, generated by `list2bin` (pattern settings match Photoshop "Light Medium" defaults). This behaviour is controlled by `show_chessboard` option. Default setting is `False` (meaning simply skipping alpha channel) for backward compatibility.
-Note that Tkinter used for Python 3.10 displays some hight-color images incorrectly; this was entirely a Tkinter problem, fixed with Python 3.11 release.
-
-### list2pnmbin
-
-`pnmlpnm.list2pnm(out_filename, image3D, maxcolors)`
-
-Write PGM P5 or PPM P6 (binary) file from nested image data list, where:
-
-- `image3D`   - `Y * X * Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
-- `maxcolors` - number of colors per channel for current image (int);
-- `out_filename` - PNM file name.
-
-### list2pnmascii
-
-`pnmlpnm.list2pnmascii(out_filename, image3D, maxcolors)` where:
-
-Write PGM P2 or PPM P3 (ASCII text) file from nested image data list, where:
-
-- `image3D`   - `Y * X * Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
-- `maxcolors` - number of colors per channel for current image (int);
-- `out_filename` - PNM file name.
+When encountering image list with 2 or 4 channels, current version of `list2bin` may treat it as LA or RGBA image correspondingly, and generate image preview for Tkinter as transparent over chessboard background (like Photoshop or GIMP). Since PNM images do not have transparency, this preview is actually either L or RGB, with image mixed with chessboard background, generated by `list2bin` on the fly (pattern settings match Photoshop "Light Medium" defaults). This behaviour is controlled by `show_chessboard` option. Default setting is `False` (meaning simply skipping alpha channel) for backward compatibility.
 
 ### list2pnm
 
-`pnmlpnm.list2pnm(out_filename, image3D, maxcolors, bin)`
+```python
+pypnm.list2pnm(out_filename, image3D, maxcolors, bin)
+```
 
 Write either binary or ASCII file from nested image data list, where:
 
 - `image3D`   - `Y * X * Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
 - `maxcolors` - number of colors per channel for current image (int);
-- `bin` - switch defining whether to write binary file or ASCII (bool). Default is True, meaning binary output, to provide backward compatibility.
+- `bin` - switch (bool) defining whether to write binary file or ASCII.
+
+   Default is `True`, meaning binary output, to provide backward compatibility.
+
 - `out_filename` - Name of PNM file to be written.
 
-Note that `list2pnm` is merely a switch between `list2pnmbin` and `list2pnmascii`, introduced for simplifying writing "Save as..." GUI dialog functions - now you can use one function for all PNM flavours, passing `bin` via lambda, if necessary. Default is `bin = True`.
-
-### create_image
-
-`image3D = create_image(X, Y, Z)`
-
-Create empty 3D nested list of `X * Y * Z` sizes.
+Note that `list2pnm` is a switch between `list2pnmbin` and `list2pnmascii`, whose direct usage is considered legacy. Using `list2pnm` instead of legacy calls simplifies writing "Save as..." functions for main programs - now you can use one function for all PNM flavours. Default is `bin = True` since binary PNM seem to be more convenient for big programs like Photoshop.
 
 ## viewer.py
 
-Program [**viewer.py**](https://github.com/Dnyarri/PyPNM/blob/main/viewer.py) is a small illustrative utility: using *PyPNM* package, it reads different flavours of PGM and PPM files, and allows saving them as different types of PGM/PNM, *i.e.* it can read ASCII PPM and write it as binary PPM or vs. Also this program shows images using *PyPNM* and Tkinter. No, there is no mistake: it does not feed PPM files to Tkinter directly. Instead, it uses nested 3D list data loaded using *PyPNM* to generate in-memory bytes object of PPM structure using `preview_data = pnmlpnm.list2bin(image3D, maxcolors)`, and then feeds this in-memory bytes object to Tkinter as `preview = PhotoImage(data=preview_data)` (note using *data=*, not *file=*). This way it displays, for example, ASCII PPM which Tkinter itself cannot handle.
+Program [**viewer.py**](https://github.com/Dnyarri/PyPNM/blob/main/viewer.py) is a small illustrative utility: using *PyPNM* package, it reads different flavours of PGM and PPM files, and allows saving them as different types of PGM/PNM, *i.e.* it can read ASCII PPM and write it as binary PPM or vs. Also this program shows images using *PyPNM* and Tkinter. No, there is no mistake: it does not feed PPM files to Tkinter directly. Instead, it uses nested 3D list data loaded using *PyPNM* to generate in-memory bytes object of PPM structure using `preview_data = pypnm.list2bin(image3D, maxcolors)`, and then feeds this in-memory bytes object to Tkinter as `preview = PhotoImage(data=preview_data)` (note using *data=*, not *file=*). This way it displays, for example, ASCII PPM which Tkinter itself cannot handle.
 
 | Fig. 1. *Example of ASCII PPM opened in Viewer.py* |
 | :---: |
@@ -167,12 +191,14 @@ Program [**viewer.py**](https://github.com/Dnyarri/PyPNM/blob/main/viewer.py) is
 
 Beside having simple yet fully functional GUI with mouse events handling a-la Photoshop, *viewer.py* is also capable to process command line arguments like
 
-`python viewer.py filename.ppm`
+```console
+python viewer.py filename.ppm
+```
 
-for opening files. In theory, you may even register it as system viewer for PPM, PGM and PBM files.
+for opening files. In theory, you may even register it as system viewer for PPM, PGM and PBM files, and become the first person in this planet using pure Python system-registered image viewer.
 
 > [!NOTE]
-> Since Viewer version 2.21.22.23 "Export via Tkinter..." option added to main menu, allowing to export opened image using Tkinter native `PhotoImage.write` method. This option added only to illustrate Tkinter limitations. For example, 16 bit per channel images, saved this way, become 8 bpc due to Tkinter internal limitations.
+> Since Viewer version 2.21.22.23 "Export via Tkinter..." option added to main menu, allowing to export opened image using Tkinter native `PhotoImage.write` method. This option added mostly to illustrate Tkinter limitations. For example, 16 bit per channel images, saved this way, become 8 bpc due to Tkinter internal limitations.
 
 ## Conclusion
 
