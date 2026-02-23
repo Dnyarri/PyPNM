@@ -4,6 +4,18 @@
 
 # PyPNM - Pure Python PPM and PGM image files reading and writing module
 
+> [!NOTE]
+> This branch is a special testing branch.
+>
+> Like [**main** PyPNM branch](https://github.com/Dnyarri/PyPNM/tree/main/), it is supposed to contain newest version of PyPNM for Python >= 3.11
+>
+> Unlike [**main** PyPNM branch](https://github.com/Dnyarri/PyPNM/tree/main/), it contains a copy of [PyPNG](https://gitlab.com/drj11/pypng), because this branch is meant to be used for testing `list2bin` simulation of alpha support. Therefore `viewer.py` from this branch may display PNG as well as PNM, and may be used as PNG ⇄ PNM converter.
+>
+> Readme of this branch is constantly outdated.
+>
+>> [!WARNING]
+>> THIS BRANCH IS NOT MEANT TO BE MERGED WITH ANY OTHERS!
+
 ## Overview and justification
 
 PPM ([Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html)) and PGM ([Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html)) (particular cases of PNM format group) are simplest file formats for RGB and L images, correspondingly. Paradoxically, this simplicity lead to some adverse consequences:
