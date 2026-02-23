@@ -21,10 +21,10 @@ under Windows XP 32-bit, including PNG support with `PyPNG`_.
 """
 
 __author__ = 'Ilya Razmanov'
-__copyright__ = '(c) 2025 Ilya Razmanov'
+__copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.23.11.34'
+__version__ = '2.26.22.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -37,7 +37,7 @@ from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import showinfo
 
 from pypng import pnglpng
-from pypnm import pnmlpnm
+import pypnm
 
 """ ╔══════════════════════════════════╗
     ║ GUI events and functions thereof ║
@@ -83,7 +83,7 @@ def ShowInfo(event=None):
     """Show program and module version, and image info"""
 
     message = 'PNMViewer ver. {0}\nPython: {1}\nModules:\n{2} ver. {3}\n{4} ver. {5}\n{6} ver. {7}'.format(
-        __version__, python_version(), pnmlpnm.__name__, pnmlpnm.__version__, pnglpng.__name__, pnglpng.__version__, pnglpng.png.__name__, pnglpng.png.__version__
+        __version__, python_version(), pypnm.__name__, pypnm.__version__, pnglpng.__name__, pnglpng.__version__, pnglpng.png.__name__, pnglpng.png.__version__
     )
     detail = 'File: {file_name}\n\nImage properties:\nWidth: {width} px\nHeight: = {height} px\nChannels: {channels} channel{s}\nColors: {colors} per channel'.format(
         file_name=sourcefilename, width=X, height=Y, channels=Z, colors=maxcolors + 1, s='s' if Z > 1 else ''
@@ -123,7 +123,7 @@ def GetSource(event=None):
         X, Y, Z, maxcolors, image3D, info = pnglpng.png2list(sourcefilename)
 
     elif Path(sourcefilename).suffix.lower() in ('.ppm', '.pgm', '.pbm', '.pnm'):
-        X, Y, Z, maxcolors, image3D = pnmlpnm.pnm2list(sourcefilename)
+        X, Y, Z, maxcolors, image3D = pypnm.pnm2list(sourcefilename)
         # ↓ Creating dummy info, containing bpc value required to Save As PNG properly
         info = {'bitdepth': 16} if maxcolors > 255 else {'bitdepth': 8}
 
@@ -131,7 +131,7 @@ def GetSource(event=None):
         raise ValueError('Extension not recognized')
 
     # ↓ Converting list to bytes of PPM-like structure "preview_data" in memory
-    preview_data = pnmlpnm.list2bin(image3D, maxcolors, show_chessboard=True)
+    preview_data = pypnm.list2bin(image3D, maxcolors, show_chessboard=True)
     # ↓ Now showing "preview_data" bytes using Tkinter
     preview = PhotoImage(data=preview_data)
     # ↓ Adding filename to window title a-la Photoshop
@@ -195,6 +195,8 @@ def GetSource(event=None):
 def SaveAsPNM(bin):
     """Once pressed on any of Save PNM"""
 
+    global sourcefilename
+
     # ↓ Adjusting "Save to" formats to be displayed according to channel number
     if Z < 3:
         format = [('Portable grey map', '.pgm')]
@@ -224,12 +226,17 @@ def SaveAsPNM(bin):
 
     # ↓ Saving "savefilename" in PNM format depending on "bin"
     UIBusy()
-    pnmlpnm.list2pnm(savefilename, image3D, maxcolors, bin)
+    pypnm.list2pnm(savefilename, image3D, maxcolors, bin)
+    # ↓ Saved file becomes source file
+    sourcefilename = savefilename
+    sortir.title('PNMViewer: {}'.format(Path(sourcefilename).name))
     UINormal()
 
 
 def SaveAsPNG():
     """Once pressed on Save PNG"""
+    
+    global sourcefilename
 
     # ↓ Figuring out suggested file name based on saving in source/different format
     if Path(sourcefilename).suffix.lower() == '.png':
@@ -251,6 +258,9 @@ def SaveAsPNG():
     # ↓ Feeding list to PyPNG via pnglpng
     UIBusy()
     pnglpng.list2png(savefilename, image3D, info)
+    # ↓ Saved file becomes source file
+    sourcefilename = savefilename
+    sortir.title('PNMViewer: {}'.format(Path(sourcefilename).name))
     UINormal()
 
 

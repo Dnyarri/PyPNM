@@ -1,0 +1,72 @@
+# Build instructions for PyPNM .py34 branch module distribution generation.
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "PyPNM"
+dynamic = ["version"]
+description = "Reading, displaying and writing PNM (PPM and PGM) image files, including 16 bits per channel, in pure Python"
+readme = "README.md"
+license = "Unlicense"
+license-files = ["LICENSE"]
+requires-python = ">=3.4"
+keywords = [
+    "ppm",
+    "pgm",
+    "pbm",
+    "pnm",
+    "Netpbm",
+    "image",
+    "format",
+    "bitmap",
+    "greyscale",
+    "RGB",
+    "Python",
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.4",
+    "Programming Language :: Python :: 3.5",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Operating System :: OS Independent",
+    "Development Status :: 5 - Production/Stable",
+    "Topic :: File Formats",
+    "Topic :: Multimedia :: Graphics",
+    "Topic :: Multimedia :: Graphics :: Graphics Conversion",
+    "Topic :: Multimedia :: Graphics :: Viewers",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+]
+
+[[project.authors]]
+name = "Ilya Razmanov"
+email = "ilyarazmanov@gmail.com"
+
+[[project.maintainers]]
+name = "Ilya Razmanov"
+email = "ilyarazmanov@gmail.com"
+
+[project.urls]
+Source = "https://github.com/Dnyarri/PyPNM"
+Documentation = "https://dnyarri.github.io/pypnm/pypnm.pdf"
+Changelog = "https://github.com/Dnyarri/PyPNM/blob/py34/CHANGELOG.md"
+Issues = "https://github.com/Dnyarri/PyPNM/issues"
+
+[tool.setuptools.package-dir]
+pypnm = "."
+
+[tool.setuptools.dynamic.version]
+attr = "pypnm.__version__"
