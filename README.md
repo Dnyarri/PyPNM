@@ -10,11 +10,11 @@
 > Like [**main** PyPNM branch](https://github.com/Dnyarri/PyPNM/tree/main/), it is supposed to contain newest version of PyPNM for Python >= 3.11
 >
 > Unlike [**main** PyPNM branch](https://github.com/Dnyarri/PyPNM/tree/main/), it contains a copy of [PyPNG](https://gitlab.com/drj11/pypng), because this branch is meant to be used for testing `list2bin` simulation of alpha support. Therefore `viewer.py` from this branch may display PNG as well as PNM, and may be used as PNG ⇄ PNM converter.
->
-> Readme of this branch is constantly outdated.
->
->> [!WARNING]
->> THIS BRANCH IS NOT MEANT TO BE MERGED WITH ANY OTHERS!
+
+Readme of this branch is constantly outdated.
+
+> [!WARNING]
+> THIS BRANCH IS NOT MEANT TO BE MERGED WITH ANY OTHERS!
 
 ## Overview and justification
 
