@@ -105,7 +105,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.26.22.34'
+__version__ = '2.26.26.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -383,15 +383,25 @@ def list2bin(list_3d, maxcolors, show_chessboard=False):
 
     """
 
-    def _chess(x, y):
-        """Chessboard pattern, size and color match Photoshop 7.0 "Light Medium".
+    # ↓ Image X, Y, Z sizes
+    Y, X, Z = (len(list_3d), len(list_3d[0]), len(list_3d[0][0]))
+
+    def _chess(x: int, y: int) -> int:
+        """Chessboard pattern, size and color match Photoshop 7.0.
 
         Photoshop chess pattern preset parameters:
-        - Small: 4 px; Medium: 8 px, Large: 16 px;
-        - Light: (0.8, 1.0); Medium: (0.4, 0.6); Dark: (0.2, 0.4) of ``maxcolors``.
+        - Small: 4 px | Medium: 8 px | Large: 16 px;
+        - Light: (0.8, 1.0) | Medium: (0.4, 0.6) | Dark: (0.2, 0.4) of ``maxcolors``.
 
         """
-        return int(maxcolors * 0.8) if ((y // 8) % 2) == ((x // 8) % 2) else maxcolors
+
+        if X < 65 or Y < 65:
+            chess_size = 4
+        elif X > 512 or Y > 512:
+            chess_size = 16
+        else:
+            chess_size = 8
+        return int(maxcolors * 0.8) if ((y // chess_size) % 2) == ((x // chess_size) % 2) else maxcolors
 
     # ↓ Image X, Y, Z sizes
     Y, X, Z = (len(list_3d), len(list_3d[0]), len(list_3d[0][0]))

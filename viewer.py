@@ -24,7 +24,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.26.22.34'
+__version__ = '2.26.26.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -36,8 +36,8 @@ from tkinter import Button, Frame, Label, Menu, PhotoImage, Tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import showinfo
 
-from pypng import pnglpng
 import pypnm
+from pypng import pnglpng
 
 """ ╔══════════════════════════════════╗
     ║ GUI events and functions thereof ║
@@ -45,13 +45,13 @@ import pypnm
 
 
 def DisMiss(event=None):
-    """Kill dialog and continue"""
+    """Kill dialog and continue."""
 
     sortir.destroy()
 
 
 def BindAll():
-    """Binding events needed even with no image open"""
+    """Binding events needed even with no image open."""
 
     sortir.bind_all('<Button-3>', ShowMenu)
     sortir.bind_all('<Alt-f>', ShowMenu)
@@ -60,27 +60,27 @@ def BindAll():
 
 
 def UINormal():
-    """Normal UI state"""
+    """Normal UI state."""
 
-    zanyato.config(state='normal')
+    zanyato.config(state='normal', cursor='')
     sortir.update()
 
 
 def UIBusy():
-    """Busy UI state"""
+    """Busy UI state."""
 
-    zanyato.config(state='disabled')
+    zanyato.config(state='disabled', cursor='watch')
     sortir.update()
 
 
 def ShowMenu(event):
-    """Pop menu up (or sort of drop it down)"""
+    """Pop menu up (or sort of drop it down)."""
 
     menu01.post(event.x_root, event.y_root)
 
 
 def ShowInfo(event=None):
-    """Show program and module version, and image info"""
+    """Show program and module version, and image info."""
 
     message = 'PNMViewer ver. {0}\nPython: {1}\nModules:\n{2} ver. {3}\n{4} ver. {5}\n{6} ver. {7}'.format(
         __version__, python_version(), pypnm.__name__, pypnm.__version__, pnglpng.__name__, pnglpng.__version__, pnglpng.png.__name__, pnglpng.png.__version__
@@ -96,7 +96,7 @@ def ShowInfo(event=None):
 
 
 def GetSource(event=None):
-    """Open source image and redefine other controls state"""
+    """Open source image and redefine other controls state."""
 
     global zoom_factor, zoom_do, zoom_show, preview, preview_data
     global X, Y, Z, maxcolors, image3D, info, sourcefilename, filename_from_command, sourcedir
@@ -174,9 +174,14 @@ def GetSource(event=None):
     # ↓ binding on preview click
     zanyato.bind('<Control-Button-1>', zoomIn)  # Ctrl + left click
     zanyato.bind('<Double-Control-Button-1>', zoomIn)  # Ctrl + left click too fast
+    zanyato.bind('<Control-+>', zoomIn)
+    zanyato.bind('<Control-=>', zoomIn)
     zanyato.bind('<Alt-Button-1>', zoomOut)  # Alt + left click
     zanyato.bind('<Double-Alt-Button-1>', zoomOut)  # Alt + left click too fast
+    zanyato.bind('<Control-minus>', zoomOut)
     sortir.bind_all('<MouseWheel>', zoomWheel)  # Wheel
+    zanyato.bind('<Control-Key-1>', zoomOne)
+    zanyato.bind('<Control-Alt-Key-0>', zoomOne)
     sortir.bind_all('<Control-i>', ShowInfo)
     # ↓ enabling zoom buttons
     butt_plus.config(state='normal', cursor='hand2')
@@ -190,10 +195,11 @@ def GetSource(event=None):
     menu01.entryconfig('Info', state='normal')
     UINormal()
     sortir.geometry('+{}+{}'.format((sortir.winfo_screenwidth() - sortir.winfo_width()) // 2, (sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32))
+    zanyato.focus_set()  # Required for some binding to work
 
 
 def SaveAsPNM(bin):
-    """Once pressed on any of Save PNM"""
+    """Once pressed on any of Save PNM."""
 
     global sourcefilename
 
@@ -234,8 +240,8 @@ def SaveAsPNM(bin):
 
 
 def SaveAsPNG():
-    """Once pressed on Save PNG"""
-    
+    """Once pressed on Save PNG."""
+
     global sourcefilename
 
     # ↓ Figuring out suggested file name based on saving in source/different format
@@ -265,7 +271,7 @@ def SaveAsPNG():
 
 
 def zoomIn(event=None):
-    """Zoom preview in"""
+    """Zoom preview in."""
 
     global zoom_factor, preview
     zoom_factor = min(zoom_factor + 1, 4)  # max zoom 5
@@ -284,7 +290,7 @@ def zoomIn(event=None):
 
 
 def zoomOut(event=None):
-    """Zoom preview out"""
+    """Zoom preview out."""
 
     global zoom_factor, preview
     zoom_factor = max(zoom_factor - 1, -4)  # min zoom 1/5
@@ -303,12 +309,28 @@ def zoomOut(event=None):
 
 
 def zoomWheel(event):
-    """zoomIn or zoomOut by mouse wheel"""
+    """zoomIn or zoomOut by mouse wheel."""
 
     if event.delta < 0:
         zoomOut()
     if event.delta > 0:
         zoomIn()
+
+
+def zoomOne(event=None):
+    """Zoom 1:1."""
+
+    global zoom_factor, preview
+    zoom_factor = 0
+    preview = zoom_do[zoom_factor]
+    zanyato.config(image=preview, compound='none')
+    zanyato.pack_configure(pady=max(0, 16 - (preview.height() // 2)))
+    # ↓ updating zoom factor display
+    label_zoom.config(text=zoom_show[zoom_factor])
+
+    # ↓ Reenabling +/- buttons
+    butt_plus.config(state='normal', cursor='hand2')
+    butt_minus.config(state='normal', cursor='hand2')
 
 
 """ ╔═══════════╗
@@ -377,15 +399,15 @@ sortir.geometry('+{}+{}'.format((sortir.winfo_screenwidth() - sortir.winfo_width
 
 # ↓ Command line part
 if len(argv) == 2:
+    sortir.focus_force()  # Otherwise loses focus when run from command line
     try_to_open = argv[1]
     if Path(try_to_open).exists() and Path(try_to_open).is_file() and (Path(try_to_open).suffix.lower() in ('.ppm', '.pgm', '.pbm', '.pnm', '.png')):
         filename_from_command = str(Path(try_to_open).resolve())
         GetSource()
     else:
         filename_from_command = None
-    sortir.focus_force()  # Otherwise loses focus when run from command line
 else:
-    filename_from_command = None
     sortir.focus_force()  # Otherwise loses focus when run from command line
+    filename_from_command = None
 
 sortir.mainloop()

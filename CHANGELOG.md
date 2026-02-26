@@ -11,8 +11,17 @@ Note that this branch (`.34`) is functionally identical to, yet internally diffe
 
 ## History
 
-0.11.26.0   Initial working version 26 Nov 2024.
-Version numbering: MAINVERSION.MMsinceJan2024.DD.BUILD.
+### Version 2
+
+| Image format | File format |
+| :---- | :---- |
+| 2.26.26.34 | Minor changes to chessboard rendering. |
+| 2.26.22.34 | Introduced more suitable import pattern, like `from pypnm import list2bin, list2pnm, pnm2list` |
+| 2.21.3.4.post5 | Compatibility list extended. |
+| 2.21.3.4.post4 | Even more developer-friendly docstrings. |
+| 2.21.3.4.post3 | More ReST-compliant docstrings. |
+| 2.21.3.4 | 3 Sep 2025 "Victory II" update mostly consist of more friendly help. |
+| 2.21.2.34 | **2 Sep** 2025 "**Victory II**": substantial changes aimed to save resources:<br>- `mmap` introduced for reading to remove intermediates of `re`.<br>- generators are widely used for writing.<br>Module input/output remains the same as for 1.17.9.34 "Victory". |
 
 ### Version 1
 
@@ -34,22 +43,8 @@ New `list2pnm` is a switch between `list2pnmbin` and `list2pnmascii`, controlled
 - 1.17.9.34     **9 May** 2025 "**Victory**": Forced 8-bit output for `list2bin` under old Python. Some optimizations.
 [PyPNM 1.17.9.34.post2 "Victory"](https://pypi.org/project/PyPNM/1.17.9.34.post2/) will be the last one in ver. 1 series.
 
-### Version 2
+## Prehistory
 
-- 2.21.2.34      **2 Sep** 2025 "**Victory II**": substantial changes aimed to save resources:
-  - `mmap` introduced for reading to remove intermediates of `re`.
-  - generators are widely used for writing.
+0.11.26.0   Initial working version 26 Nov 2024.
 
-  Module input/output remains the same as for 1.17.9.34 "Victory".
-
-- 2.21.3.4        3 Sep 2025 "Victory II" update mostly consist of more friendly help.
-
-- 2.21.3.4.post3  More ReST-compliant docstrings.
-
-- 2.21.3.4.post4  Even more developer-friendly docstrings.
-
-- 2.21.3.4.post5  Compatibility list extended.
-
-- 2.26.22.34      Introduced more suitable import pattern, like
-
-  `from pypnm import list2bin, list2pnm, pnm2list`
+Version numbering: MAINVERSION.MMsinceJan2024.DD.BUILD.

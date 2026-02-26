@@ -10,7 +10,7 @@ PPM and PGM image files reading, displaying and writing for Python >=3.4.
     `PBM`_ file as image list[list[list[int]]], displaying corresponding
     nested list by means of Tkinter, and writing an image nested list to
     `PPM`_ or `PGM`_ file.
-    
+
     All functions are implemented in pure Python with minimal import of
     standard CPython modules.
 
@@ -96,9 +96,14 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.26.22.34'
+__version__ = '2.26.26.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
 from .pnmlpnm import list2bin, list2pnm, pnm2list
+
+# ↓ Assignments below do nothing but stop linter from bitching and whining.
+pnm2list = pnm2list
+list2bin = list2bin
+list2pnm = list2pnm
