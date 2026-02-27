@@ -13,7 +13,7 @@ Note that this branch (`.34`) is functionally identical to, yet internally diffe
 
 ### Version 2
 
-| Image format | File format |
+| Version | Major changes |
 | :---- | :---- |
 | 2.26.26.34 | Minor changes to chessboard rendering. |
 | 2.26.22.34 | Introduced more suitable import pattern, like `from pypnm import list2bin, list2pnm, pnm2list` |
