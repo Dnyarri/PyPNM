@@ -18,7 +18,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.27.1.7'
+__version__ = '2.27.1.9'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -26,7 +26,7 @@ __status__ = 'Production'
 from pathlib import Path
 from platform import python_version, python_version_tuple  # Used for info
 from sys import argv
-from time import ctime  # Used to show file info only
+from time import localtime, strftime  # Used to show file info only
 from tkinter import Button, Frame, Label, Menu, PhotoImage, Tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import showinfo
@@ -81,12 +81,12 @@ def ShowInfo(event=None) -> None:
 
     file_size = Path(sourcefilename).stat().st_size
     file_size_str = f'{file_size / 1048576:.2f} Mb' if (file_size > 1048576) else f'{file_size / 1024:.2f} Kb' if (file_size > 1024) else f'{file_size} bytes'
-    creation_str = f'{ctime(Path(sourcefilename).stat().st_ctime)}' if int(python_version_tuple()[1]) < 12 else f'{ctime(Path(sourcefilename).stat().st_birthtime)}'
-    modification_str = ctime(Path(sourcefilename).stat().st_mtime)
+    creation_str = strftime('%d %B %Y %H:%M:%S', localtime(Path(sourcefilename).stat().st_ctime)) if int(python_version_tuple()[1]) < 12 else strftime('%d %B %Y %H:%M:%S', localtime(Path(sourcefilename).stat().st_birthtime))
+    modification_str = strftime('%d %B %Y %H:%M:%S', localtime(Path(sourcefilename).stat().st_mtime))
     showinfo(
         title='General information',
         message=f'PNMViewer ver. {__version__}\nPython: {python_version()}\nModules:\n{pypnm.__name__} ver. {pypnm.__version__}',
-        detail=f'File properties:\n{sourcefilename}\nSize: {file_size_str}\nCreated: {creation_str}\nModified: {modification_str}\n\nImage properties:\nWidth: {X} px\nHeight: {Y} px\nChannels: {Z} channel{"s" if Z > 1 else ""}\nColor depth: {maxcolors + 1} gradations/channel',
+        detail=f'File properties:\n{sourcefilename}\nSize: {file_size_str}\nCreated:  {creation_str}\nModified: {modification_str}\n\nImage properties:\nWidth: {X} px\nHeight: {Y} px\nChannels: {Z} channel{"s" if Z > 1 else ""}\nColor depth: {maxcolors + 1} gradations/channel',
     )
 
 
@@ -385,6 +385,7 @@ BindAll()
 # ↓ Center window, +32 vertically
 sortir.update()
 sortir.minsize(frame_img.winfo_width(), frame_img.winfo_height())
+sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
 sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+{(sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32}')
 
 # ↓ Command line part
