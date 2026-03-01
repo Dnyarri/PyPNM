@@ -18,7 +18,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.26.27.12'
+__version__ = '2.27.1.7'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -49,8 +49,11 @@ def BindAll() -> None:
 
     sortir.bind_all('<Button-3>', ShowMenu)
     sortir.bind_all('<Alt-f>', ShowMenu)
+    sortir.bind_all('<Alt-F>', ShowMenu)
     sortir.bind_all('<Control-o>', GetSource)
+    sortir.bind_all('<Control-O>', GetSource)
     sortir.bind_all('<Control-q>', DisMiss)
+    sortir.bind_all('<Control-Q>', DisMiss)
 
 
 def UINormal() -> None:
@@ -173,6 +176,7 @@ def GetSource(event=None) -> None:
     menu01.entryconfig('Export via Tkinter...', state='normal')
     menu01.entryconfig('Info', state='normal')
     UINormal()
+    sortir.minsize(frame_img.winfo_width(), frame_img.winfo_height())
     sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+{(sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32}')
     zanyato.focus_set()  # Required for some binding to work
 
@@ -330,7 +334,6 @@ sourcefilename = X = Y = Z = maxcolors = None
 
 sortir = Tk()
 sortir.title('PNMViewer')
-sortir.minsize(128, 128)
 sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00'))
 
 # ↓ Main menu, currently one "File" entry
@@ -350,7 +353,7 @@ frame_img.pack(side='top', anchor='center', expand=True)
 
 zanyato = Label(
     frame_img,
-    text='Preview area.\n  Double click to open image,\n  Right click or Alt+F for a menu.\nWith image opened,\n  Ctrl+Click to zoom in,\n  Alt+Click to zoom out.',
+    text='Preview area.\n  Double click to open image,\n  Right click or Alt+F for a menu.\nWith image opened,\n  Zoom in: Ctrl+Click or Ctrl+"+",\n  Zoom out: Alt+Click or Ctrl+"-",\n  Zoom 1:1: Ctrl+1;\n  Wheel: zoom +/-',
     font=('helvetica', 12),
     justify='left',
     borderwidth=2,
@@ -381,6 +384,7 @@ BindAll()
 
 # ↓ Center window, +32 vertically
 sortir.update()
+sortir.minsize(frame_img.winfo_width(), frame_img.winfo_height())
 sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+{(sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32}')
 
 # ↓ Command line part
