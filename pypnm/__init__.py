@@ -97,9 +97,14 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.26.23.23'
+__version__ = '2.26.27.312'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
 from .pnmlpnm import list2bin, list2pnm, pnm2list
+
+# ↓ Assignments below do nothing but stop linter from bitching and whining.
+pnm2list = pnm2list
+list2bin = list2bin
+list2pnm = list2pnm
