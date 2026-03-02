@@ -60,6 +60,7 @@ name = "Ilya Razmanov"
 email = "ilyarazmanov@gmail.com"
 
 [project.urls]
+Homepage = "https://dnyarri.github.io/"
 Source = "https://github.com/Dnyarri/PyPNM"
 Documentation = "https://dnyarri.github.io/pypnm/pypnm.pdf"
 Changelog = "https://github.com/Dnyarri/PyPNM/blob/py34/CHANGELOG.md"
