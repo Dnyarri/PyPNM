@@ -2,7 +2,7 @@
 
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pypnm) ![PyPI - Version](https://img.shields.io/pypi/v/pypnm)
 
-## Overview and Justification
+## Overview
 
 PyPNM is a pure Python module, providing functions for:
 
@@ -12,6 +12,10 @@ PyPNM is a pure Python module, providing functions for:
 
 - displaying 3D list thus obtained by converting it to Tkinter-compatible data in memory;
 - subsequent writing edited image pixel data 3D list to disk as PPM or PGM file, either binary or ASCII.
+
+Functions are detailed in *"Functions description"*, and illustrated in *"Usage example"* sections below.
+
+## Justification
 
 PPM ([Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html)) and PGM ([Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html)) (particular cases of PNM format group) are simplest file formats for RGB (color) and L (greyscale) images, correspondingly. Not surprisingly for this decaying Universe, such a simplicity lead to some adverse consequences:
 
@@ -98,7 +102,7 @@ Since version 2.21.3.4.post7 recommended import is:
 import pypnm
 ```
 
-then use functions as described in section [*"Functions description"*](#functions-description), or just take a look at [*"Usage example"*](#usage-example) section below.
+then follow functions descriptions in section *"Functions description"*, or just take a look at *"Usage example"* section below.
 
 Note that legacy import schemes like
 
