@@ -23,7 +23,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.26.27.7'
+__version__ = '2.28.2.22'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -31,13 +31,13 @@ __status__ = 'Production'
 from pathlib import Path
 from platform import python_version, python_version_tuple
 from sys import argv
-from time import ctime  # Used to show file info only
+from time import localtime, strftime  # Used to show file info only
 from tkinter import Button, Frame, Label, Menu, PhotoImage, Tk
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import showinfo
 
 import pypnm
-from pypng import pnglpng
+import pypng
 
 """ ╔══════════════════════════════════╗
     ║ GUI events and functions thereof ║
@@ -60,6 +60,9 @@ def BindAll() -> None:
     sortir.bind_all('<Control-O>', GetSource)
     sortir.bind_all('<Control-q>', DisMiss)
     sortir.bind_all('<Control-Q>', DisMiss)
+    sortir.bind_all('<Control-w>', DisMiss)
+    sortir.bind_all('<Control-W>', DisMiss)
+
 
 def UINormal():
     """Normal UI state."""
@@ -81,17 +84,17 @@ def ShowMenu(event):
     menu01.post(event.x_root, event.y_root)
 
 
-def ShowInfo(event=None):
+def ShowInfo(event=None) -> None:
     """Show program and module version, and image info."""
 
     file_size = Path(sourcefilename).stat().st_size
     file_size_str = f'{file_size / 1048576:.2f} Mb' if (file_size > 1048576) else f'{file_size / 1024:.2f} Kb' if (file_size > 1024) else f'{file_size} bytes'
-    creation_str = f'{ctime(Path(sourcefilename).stat().st_ctime)}' if int(python_version_tuple()[1]) < 12 else f'{ctime(Path(sourcefilename).stat().st_birthtime)}'
-    modification_str = ctime(Path(sourcefilename).stat().st_mtime)
+    creation_str = strftime('%d %B %Y %H:%M:%S', localtime(Path(sourcefilename).stat().st_ctime)) if int(python_version_tuple()[1]) < 12 else strftime('%d %B %Y %H:%M:%S', localtime(Path(sourcefilename).stat().st_birthtime))
+    modification_str = strftime('%d %B %Y %H:%M:%S', localtime(Path(sourcefilename).stat().st_mtime))
     showinfo(
         title='General information',
-        message=f'PNMViewer ver. {__version__}\nPython: {python_version()}\nModules:\n{pypnm.__name__} ver. {pypnm.__version__}\n{pnglpng.__name__} ver. {pnglpng.__version__}\n{pnglpng.png.__name__} ver. {pnglpng.png.__version__}',
-        detail=f'File properties:\n{sourcefilename}\nSize: {file_size_str}\nCreated: {creation_str}\nModified: {modification_str}\n\nImage properties:\nWidth: {X} px\nHeight: {Y} px\nChannels: {Z} channel{"s" if Z > 1 else ""}\nColor depth: {maxcolors + 1} gradations/channel',
+        message=f'PNMViewer ver. {__version__}\nPython: {python_version()}\nModules:\n{pypnm.__name__} ver. {pypnm.__version__}',
+        detail=f'File properties:\n{sourcefilename}\nSize: {file_size_str}\nCreated:  {creation_str}\nModified: {modification_str}\n\nImage properties:\nWidth: {X} px\nHeight: {Y} px\nChannels: {Z} channel{"s" if Z > 1 else ""}\nColor depth: {maxcolors + 1} gradations/channel',
     )
 
 
@@ -117,7 +120,7 @@ def GetSource(event=None):
     #   NOTE: maxcolors, image3D, info are GLOBALS!
     #   They are used during save!
     if Path(sourcefilename).suffix.lower() == '.png':
-        X, Y, Z, maxcolors, image3D, info = pnglpng.png2list(sourcefilename)
+        X, Y, Z, maxcolors, image3D, info = pypng.png2list(sourcefilename)
 
     elif Path(sourcefilename).suffix.lower() in ('.ppm', '.pgm', '.pbm', '.pnm'):
         X, Y, Z, maxcolors, image3D = pypnm.pnm2list(sourcefilename)
@@ -190,8 +193,10 @@ def GetSource(event=None):
     menu01.entryconfig('Save PNG...', state='normal')
     menu01.entryconfig('Info', state='normal')
     UINormal()
-    sortir.minsize(frame_img.winfo_width(), frame_img.winfo_height())
-    sortir.geometry('+{}+{}'.format((sortir.winfo_screenwidth() - sortir.winfo_width()) // 2, (sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32))
+    h_spacer = min(sortir.winfo_reqwidth(), 9 * sortir.winfo_screenwidth() // 10)
+    v_spacer = min(sortir.winfo_reqheight(), 9 * sortir.winfo_screenheight() // 10)
+    sortir.minsize(h_spacer, v_spacer)
+    sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+{(sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32}')
     zanyato.focus_set()  # Required for some binding to work
 
 
@@ -260,7 +265,7 @@ def SaveAsPNG():
 
     # ↓ Feeding list to PyPNG via pnglpng
     UIBusy()
-    pnglpng.list2png(savefilename, image3D, info)
+    pypng.list2png(savefilename, image3D, info)
     # ↓ Saved file becomes source file
     sourcefilename = savefilename
     sortir.title(f'PNMViewer: {Path(sourcefilename).name}')
@@ -272,7 +277,6 @@ def zoomIn(event=None):
 
     global zoom_factor, preview
     zoom_factor = min(zoom_factor + 1, 4)  # max zoom 5
-    preview = PhotoImage(data=preview_data)
     preview = zoom_do[zoom_factor]
     zanyato.config(image=preview, compound='none')
     zanyato.pack_configure(pady=max(0, 16 - (preview.height() // 2)))
@@ -291,7 +295,6 @@ def zoomOut(event=None):
 
     global zoom_factor, preview
     zoom_factor = max(zoom_factor - 1, -4)  # min zoom 1/5
-    preview = PhotoImage(data=preview_data)
     preview = zoom_do[zoom_factor]
     zanyato.config(image=preview, compound='none')
     zanyato.pack_configure(pady=max(0, 16 - (preview.height() // 2)))
@@ -312,6 +315,7 @@ def zoomWheel(event):
         zoomOut()
     if event.delta > 0:
         zoomIn()
+
 
 def zoomOne(event=None):
     """Zoom 1:1."""
@@ -388,8 +392,11 @@ BindAll()
 
 # ↓ Center window, +32 vertically
 sortir.update()
-sortir.minsize(frame_img.winfo_width(), frame_img.winfo_height())
-sortir.geometry('+{}+{}'.format((sortir.winfo_screenwidth() - sortir.winfo_width()) // 2, (sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32))
+h_spacer = min(sortir.winfo_reqwidth(), 9 * sortir.winfo_screenwidth() // 10)
+v_spacer = min(sortir.winfo_reqheight(), 9 * sortir.winfo_screenheight() // 10)
+sortir.minsize(h_spacer, v_spacer)
+sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
+sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2}+{(sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32}')
 
 # ↓ Command line part
 if len(argv) == 2:
