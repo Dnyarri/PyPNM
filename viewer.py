@@ -24,7 +24,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.27.1.5'
+__version__ = '2.28.2.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -61,6 +61,8 @@ def BindAll():
     sortir.bind_all('<Control-O>', GetSource)
     sortir.bind_all('<Control-q>', DisMiss)
     sortir.bind_all('<Control-Q>', DisMiss)
+    sortir.bind_all('<Control-w>', DisMiss)
+    sortir.bind_all('<Control-W>', DisMiss)
 
 
 def UINormal():
@@ -201,7 +203,9 @@ def GetSource(event=None):
     menu01.entryconfig('Save PNG...', state='normal')
     menu01.entryconfig('Info', state='normal')
     UINormal()
-    sortir.minsize(frame_img.winfo_width(), frame_img.winfo_height())
+    h_spacer = min(sortir.winfo_reqwidth(), 9 * sortir.winfo_screenwidth() // 10)
+    v_spacer = min(sortir.winfo_reqheight(), 9 * sortir.winfo_screenheight() // 10)
+    sortir.minsize(h_spacer, v_spacer)
     sortir.geometry('+{}+{}'.format((sortir.winfo_screenwidth() - sortir.winfo_width()) // 2, (sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32))
     zanyato.focus_set()  # Required for some binding to work
 
@@ -402,7 +406,10 @@ BindAll()
 
 # ↓ Center window, +32 vertically
 sortir.update()
-sortir.minsize(frame_img.winfo_width(), frame_img.winfo_height())
+sortir.update()
+h_spacer = min(sortir.winfo_reqwidth(), 9 * sortir.winfo_screenwidth() // 10)
+v_spacer = min(sortir.winfo_reqheight(), 9 * sortir.winfo_screenheight() // 10)
+sortir.minsize(h_spacer, v_spacer)
 sortir.geometry('+{}+{}'.format((sortir.winfo_screenwidth() - sortir.winfo_width()) // 2, (sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32))
 
 # ↓ Command line part
