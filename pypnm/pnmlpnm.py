@@ -105,7 +105,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.26.26.34'
+__version__ = '2.29.19.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -359,12 +359,15 @@ def pnm2list(in_filename):
         return _p1(in_filename)
     else:
         raise ValueError('Header {} is not in P1:P6 range'.format(beginnings))
+
+
 # ↑ End of pnm2list PNM reading function
 
 
 """ ╔══════════╗
     ║ list2bin ║
     ╚══════════╝ """
+
 
 def list2bin(list_3d, maxcolors, show_chessboard=False):
     """Convert nested image data list to PGM P5 or PPM P6 bytes in memory.
@@ -439,16 +442,24 @@ def list2bin(list_3d, maxcolors, show_chessboard=False):
             """ ┌────────────────────────────────────────────────┐
                 │ Force preview 8 bit/channel for Python <= 3.10 │
                 └────────────────────────────────────────────────┘ """
-            list_1d = map(lambda channel: (preview_maxcolors * channel) // maxcolors, list_1d)
+            rescaler = preview_maxcolors / maxcolors
+
+            def _reduce(channel):
+                return int(channel * rescaler)
+
+            list_1d = map(_reduce, list_1d)
         content = array.array('B', list_1d)
     header = '{file_type}\n{width} {height}\n{colors}\n'.format(file_type=magic, width=X, height=Y, colors=preview_maxcolors)
     return b''.join((header.encode('ascii'), content.tobytes()))
+
+
 # ↑ End of 'list2bin' list to in-memory PNM conversion function
 
 
 """ ╔═════════════╗
     ║ list2pnmbin ║
     ╚═════════════╝ """
+
 
 def list2pnmbin(out_filename, list_3d, maxcolors):
     """Write binary PNM ``out_filename`` file; writing performed per row to reduce RAM usage.
@@ -486,12 +497,15 @@ def list2pnmbin(out_filename, list_3d, maxcolors):
             file_pnm.write(row_array)  # Writing row bytes array to file
 
     return None
+
+
 # ↑ End of 'list2pnmbin' function writing binary PPM/PGM file
 
 
 """ ╔═══════════════╗
     ║ list2pnmascii ║
     ╚═══════════════╝ """
+
 
 def list2pnmascii(out_filename, list_3d, maxcolors):
     """Write ASCII PNM ``out_filename`` file; writing performed per sample to reduce RAM usage.
@@ -533,12 +547,15 @@ def list2pnmascii(out_filename, list_3d, maxcolors):
                     file_pnm.write('{} '.format(list_3d[y][x][z]))  # Writing channel value to file
 
     return None
+
+
 # ↑ End of 'list2pnmascii' function writing ASCII PPM/PGM file
 
 
 """ ╔══════════╗
     ║ list2pnm ║
     ╚══════════╝ """
+
 
 def list2pnm(out_filename, list_3d, maxcolors, bin=True):
     """Write PNM ``out_filename`` file using either ``list2pnmbin`` or ``list2pnmascii`` depending on ``bin`` switch.
@@ -560,6 +577,8 @@ def list2pnm(out_filename, list_3d, maxcolors, bin=True):
         list2pnmascii(out_filename, list_3d, maxcolors)
 
     return None
+
+
 # ↑ End of 'list2pnm' switch function writing any type of PPM/PGM file
 
 
@@ -567,12 +586,15 @@ def list2pnm(out_filename, list_3d, maxcolors, bin=True):
     ║ Create empty image ║
     ╚════════════════════╝ """
 
+
 def create_image(X, Y, Z):
     """Create 3D nested list of X * Y * Z size filled with zeroes."""
 
     new_image = [[[0 for z in range(Z)] for x in range(X)] for y in range(Y)]
 
     return new_image
+
+
 # ↑ End of 'create_image' empty nested 3D list creation
 
 # ↓ Dummy stub for standalone execution attempt
@@ -581,4 +603,5 @@ if __name__ == '__main__':
     need_help = input('Would you like to read some help (y/n)?')
     if need_help.startswith(('y', 'Y')):
         import pnmlpnm
+
         help(pnmlpnm)

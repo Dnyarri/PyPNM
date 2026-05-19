@@ -4,24 +4,27 @@ Pure Python module for PPM and PGM image files reading, displaying, and writing.
 
 ## Version
 
-[PyPNM Maximum compatibility version](https://github.com/Dnyarri/PyPNM/tree/py34/).
+[PyPNM Maximum compatibility version](https://github.com/Dnyarri/PyPNM/tree/py34/ "PyPNM for Python 3.4 and above").
 Successfully tested with Python 3.4 under Windows XP.
 
-Note that this branch (`.34`) is functionally identical to, yet internally different from `main` branch.
+Note that this branch ([`.34`](https://github.com/Dnyarri/PyPNM/tree/py34/ "PyPNM for Python 3.4 and above")) is functionally identical to, yet internally different from [`main`](https://github.com/Dnyarri/PyPNM/ "PyPNM for Python 3.11 and above") branch.
 
 ## History
 
+Current versioning for this branch is MAINVERSION.MMsinceJan2024.DD.34.
+
 ### Version 2
 
-| Version | Major changes |
-| :---- | :---- |
-| 2.26.26.34 | Minor changes to chessboard rendering. |
-| 2.26.22.34 | Introduced more suitable import pattern, like `from pypnm import list2bin, list2pnm, pnm2list` |
-| 2.21.3.4.post5 | Compatibility list extended. |
-| 2.21.3.4.post4 | Even more developer-friendly docstrings. |
-| 2.21.3.4.post3 | More ReST-compliant docstrings. |
-| 2.21.3.4 | 3 Sep 2025 "Victory II" update mostly consist of more friendly help. |
-| 2.21.2.34 | **2 Sep** 2025 "**Victory II**": substantial changes aimed to save resources:<br>- `mmap` introduced for reading to remove intermediates of `re`.<br>- generators are widely used for writing.<br>Module input/output remains the same as for 1.17.9.34 "Victory". |
+| Version | Date | Major changes |
+| :---- | :---- | :---- |
+| 2.29.19.34 | 18 May 2026 | Changed preview bitdepth reduction code for old Tkinter (18 May 2026). |
+| 2.26.26.34 | 27 Feb 2026 | Minor changes to chessboard rendering. |
+| 2.26.22.34 | 23 Feb 2026 | Introduced more suitable import pattern, like `from pypnm import list2bin, list2pnm, pnm2list` |
+| 2.21.3.4.post5 | 31 Dec 2025 | Compatibility list extended. |
+| 2.21.3.4.post4 | 23 Nov 2025 | Even more developer-friendly docstrings. |
+| 2.21.3.4.post3 | 12 Nov 2025 | More ReST-compliant docstrings. |
+| 2.21.3.4 | 3 Sep 2025 | "Victory II" update mostly consist of more friendly help. |
+| 2.21.2.34 | **2 Sep 2025** | "**Victory II**": substantial changes aimed to save resources:<br>- `mmap` introduced for reading to remove intermediates of `re`.<br>- generators are widely used for writing.<br>Module input/output remains the same as for 1.17.9.34 "Victory". |
 
 ### Version 1
 
