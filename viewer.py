@@ -23,7 +23,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.28.2.22'
+__version__ = '2.30.12.2'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -223,7 +223,7 @@ def SaveAsPNM(bin: bool):
 
     # ↓ Open "Save as..." file
     savefilename = asksaveasfilename(
-        title=f'Save {filetype.upper()} file',
+        title=f'Save {"binary" if bin else "ASCII"} {filetype.upper()} file',
         filetypes=format,
         defaultextension=extension,
         initialdir=Path(sourcefilename).parent,
