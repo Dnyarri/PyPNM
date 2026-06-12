@@ -2,7 +2,7 @@
 | 【EN】 | [〖RU〗](README.RU.md) |
 | ---- | ---- |
 
-# PyPNM - Pure Python PPM and PGM image files reading and writing module
+# PyPNM - Pure Python PPM and PGM image files reading, displaying, and writing module
 
 > [!NOTE]
 > This branch contains a special extended compatibility version of PyPNM, deliberately made to be compatible with old versions of Python 3.
@@ -12,7 +12,7 @@
 If you use Python 3.11 or above, it is highly recommended to switch to [**main** PyPNM branch](https://github.com/Dnyarri/PyPNM/tree/main/), where the newest main version is hanging.
 
 > [!WARNING]
-> THIS BRANCH IS NOT MEANT TO BE MERGED WITH ANY OTHERS!
+> **THIS BRANCH IS NOT MEANT TO BE MERGED WITH ANY OTHERS!**
 
 ## Overview and justification
 
@@ -39,7 +39,7 @@ To accomplish this, current PyPNM module was developed, combining input/output f
 Current PyPNM version is maximal backward compatibility build. While most of the development was performed using Python 3.12, extensive testing with other versions was carried out, and PyPNM proven to work with antique **Python 3.4** ([reached end of life 18 Mar 2019](https://devguide.python.org/versions/)) under **Windows XP 32-bit** ([reached end of support 8 Apr 2014](https://learn.microsoft.com/en-us/lifecycle/products/windows-xp)).
 
 > [!NOTE]
-> Tkinter, bundled with standard CPython distributions 3.10 and below have problems with 16 bpc images. Although it's not PyPNM but Tkinter problem, it's still ungood and severely discombobulating. As a workaround, `list2bin` function in PyPNM extended compatibility version (.34) includes a routine for color depth reduction from 16 bpc to 8 bpc when generating a preview. Surely `list2bin` tries to avoid such a remapping unless it is absolutely necessary since remapping requires extra calculation and therefore slows the function down; decision on remapping, however, is based on correlation between Python version and bundled Tkinter version, and therefore may fail if you have custom builds of Tkinter, or Python, or both. Failure is most likely to manifest as unnecessary slowdowns, and least likely as Tkinter crash. Remember that this module is provided under Unlicense, I don't care much of my copyright, so you may edit the source, including Python version detection criteria, at will. Hint: Python versions is determined as `python_version_tuple()[1]`.
+> Tkinter, bundled with standard CPython distributions 3.10 and below have problems with 16 bpc images. Although it's not PyPNM but Tkinter problem, it's still both ungood and severely discombobulating. As a workaround, `list2bin` function in PyPNM extended compatibility version (.34) includes a routine for color depth reduction from 16 bpc to 8 bpc when generating a preview. Surely `list2bin` tries to avoid such a remapping unless it is absolutely necessary since remapping requires extra calculation and therefore slows the function down; decision on remapping, however, is based on correlation between Python version and bundled Tkinter version, and therefore may fail if you have custom builds of Tkinter, or Python, or both. Failure is most likely to manifest as unnecessary slowdowns, and least likely as Tkinter crash. Remember that this module is provided under Unlicense, I don't care much of my copyright, so you may edit the source, including Python version detection criteria, at will. *Hint:* Python versions is determined as `python_version_tuple()[1]`.
 >
 > On the other hand, if you have only new versions of Python and Tkinter, you may prefer downloading [Main version of PyPNM](https://github.com/Dnyarri/PyPNM), which doesn't have any backward compatibility fixes, and therefore doesn't waste CPU time on it.
 
@@ -137,15 +137,21 @@ Detailed functions arguments description is provided below, as well as in module
 ### pnm2list
 
 ```python
-X, Y, Z, maxcolors, image3D = pypnm.pnm2list(in_filename)
+X, Y, Z, maxcolors, image3D = pypnm.pnm2list(in_filename, tuplevel)
 ```
 
 Read data from PPM/PGM file to nested image data list, where:
 
-- `X, Y, Z`   - image sizes (int);
-- `maxcolors` - number of colors per channel for current image (int);
-- `image3D`   - image pixel data as list(list(list(int)));
-- `in_filename` - PPM/PGM file name (str).
+- `X, Y, Z`    - image sizes (int);
+- `maxcolors`  - number of colors per channel for current image (int);
+- `image3D`    - image pixel data as list(list(list(int)));
+- `in_filename` - PPM/PGM file name (str);
+- `tuplevel`   - `image3D` structure switch:
+  - `tuplevel='image'`: `image3D` is tuple(tuple(tuple(int)));
+  - `tuplevel='pixel'`: `image3D` is list(list(tuple(int)));
+  - `tuplevel=` other: `image3D` is list(list(list(int))).
+
+  Default `tuplevel=None`, meaning no tuples are used, and `image3D` structure is list(list(list(int))).
 
 ### list2bin
 

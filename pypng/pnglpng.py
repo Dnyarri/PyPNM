@@ -31,14 +31,22 @@ Usage
 
 After ``import pnglpng``, use something like::
 
-    X, Y, Z, maxcolors, list_3d, info = pnglpng.png2list(in_filename)
+    X, Y, Z, maxcolors, list_3d, info = pnglpng.png2list(in_filename, tuplevel)
 
 for reading data from PNG file, where:
 
 - ``X``, ``Y``, ``Z``: PNG image dimensions (int);
-- ``maxcolors``: number of colors per channel for current image (int), either 1, or 255, or 65535, for 1 bpc, 8 bpc and 16 bpc PNG respectively;
-- ``list_3d``: Y * X * Z list (image) of lists (rows) of lists (pixels) of ints (channels), from PNG iDAT;
-- ``info``: dictionary of PNG chunks like resolution etc., as they are accessible by PyPNG.
+- ``maxcolors``: maximum value of colors per channel for current image (int),
+  either 1, or 255, or 65535, for 1 bpc, 8 bpc and 16 bpc PNG respectively;
+- ``list_3d``: Y * X * Z list (image) of lists (rows) of lists (pixels) of
+  ints (channels), from PNG iDAT;
+- ``info``: dictionary of PNG chunks like resolution etc.,
+  as they are accessible by PyPNG;
+- ``tuplevel``: image representation switch:
+
+  - ``tuplevel='pixel'``: ``list_3d`` is list[list[tuple[int]]];
+  - ``tuplevel='image'``: ``list_3d`` is tuple[tuple[tuple[int]]];
+  - ``tuplevel=`` other: ``list_3d`` is list[list[list[int]]].
 
 and ::
 
@@ -62,28 +70,40 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2024-2025 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '25.11.11.34'
+__version__ = '26.6.12.34'
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
 
 from . import png  # PNG I/O: PyPNG from: https://gitlab.com/drj11/pypng
 
-""" ┌──────────┐
+""" ╭──────────╮
     │ png2list │
-    └──────────┘ """
+    ╰──────────╯ """
 
 
-def png2list(in_filename):
+def png2list(in_filename, tuplevel=None):
     """Take PNG filename and return PNG data in a human-friendly form.
 
     :param str in_filename: input file name;
+    :param tuplevel: switch ``list_3d`` structure
+
+        - ``tuplevel='image'``: ``list_3d`` is tuple[tuple[tuple[int]]];
+        - ``tuplevel='pixel'``: ``list_3d`` is list[list[tuple[int]]];
+        - ``tuplevel=`` other: ``list_3d`` is list[list[list[int]]].
+
+    :type tuplevel: str or None
     :return X, Y, Z, maxcolors, list_3d, info: tuple, consisting of:
 
-    - ``X``, ``Y``, ``Z``: PNG image dimensions (int);
-    - ``maxcolors``: number of colors per channel for current image (int), either 1, or 255, or 65535, for 1 bpc, 8 bpc and 16 bpc PNG respectively;
-    - ``list_3d``: Y * X * Z list (image) of lists (rows) of lists (pixels) of ints (channels), from PNG iDAT;
-    - ``info``: dictionary of PNG chunks like resolution etc., as they are accessible by PyPNG.
+        - **``X``**, **``Y``**, **``Z``**: PNG image dimensions (int);
+        - **``maxcolors``**: maximum value of colors per channel
+        for current image (int),
+        either 1, or 255, or 65535, for 1 bpc, 8 bpc and 16 bpc PNG,
+        respectively;
+        - **``list_3d``**: list/tuple (image) of lists/tuples (rows) of
+        lists/tuples (pixels) of ints (channel values), from PNG iDAT;
+        - **``info``**: dictionary of PNG chunks like resolution *etc.*,
+        as they are accessible by PyPNG.
 
     """
 
@@ -101,15 +121,23 @@ def png2list(in_filename):
 
     imagedata = tuple(pixels)  # Freezes tuple of bytes or whatever "pixels" generator returns
 
-    # Forcedly create 3D list of int out of "imagedata" tuple of hell knows what
-    list_3d = [[[int((imagedata[y])[(x * Z) + z]) for z in range(Z)] for x in range(X)] for y in range(Y)]
+    # ↓ Forcedly create 3D list/tuple of int out of "imagedata" tuple of hell knows what
+    if tuplevel == 'pixel':
+        list_3d = [[tuple([int((imagedata[y])[(x * Z) + z]) for z in range(Z)]) for x in range(X)] for y in range(Y)]
+        return (X, Y, Z, maxcolors, list_3d, info)
 
+    if tuplevel == 'image':
+        list_3d = tuple([tuple([tuple([int((imagedata[y])[(x * Z) + z]) for z in range(Z)]) for x in range(X)]) for y in range(Y)])
+        return (X, Y, Z, maxcolors, list_3d, info)
+
+    # ↓ If none of the 'tuplevel' above ensued
+    list_3d = [[[int((imagedata[y])[(x * Z) + z]) for z in range(Z)] for x in range(X)] for y in range(Y)]
     return (X, Y, Z, maxcolors, list_3d, info)
 
 
-""" ┌──────────┐
+""" ╭──────────╮
     │ list2png │
-    └──────────┘ """
+    ╰──────────╯ """
 
 
 def list2png(out_filename, list_3d, info):
@@ -125,9 +153,7 @@ def list2png(out_filename, list_3d, info):
     """
 
     # ↓ Determining list dimensions
-    Y = len(list_3d)
-    X = len(list_3d[0])
-    Z = len(list_3d[0][0])
+    Y, X, Z = (len(list_3d), len(list_3d[0]), len(list_3d[0][0]))
     # ↓ Ignoring any possible list channels above 4-th.
     Z = min(Z, 4)
 
@@ -167,17 +193,15 @@ def list2png(out_filename, list_3d, info):
     return None
 
 
-""" ┌────────────────────┐
+""" ╭────────────────────╮
     │ Create empty image │
-    └────────────────────┘ """
+    ╰────────────────────╯ """
 
 
 def create_image(X, Y, Z):
     """Create zero-filled 3D nested list of X * Y * Z size."""
 
-    new_image = [[[0 for z in range(Z)] for x in range(X)] for y in range(Y)]
-
-    return new_image
+    return [[[0 for z in range(Z)] for x in range(X)] for y in range(Y)]
 
 
 # ↓ Dummy stub for standalone execution attempt

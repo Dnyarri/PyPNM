@@ -19,13 +19,19 @@ keywords = [
     "pnm",
     "Netpbm",
     "image",
+    "file",
     "format",
     "bitmap",
     "greyscale",
     "RGB",
+    "read",
+    "write",
+    "display",
     "Python",
 ]
 classifiers = [
+    "Operating System :: OS Independent",
+    "Development Status :: 5 - Production/Stable",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.4",
     "Programming Language :: Python :: 3.5",
@@ -39,16 +45,20 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: 3.15",
-    "Operating System :: OS Independent",
-    "Development Status :: 5 - Production/Stable",
     "Topic :: File Formats",
+    "Topic :: Multimedia",
     "Topic :: Multimedia :: Graphics",
     "Topic :: Multimedia :: Graphics :: Graphics Conversion",
     "Topic :: Multimedia :: Graphics :: Viewers",
+    "Topic :: Multimedia :: Graphics :: Editors",
+    "Topic :: Multimedia :: Graphics :: Editors :: Raster-Based",
+    "Topic :: Scientific/Engineering :: Image Processing",
+    "Topic :: Scientific/Engineering :: Visualization",
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Intended Audience :: Developers",
     "Intended Audience :: Education",
     "Intended Audience :: Science/Research",
+    "Intended Audience :: End Users/Desktop",
 ]
 
 [[project.authors]]
@@ -68,6 +78,9 @@ Issues = "https://github.com/Dnyarri/PyPNM/issues"
 
 [tool.setuptools.package-dir]
 pypnm = "."
+
+[tool.setuptools.package-data]
+pypnm = ["help.md",]
 
 [tool.setuptools.dynamic.version]
 attr = "pypnm.__version__"

@@ -84,18 +84,28 @@ import pypnm
 
 ### pnm2list
 
-`X, Y, Z, maxcolors, image3D = pypnm.pnm2list(in_filename)`
+```python
+X, Y, Z, maxcolors, image3D = pypnm.pnm2list(in_filename, tuplevel)
+```
 
 чтение данных из файла PPM/PGM, где:
 
 - `X, Y, Z`   - размеры изображения, int;
 - `maxcolors` - количество цветов на канал, int;
 - `image3D`   - собственно данные пикселей, list(list(list(int)));
-- `in_filename` - имя файла PPM/PGM, str.
+- `in_filename` - имя файла PPM/PGM, str;
+- `tuplevel`   - переключатель структуры `image3D`:
+  - `tuplevel='image'`: `image3D` имеет тип tuple(tuple(tuple(int)));
+  - `tuplevel='pixel'`: `image3D` имеет тип list(list(tuple(int)));
+  - `tuplevel=` что угодно ещё: `image3D` имеет тип list(list(list(int))).
+
+  По умолчанию `tuplevel=None`, то есть структура `image3D` - list(list(list(int))), как в самой первой версии.
 
 ### list2bin
 
-`image_bytes = pypnm.list2bin(image3D, maxcolors, show_chessboard)`
+```python
+image_bytes = pypnm.list2bin(image3D, maxcolors, show_chessboard)
+```
 
 Превращает изображение в форме вложенного трёхмерного списка целых чисел в байтовый объект типа PPM (P6) или PGM (P5) в памяти:
 
@@ -111,7 +121,9 @@ import pypnm
 
 ### list2pnm
 
-`pypnm.list2pnm(out_filename, image3D, maxcolors, bin)`
+```python
+pypnm.list2pnm(out_filename, image3D, maxcolors, bin)
+```
 
 Запись картинки в бинарный или ASCII файл:
 
@@ -124,7 +136,9 @@ import pypnm
 
 ### create_image
 
-`image3D = create_image(X, Y, Z)`
+```python
+image3D = create_image(X, Y, Z)
+```
 
 Создаёт пустой трёхмерный список размеров `X*Y*Z`.
 

@@ -6,40 +6,40 @@
 
 PyPNM is a pure Python module, providing functions for:
 
-- reading PPM and PGM image files (both 8 and 16 bits per channel color depth) to image 3D nested lists for further editing;
+- **reading** PPM and PGM image files (both 8 and 16 bits per channel color depth, both binary and ASCII files) to image 3D nested lists for further editing;
 
-   (Reading support for 1 bpc PBM is provided as well.)
+  Reading support for 1 bpc PBM is provided as well. Writing PBM is not supported and not planned since 1 bpc images are next to useless for editing.
 
-- displaying 3D list thus obtained by converting it to Tkinter-compatible data in memory;
-- subsequent writing edited image pixel data 3D list to disk as PPM or PGM file, either binary or ASCII.
+- **displaying** 3D list thus obtained by converting it to Tkinter-compatible data in memory;
+- **writing** edited image 3D list to disk as PPM or PGM file, either binary or ASCII.
 
 Functions are detailed in *"Functions description"*, and illustrated in *"Usage example"* sections below.
 
 ## Justification
 
-PPM ([Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html)) and PGM ([Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html)) (particular cases of PNM format group) are simplest file formats for RGB (color) and L (greyscale) images, correspondingly. Not surprisingly for this decaying Universe, such a simplicity lead to some adverse consequences:
+PPM ([Portable Pixel Map](https://netpbm.sourceforge.net/doc/ppm.html)) and PGM ([Portable Gray Map](https://netpbm.sourceforge.net/doc/pgm.html)) (particular cases of PNM aka [Netpbm](https://netpbm.sourceforge.net/doc/) format group) are simplest file formats for RGB (color) and L (greyscale) images, correspondingly. Not surprisingly for this decaying Universe, such a simplicity lead to some adverse consequences:
 
 - lack of strict official specification. Instead, you may find words like "usual" in format description. Surely, there is always someone who implement this part of image format in unprohibited, yet a totally unusual way.
 
-- unwillingness of many professional software developers to spend their precious time on such a trivial task as supporting simple open format. It took years for almighty Adobe team to include PNM module in Photoshop rather than count on third-party developers, and surely (see above) they took their chance to implement a header scheme nobody else seem to use. What as to PNM support in Python, say, Pillow, it's often incomplete and/or requires counterintuitive measures when dealing with specific image types (like 16 bit per channel) in rare cases such a support exist.
+- unwillingness of many professional software developers to spend their precious time on such a trivial task as supporting simple open format. It took years for almighty Adobe team to include PNM module in Photoshop rather than count on third-party developers (and surely they took their chance to implement a unique header scheme).
+
+  What as to PNM support in Python, say, Pillow, it's often incomplete and/or requires counterintuitive measures when dealing with specific image types (like 16 bit per channel) in rare cases such a support exist.
 
 As a result, novice Python user (like the writer of these words) may find it difficult to get simple yet reliable input/display/output modules for PPM and PGM image formats.
 
 ## Objectives
 
-1. To obtain suitable facility for **visualization** of image-like data (images first and foremost), represented as 3D nested lists, by means of Tkinter `PhotoImage(data=...)` class.
+**Primary goal** of current project was creating a minimalistic tool for visualizing image data (and, as far as practicable, other similar continual parallelepipedal data) to facilitate developing image filtering and editing software and prototypes in pure Python from scratch, not relying on third-party software with unknown limitations and uncontrolled deprecations.
 
-   That is, getting something to easily view images being edited, without downloading excessively large packages.
+On the one hand, the only logical Python-native data structure for images seem to be nested 3D list, *i.e.* `list(list(list(int)))` (see *Image representation* below).
 
-2. To obtain simple and compact cross-platform module for **reading** PPM and PGM files as 3D nested lists for further processing with Python, and subsequent **writing** of processed 3D nested lists data to PPM or PGM files.
+On the other hand, all current CPython distributions include Tkinter, providing image rendering via PhotoImage class. Currently PhotoImage support only two smooth color formats, namely PNG and binary PNM (PPM and PGM), with PNM being considerably simpler than PNG.
 
-   It is necessary to have not only 8 bpc but 16 bpc images supported fully and directly, for the developer to consider PyPNM as "just working", without going deeply into details.
+Therefore, a tool for converting Python nested lists to PPM or PGM bytes in memory is supposed to accomplish a primary task - one may edit a list with any algorithm of his/her own design, then simply feed the resulting list to such a tool, then feed resulting bytes to Tkinter, and viola, the preview.
 
-3. Finally, to inspire and facilitate further development of image **editing** algorithms in Python (meaning Python itself, not C or Rust or whatever) by attaining objectives № 1 and 2 above.
+**Secondary goal** is providing image data interchange with other software, that is, reading image files in some common format and converting them into Python nested lists, as well as converting edited lists back into some common image format and saving it as a file. Again, PNM have a benefit of being as simple as possible, yet provide crucial features like handling 16 bit per channel (bpc) image data.
 
-   That is, once you can read and write images, and view the result of analyzing/filtering image with your algorithm, you, as a developer, may finally concentrate on image processing algorithm itself, rather than any auxiliary facilities.
-
-To accomplish this, current PyPNM module was developed, combining read/write functions for binary and ASCII PGM and PPM files (*i.e.* P2, P5, P3 and P6 PNM file types), and suitable facilities for image display. Both greyscale and RGB color spaces with 8 bit and 16 bit per channel color depths (0..255 and 0..65535 ranges respectively) are supported directly, without limitations and without any dances with tambourine like using separate methods for different bit depths *etc*.
+To accomplish the objectives above, current PyPNM module was developed, combining read/write functions for binary and ASCII PGM and PPM files (*i.e.* P2, P5, P3 and P6 PNM file types), and suitable facilities for image display. Both greyscale and RGB color spaces with 8 bit and 16 bit per channel color depths (0..255 and 0..65535 ranges respectively) are supported directly, without limitations and without any dances with tambourine like using separate methods for different bit depths *etc*.
 
 Thus, PyPNM may simplify writing image processing applications in Python, either as a part of rapid prototyping or as finalized software.
 
@@ -49,15 +49,6 @@ Thus, PyPNM may simplify writing image processing applications in Python, either
 | *Adaptive image averaging application. PNM image file open/save, as well as image filtering before/after display are based on PyPNM. Nested list structure, produced by PyPNM, allows easy processing of arbitrary number of channels with the same algorithm; for example, in this filter* `map`*s are actively used to create compact omnivorous algorithm.* |
 
 Noteworthy that PyPNM is pure Python module, which makes it pretty compact and OS-independent. No third-party imports, no Numpy version conflicts (some may find it surprising, but list reshaping in Python can be done with one line without Numpy) *etc*.
-
-## Python compatibility
-
-Current PyPNM version, created for PyPI distribution, is a maximal backward compatibility build. While most of the development was performed using Python 3.12, extensive testing with other versions was carried out, and PyPNM proven to work with antique **Python 3.4** ([reached end of life 18 Mar 2019](https://devguide.python.org/versions/)) under **Windows XP 32-bit** ([reached end of support 8 Apr 2014](https://learn.microsoft.com/en-us/lifecycle/products/windows-xp)).
-
-> [!NOTE]
-> Tkinter, bundled with standard CPython distributions 3.10 and below have problems with 16 bpc images. Although it's not PyPNM but Tkinter problem, it's still ungood and severely discombobulating. As a workaround, `list2bin` function in PyPNM extended compatibility version (.34) includes a routine for color depth reduction from 16 bpc to 8 bpc when generating a preview. Surely `list2bin` tries to avoid such a remapping unless it is absolutely necessary since remapping requires extra calculation and therefore slows the function down; decision on remapping, however, is based on correlation between CPython version and bundled Tkinter version, and therefore may fail if you have custom builds of Tkinter, or Python, or both. Failure is most likely to manifest as unnecessary slowdowns, and least likely as Tkinter exception. Remember that this module is provided under Unlicense, I don't care much of my copyright, so you may edit the source at will, including Python version detection criteria.
->
-> If you have only new versions of Python (3.11 and above) and Tkinter, you may consider downloading [Main version of PyPNM](https://github.com/Dnyarri/PyPNM), which doesn't have any backward compatibility fixes, and therefore doesn't waste CPU time on it.
 
 ## Format compatibility
 
@@ -76,15 +67,29 @@ Current PyPNM module read and write capabilities are briefly summarized below.
 | 1 bit ink on/off | P4 Binary PBM | Yes | No |
 | 1 bit ink on/off | P1 ASCII PBM | Yes | No |
 
-## Target image representation
-
-**Main goal** of module under discussion **is** not just bytes reading and writing but representing image as some logically organized structure for further **image editing**.
+## Image representation
 
 Is seems logical to represent an RGB image as nested 3D structure - (X, Y)-sized matrix of three-component (R, G, B) vectors. Since in Python list seem to be about the only variant for mutable structures like that, it is suitable to represent image as `list(list(list(int)))` structure. Therefore, it would be convenient to have module read/write image data from/to such a structure.
 
-Note that for L images memory structure is still `list(list(list(int)))`, with innermost list having only one component, which enables further image editing with the same nested loop or map() regardless of color mode.
+Note that for L images memory structure, produced by PyPNM, is still `list(list(list(int)))`, with innermost list having only one component. Using the same consistent data structure enables further image editing with the same nested loop or map() regardless of color mode.
 
-Note that since main PyPNM purpose is facilitating image editing, when reading 1-bit PBM files into image this module promotes data to 8-bit L, inverting values and multiplying by 255, so that source 1 (ink on) is changed to 0 (black), and source 0 (ink off) is changed to 255 (white) - since any palette-based images, 1-bit included, are next to useless for general image processing (try to imagine 1-bit Gaussian blur, for example), and have to be converted to smooth color for that, conversion is performed by PyPNM automatically.
+Note that since main PyPNM purpose is facilitating image editing, PyPNM module promotes 1 bit PBM files into image list data corresponding to 8 bit L when reading, inverting values and multiplying by 255, so that source 1 (ink on) is changed to 0 (black), and source 0 (ink off) is changed to 255 (white); so, practically, a PBM is opened as a 8 bit PGM. The reason for forced color space conversion is that any palette-based images, 1 bit included, are next to useless for general image processing, and have to be converted to smooth color anyway, therefore conversion is performed by PyPNM automatically.
+
+## Python compatibility
+
+Current PyPNM version, created specifically for PyPI distribution, is a maximal backward compatibility build. While most of the development was performed using Python 3.12, extensive testing with other versions was carried out, and PyPNM proven to work with antique **Python 3.4** ([reached end of life 18 Mar 2019](https://devguide.python.org/versions/#full-chart)) under **Windows XP 32-bit** ([reached end of support 8 Apr 2014](https://learn.microsoft.com/en-us/lifecycle/products/windows-xp)).
+
+What as to forward compatibility, currently PyPNM is working under stable Python 3.14, as well as Python 3.15 embryo, and supposed to keep working until Python developers deprecate arithmetics.
+
+> **Note:**
+>
+> Tkinter, bundled with standard CPython distributions 3.10 and below have problems with 16 bpc images, ranging from silent crash to explainable exception. Although it's not PyPNM but Tkinter problem, it's still both ungood and severely discombobulating. As a workaround, `list2bin` function in PyPNM extended compatibility version (.34) includes a routine for color depth reduction from 16 bpc to 8 bpc when generating a preview.
+>
+> Since color remapping requires extra calculation and therefore slows the function down, `list2bin` tries to avoid such a remapping unless it is absolutely necessary; decision on remapping, however, is based on correlation between CPython version and bundled Tkinter version, and therefore may fail if you have custom builds of Tkinter, or Python, or both. Failure is most likely to manifest as unnecessary slowdowns, and least likely as Tkinter exception.
+>
+> Please notice that, to facilitate Python usage for image editing, this module is provided under Unlicense, meaning I don't care much of my copyright, so you may edit the source at will, including Python version detection criteria. *Hint:* Python version is detected as `python_version_tuple()[1]`.
+>
+> If you have only new versions of Python (3.11 and above) and Tkinter installed, you may consider downloading [Main version of PyPNM](https://github.com/Dnyarri/PyPNM), which doesn't have any backward compatibility fixes, and therefore doesn't waste CPU time on it.
 
 ## Installation
 
@@ -158,15 +163,21 @@ Detailed functions arguments description is provided below, as well as in module
 ### pnm2list
 
 ```python
-X, Y, Z, maxcolors, image3D = pypnm.pnm2list(in_filename)
+X, Y, Z, maxcolors, image3D = pypnm.pnm2list(in_filename, tuplevel)
 ```
 
 Read data from PPM/PGM file to nested image data list, where:
 
-- `X, Y, Z`   - image sizes (int);
-- `maxcolors` - number of colors per channel for current image (int);
-- `image3D`   - image pixel data as list(list(list(int)));
-- `in_filename` - PPM/PGM file name (str).
+- `X, Y, Z`    - image sizes (int);
+- `maxcolors`  - maximal color value per channel for current image (int), either 255, or 65535;
+- `image3D`    - image pixel data as list(list(list(int)));
+- `in_filename` - PPM/PGM file name (str);
+- `tuplevel`   - `image3D` structure switch:
+  - `tuplevel='image'`: `image3D` is tuple(tuple(tuple(int)));
+  - `tuplevel='pixel'`: `image3D` is list(list(tuple(int)));
+  - `tuplevel=` other: `image3D` is list(list(list(int))).
+
+  Default `tuplevel=None`, meaning no tuples are used, and `image3D` structure is list(list(list(int))).
 
 ### list2bin
 
@@ -176,17 +187,23 @@ image_bytes = pypnm.list2bin(image3D, maxcolors, show_chessboard)
 
 Convert nested image data list to PGM P5 or PPM P6 (binary) data structure in memory, where:
 
-- `image3D`   - `Y * X * Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
-- `maxcolors` - number of colors per channel for current image (int);
-- `show_chessboard` - optional bool, set `True` to show LA and RGBA images against chessboard pattern; `False` or missing show existing L or RGB data for transparent areas as opaque.
+- `image3D`   - list (image) of lists (rows) of lists (pixels) of ints (channel values), having `Y * X * Z` size;
+- `maxcolors` - maximal color value per channel for current image (int), either 255, or 65535;
+- `show_chessboard` - optional bool, set `True` to show LA and RGBA images against chessboard pattern; `False` or missing show existing L or RGB data for transparent areas as opaque (see the Note below).
 
    Default is `False` for backward compatibility;
 
-- `image_bytes` - PNM-structured binary data.
+- `image_bytes` - returned PNM-structured binary data.
 
   `image_bytes` object thus obtained is well compatible with Tkinter `PhotoImage(data=...)` method and therefore may be used to (and actually was developed for) visualize any data represented as image-like 3D list.
 
-When encountering image list with 2 or 4 channels, current version of `list2bin` may treat it as LA or RGBA image correspondingly, and generate image preview for Tkinter as transparent over chessboard background (like Photoshop or GIMP). Since PNM images do not have transparency, this preview is actually either L or RGB, with image mixed with chessboard background, generated by `list2bin` on the fly (pattern settings match Photoshop "Light Medium" defaults). This behaviour is controlled by `show_chessboard` option. Default setting is `False` (meaning simply skipping alpha channel) for backward compatibility.
+> **Note:**
+>
+> When encountering image list with 2 or 4 channels, current version of `list2bin` may treat it as LA or RGBA image correspondingly, and generate image preview for Tkinter as transparent over chessboard background (like Photoshop or GIMP). Since PNM images do not have transparency, this preview is actually either L or RGB, with image mixed with chessboard background, generated by `list2bin` on the fly.
+>
+> Pattern color match Photoshop "Light" defaults, size match Photoshop "Small" for images smaller than 65 pixels in any direction, else "Large" for images larger than 512 pixels in any direction, else "Medium".
+>
+> This behaviour is controlled by `show_chessboard` option. Default setting is `False` (meaning simply ignoring alpha channel) for backward compatibility.
 
 ### list2pnm
 
@@ -196,15 +213,14 @@ pypnm.list2pnm(out_filename, image3D, maxcolors, bin)
 
 Write either binary or ASCII file from nested image data list, where:
 
+- `out_filename` - name of PNM file to be written.
 - `image3D`   - `Y * X * Z` list (image) of lists (rows) of lists (pixels) of ints (channels);
-- `maxcolors` - number of colors per channel for current image (int);
-- `bin` - switch (bool) defining whether to write binary file or ASCII.
+- `maxcolors` - maximal color value per channel for current image (int), either 255, or 65535;
+- `bin` - switch (bool) defining whether to write binary PNM file or ASCII one.
 
    Default is `True`, meaning binary output, to provide backward compatibility.
 
-- `out_filename` - Name of PNM file to be written.
-
-Note that `list2pnm` is a switch between internal `list2pnmbin` and `list2pnmascii`, whose direct usage is considered legacy. Using `list2pnm` instead of legacy calls simplifies writing "Save as..." functions for main programs - now you can use one function for all PNM flavours. Default is `bin = True` since binary PNM seem to be more convenient for big programs like Photoshop.
+Note that `list2pnm` is a switch between internal `list2pnmbin` and `list2pnmascii` functions, whose direct usage is considered legacy. Using `list2pnm` instead of legacy calls simplifies writing "Save as..." functions for main programs - now you can use one function for all PNM flavours. Default is `bin = True` since binary PNM seem to be more convenient for big programs like Photoshop.
 
 ## References
 
@@ -216,16 +232,20 @@ Note that `list2pnm` is a switch between internal `list2pnmbin` and `list2pnmasc
 
 3. [PyPNM for Python 3.4 at Github](https://github.com/Dnyarri/PyPNM/tree/py34/) - same as above, but compatible with Python down to 3.4. Besides PPM and PGM support, image viewer in this branch also have PNG support, based on [PyPNG](https://gitlab.com/drj11/pypng), and therefore may be used as pure Python PNM <=> PNG converter.
 
-4. [PyPNM docs (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf). While current documentation was written for 9 May 2025 "Victory" version, it remains valid for 2 Sep 2025 "Victory II" release since the latter involves total inner optimization without changing input and output data types and structure.
+4. [PyPNM bedside book (PyPNM documentation in PDF format)](https://dnyarri.github.io/pypnm/pypnm.pdf).
 
 5. [PyPNM home page with explanations and versions description](https://dnyarri.github.io/pypnm.html).
 
-## Illustrations
+## Usage examples
 
-1. [Adaptive image averager](https://dnyarri.github.io/povthread.html#averager) is an example of special effect image filter, necessary for the whole [POV‑Ray Thread](https://dnyarri.github.io/povthread.html), but absent in normal image editors like Photoshop. As a result, filter was written in Python, and works surprisingly fast for a Python image editing.
+1. [ScaleNx](https://dnyarri.github.io/scalenx.html) is a pure Python implementation of pixel image rescaling algorithms, currently encompassing Scale2x, Scale3x, Scale2xSFX and Scale3xSFX methods ([ScaleNx module is available at PyPI](https://pypi.org/project/ScaleNx/)). Since all ScaleNx methods operate whole pixels (no channel splitting *etc*.), `list(list(list(int)))` image structure generated by PyPNM fits these algorithms naturally.
+
+   Adding `tuplevel` option in recent PyPNM version provided Scale3xSFX speed increase *ca.* 17% on low color images due to pixel pattern caching.
+
+2. [Adaptive image averager](https://dnyarri.github.io/povthread.html#averager) is an example of special effect image filter, necessary for [POV‑Ray Thread](https://dnyarri.github.io/povthread.html) project, but absent in normal image editors like Photoshop. As a result, filter was written in Python, and works surprisingly fast for a Python image editing.
 
    Nested list image representation, as provided by PyPNM, allows pixel processing with a single map() in any color mode from L to RGBA, thus making the code both simple and fast.
 
-2. [Bilinear and barycentric image interpolation, rescaling, and other transformations in pure Python](https://dnyarri.github.io/imin.html) also utilizes map()-based approach to simplify processing images, represented by PyPNM-generated nested lists.
+3. [Barycentric and bilinear image interpolation, rescaling, and other transformations in pure Python](https://dnyarri.github.io/imin.html) also utilizes map()-based approach to simplify processing images, represented by PyPNM-generated nested lists.
 
    Apparently, PyPNM also provides displaying images being edited by means of Tkinter.
