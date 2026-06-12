@@ -109,18 +109,28 @@ main_window.mainloop()
 
 ### pnm2list
 
-`X, Y, Z, maxcolors, image3D = pypnm.pnm2list(in_filename)`
+```python
+X, Y, Z, maxcolors, image3D = pypnm.pnm2list(in_filename, tuplevel)
+```
 
 чтение данных из файла PPM/PGM, где:
 
 - `X, Y, Z`   - размеры изображения, int;
 - `maxcolors` - количество цветов на канал, int;
 - `image3D`   - собственно данные пикселей, list(list(list(int)));
-- `in_filename` - имя файла PPM/PGM, str.
+- `in_filename` - имя файла PPM/PGM, str;
+- `tuplevel`   - переключатель структуры `image3D`:
+  - `tuplevel='image'`: `image3D` имеет тип tuple(tuple(tuple(int)));
+  - `tuplevel='pixel'`: `image3D` имеет тип list(list(tuple(int)));
+  - `tuplevel=` что угодно ещё: `image3D` имеет тип list(list(list(int))).
+
+  По умолчанию `tuplevel=None`, то есть структура `image3D` - list(list(list(int))), как в самой первой версии.
 
 ### list2bin
 
-`image_bytes = pypnm.list2bin(image3D, maxcolors, show_chessboard)`
+```python
+image_bytes = pypnm.list2bin(image3D, maxcolors, show_chessboard)
+```
 
 Превращает изображение в форме вложенного трёхмерного списка целых чисел в байтовый объект типа PPM (P6) или PGM (P5) в памяти:
 
@@ -129,14 +139,16 @@ main_window.mainloop()
 - `show_chessboard` - bool, при установке `True` генерирует превью LA и RGBA-картинок на фоне шахматной паттерны; `False` или отсутствие переменной приводит к простому игнорированию альфа-канала. Значение по умолчанию `False` для задней совместимости;
 - `image_bytes` - байты PNM.
 
-Полученный объект `image_bytes` совместим с методом Tkinter `PhotoImage(data=...)` и предназначен для визуализации любых данных, похожих на картинку в виде 3D-списка.
+  Полученный объект `image_bytes` совместим с методом Tkinter `PhotoImage(data=...)` и предназначен для визуализации любых данных, похожих на картинку в виде 3D-списка.
 
 > [!NOTE]
 > В случае списков с 2 или 4 каналами свежая версия `list2bin` может считать их LA или RGBA картинками, и генерировать для них превью на фоне шахматной паттерны (как Photoshop или GIMP). Поскольку форматы PNM не поддерживают прозрачности, данная картинка на самом деле имеет структуру L или RGB, а паттерну генерирует и подмешивает на лету сама функция `list2bin`. Данное поведение контролируется переменной `show_chessboard`; текущая установка `False` (просто выбрасывает альфа-канал) для совместимости со старыми версиями PyPNM, в которых такой опции не было.
 
 ### list2pnm
 
-`pypnm.list2pnm(out_filename, image3D, maxcolors, bin)`
+```python
+pypnm.list2pnm(out_filename, image3D, maxcolors, bin)
+```
 
 Запись картинки в бинарный или ASCII файл:
 
@@ -149,9 +161,11 @@ main_window.mainloop()
 
 ### create_image
 
-`image3D = create_image(X, Y, Z)`
+```python
+image3D = create_image(X, Y, Z)
+```
 
-Создаёт пустой трёхмерный список размеров `X*Y*Z`.
+Создаёт пустой трёхмерный список размеров `X * Y * Z`.
 
 ## viewer.py
 
@@ -161,7 +175,7 @@ main_window.mainloop()
 | :---: |
 | [![Пример отрисовки текстового .ppm с помощью Viewer.py](https://dnyarri.github.io/pypnm/viewer.png "Пример отрисовки текстового .ppm с помощью Viewer.py")](https://dnyarri.github.io/pypnm.html) |
 
-Помимо минималистического GUI с использованием мышки а-ля Photoshop, *viewer.py* также в состоянии переварить аргументы командной строки
+Помимо минималистического GUI с использованием мышки а-ля Photoshop, *viewer.py* также в состоянии переварить аргументы командной строки типа:
 
 ```console
 python viewer.py filename.ppm

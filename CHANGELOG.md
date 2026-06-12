@@ -8,10 +8,13 @@ Pure Python module for PPM and PGM image files reading, displaying, and writing.
 
 ## History
 
+Current versioning for this branch is MAINVERSION.MMsinceJan2024.DD.312 (*i.e.*, \*.13 is Jan 2025, \*.25 is Jan 2026, 2.30.12.312 is "Version 2 update 12 June 2026, for Python 3.11 and above", *etc.*)
+
 ### Version 2
 
 | Version | Major changes |
 | :--- | :--- |
+| 2.30.12.312 | Beside representing image as `list(list(list(int)))`, two more structures added: `list(list(tuple(int)))` and `tuple(tuple(tuple(int)))`, controlled by `tuplevel` parameter. |
 | 2.26.27.312 | Minor changes to chessboard rendering. |
 | 2.26.23.23 | More suitable import scheme like `from pypnm import list2bin, list2pnm, pnm2list` |
 | 2.23.23.23 | Even more developer-friendly docstrings. |
@@ -33,6 +36,6 @@ Pure Python module for PPM and PGM image files reading, displaying, and writing.
 | 1.13.09.0 | Complete rewriting of `pnm2list` using `re` and `array`; PPM and PGM support rewritten. |
 | 1.12.14.1 | [Public release at PyPI](https://pypi.org/project/PyPNM/). |
 
-## Prehistory
+### Prehistory
 
-0.11.26.0   Initial working version 26 Nov 2024. Version numbering: MAINVERSION.MMsinceJan2024.DD.BUILD (*i.e.*, \*.13 is Jan 2025, \*.25 is Jan 2026 *etc.*)
+0.11.26.0   Initial working version 26 Nov 2024.
