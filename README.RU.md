@@ -154,7 +154,7 @@ Readme данной ветки практически никогда не пос
 
 Помимо минималистического GUI с использованием мышки а-ля Photoshop, *viewer.py* также в состоянии переварить аргументы командной строки
 
-`py -3.4 viewer.py filename.ppm`
+`python viewer.py filename.ppm`
 
 для открытия файлов. В принципе, вы можете даже зарегистрировать его в качестве системного смотрела для файлов PPM, PGM и PBM.
 
@@ -170,7 +170,7 @@ Readme данной ветки практически никогда не пос
 
 3. [PyPNM на Github](https://github.com/Dnyarri/PyPNM/) - помимо собственно модуля содержит пример приложения для просмотра, иллюстрирующий применение `list2bin` для визуализации данных с помощью Tkinter `PhotoImage(data=...)`, и конверсии изображений между форматами.
 
-4. [PyPNM docs (PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf). Текущая версия документации относится к выпуску 9 мая 2025 года "Victory", но, поскольку капитальная модернизация, проведённая в версии 2 сентября 2025 года "Victory II", не затрагивает структуру ввода и вывода, документация действительна и для новых версий. Новая версия делает всё то же самое, просто старается жрать меньше ресурсов.
+4. [PyPNM bedside book (PyPNM documentation in PDF)](https://dnyarri.github.io/pypnm/pypnm.pdf).
 
 5. [PixelArtScaling](https://github.com/Dnyarri/PixelArtScaling/) - пример применения, масштабирование изображений методами Scale2x, Scale3x, Scale2xSFX и Scale3xSFX на чистом Python, ввод/вывод PNG основан на [PyPNG](https://gitlab.com/drj11/pypng), а PNM - на [PyPNM](https://pypi.org/project/PyPNM/), что делает приложения кросс-платформенными.
 
