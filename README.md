@@ -255,4 +255,4 @@ As with "Averager" above, the module itself utilizes the fact that pixels repres
 
 ---
 
-[Dnyarri website - more Python freeware for image processing, 3D, and batch automation](https://dnyarri.github.io "The Toad's Slimy Mudhole - Python freeware for POV-Ray and other 3D, Scale2x, Scale3x, Scale2xSFX, Scale3xSFX, PPM and PGM image support, bilinear and barycentric image interpolation, and batch processing") by the same author.
+[The Toad's Slimy Mudhole website - more Python freeware for 2D image processing, POV-Ray and other 3D, and batch automation](https://dnyarri.github.io "The Toad's Slimy Mudhole - Python freeware for POV-Ray and other 3D, Scale2x, Scale3x, Scale2xSFX, Scale3xSFX, PPM and PGM image support, bilinear and barycentric image interpolation, PNG to ICO conversion, and batch processing") by the same author.
