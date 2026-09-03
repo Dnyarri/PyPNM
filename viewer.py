@@ -12,7 +12,7 @@ since it recodes them to binary on the fly.
 NOTE:
 
 This is special developer edition, including PNG support with `PyPNG`_.,
-added deliberately to test LA and RGBA preview.
+and equipped with debug window, added deliberately to check data structures.
 
 .. _PyPNM for Python >= 3.11: https://github.com/Dnyarri/PyPNM
 
@@ -24,7 +24,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.32.2.8.dev1'  # 2 Aug 2026
+__version__ = '2.33.3.8.dev1'  # 3 Sep 2026
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -33,9 +33,10 @@ from pathlib import Path
 from platform import python_version, python_version_tuple
 from sys import argv
 from time import localtime, strftime  # Used to show file info only
-from tkinter import Button, Canvas, Frame, Label, Menu, PhotoImage, Tk
+from tkinter import BooleanVar, Button, Canvas, Frame, Label, Menu, PhotoImage, Tk, Toplevel
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import showinfo
+from tkinter.scrolledtext import ScrolledText
 
 import pypng
 import pypnm
@@ -45,10 +46,25 @@ import pypnm
     ╚══════════════════════════════════╝ """
 
 
-def DisMiss(event=None):
+def DisMiss(event=None) -> None:
     """Kill dialog and continue."""
 
     sortir.destroy()
+
+
+def ShallPass() -> None:
+
+    pass
+
+
+def PopUnpopDebug() -> None:
+    """Pop or hide debug window depending on `pop_debug` value."""
+
+    if pop_debug.get():
+        insecticide.deiconify()
+        insecticide.lower(sortir)
+    else:
+        insecticide.iconify()
 
 
 def UINormal() -> None:
@@ -114,18 +130,36 @@ def GetSource(event=None) -> None:
     # ↓ Loading file, converting data to list.
     #   NOTE: maxcolors, image3D, info are GLOBALS!
     #   They are used during save!
+    tuplevel = 'image'
     if Path(sourcefilename).suffix.lower() == '.png':
-        X, Y, Z, maxcolors, image3D, info = pypng.png2list(sourcefilename)
+        X, Y, Z, maxcolors, image3D, info = pypng.png2list(sourcefilename, tuplevel)
 
     elif Path(sourcefilename).suffix.lower() in ('.ppm', '.pgm', '.pbm', '.pnm'):
-        X, Y, Z, maxcolors, image3D = pypnm.pnm2list(sourcefilename)
+        X, Y, Z, maxcolors, image3D = pypnm.pnm2list(sourcefilename, tuplevel)
         # ↓ Creating dummy info, containing bpc value required to Save As PNG properly
         info = {'bitdepth': 16} if maxcolors > 255 else {'bitdepth': 8}
     else:
         raise ValueError('Extension not recognized')
 
+    # ↓ Updating debug text
+    pogovorit.insert('end', f'\n{sourcefilename=}\n{X=} {Y=} {Z=} {maxcolors=} {tuplevel=}\n')
+    if X * Y < 16 * 16 + 1:
+        pogovorit.insert('end', f'{image3D}\n')
+    else:
+        if tuplevel in ('image', 'pixel'):
+            divider = ' ('
+        else:
+            divider = ' ['
+        example = (str(image3D)[0 : ((16 * 16) * Z)]).rpartition(divider)[0]
+        pogovorit.insert('end', f'\nImage too big, printing just a beginning:\n{example} ...\n')
+    pogovorit.see('end')
+    # ↓ Showing debug window if option set in menu
+    PopUnpopDebug()
+
     # ↓ Converting list to bytes of PPM-like structure "preview_data" in memory
     preview_data = pypnm.list2bin(image3D, maxcolors, show_chessboard=True)
+    pogovorit.insert('end', f'\nPreview bytes beginning:\n{str(preview_data)[0:256]} ...\n')
+    pogovorit.see('end')
     # ↓ Now showing "preview_data" bytes using Tkinter
     preview = PhotoImage(data=preview_data)
     # ↓ Adding filename to window title a-la Photoshop
@@ -156,10 +190,10 @@ def GetSource(event=None) -> None:
     }
 
     # ↓ attempt to calculate zoom to fit
-    #   GUI X extra = 16 px, GUI Y extra = 63 px
+    #   GUI extra = 16 px
     screen_width, screen_height = sortir.winfo_screenwidth(), sortir.winfo_screenheight()
-    if X + 16 > screen_width or Y + 64 > screen_height:
-        zoom_factor = -(max((X + 16) // screen_width, (Y + 64) // screen_height))
+    if (preview.width() + 16) > screen_width or (preview.height() + frame_zoom.winfo_reqheight() + 16) > screen_height:
+        zoom_factor = max(-(max((preview.width() + 16) // screen_width, (preview.height() + frame_zoom.winfo_reqheight() + 16) // screen_height)), minizoom)
 
     preview = zoom_do[zoom_factor]
     # ↓ Sizes of preview to fit the screen
@@ -292,7 +326,7 @@ def zoomIn(event=None) -> None:
 
     global zoom_factor, preview
 
-    zoom_factor = min(zoom_factor + 1, 4)  # max zoom 5
+    zoom_factor = min(zoom_factor + 1, maxizoom)
     preview = zoom_do[zoom_factor]
     zanyato.config(
         image=preview,
@@ -318,7 +352,7 @@ def zoomIn(event=None) -> None:
     label_zoom.config(text=zoom_show[zoom_factor])
     # ↓ reenabling +/- buttons
     butt_minus.config(state='normal', cursor='hand2')
-    if zoom_factor == 4:  # max zoom 5
+    if zoom_factor == maxizoom:
         butt_plus.config(state='disabled', cursor='arrow')
     else:
         butt_plus.config(state='normal', cursor='hand2')
@@ -329,7 +363,7 @@ def zoomOut(event=None) -> None:
 
     global zoom_factor, preview
 
-    zoom_factor = max(zoom_factor - 1, -4)  # min zoom 1/5
+    zoom_factor = max(zoom_factor - 1, minizoom)
     preview = zoom_do[zoom_factor]
     zanyato.config(
         image=preview,
@@ -355,7 +389,7 @@ def zoomOut(event=None) -> None:
     label_zoom.config(text=zoom_show[zoom_factor])
     # ↓ reenabling +/- buttons
     butt_plus.config(state='normal', cursor='hand2')
-    if zoom_factor == -4:  # min zoom 1/5
+    if zoom_factor == minizoom:  # min zoom 1/5
         butt_minus.config(state='disabled', cursor='arrow')
     else:
         butt_minus.config(state='normal', cursor='hand2')
@@ -364,10 +398,11 @@ def zoomOut(event=None) -> None:
 def zoomWheel(event) -> None:
     """zoomIn or zoomOut by mouse wheel."""
 
-    if event.delta < 0:
-        zoomOut()
-    if event.delta > 0:
-        zoomIn()
+    if event.widget not in (insecticide, pogovorit):
+        if event.delta < 0:
+            zoomOut()
+        if event.delta > 0:
+            zoomIn()
 
 
 def zoomOne(event=None) -> None:
@@ -428,6 +463,7 @@ def canvasDrag(event) -> None:
 
 zoom_factor = 0
 sourcefilename = X = Y = Z = maxcolors = None
+minizoom, maxizoom = (-4, 4)  # Zoom from 1:5 to 5:1. Mnemonic: "mini" means "image look small".
 
 sortir = Tk()
 sortir.title('PNMViewer')
@@ -442,6 +478,9 @@ menu01.add_command(label='Save ASCII PNM...', state='disabled', command=lambda: 
 menu01.add_command(label='Save PNG...', state='disabled', command=SaveAsPNG)
 menu01.add_separator()
 menu01.add_command(label='Info', state='disabled', accelerator='Ctrl+I', command=ShowInfo)
+menu01.add_separator()
+pop_debug = BooleanVar(value=False)
+menu01.add_checkbutton(label='Pop debug window', variable=pop_debug, state='normal', command=PopUnpopDebug)
 menu01.add_separator()
 menu01.add_command(label='Exit', state='normal', accelerator='Ctrl+Q', command=DisMiss)
 
@@ -554,6 +593,27 @@ sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheig
 
 # ↓ Center window, +64 vertically
 sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_reqwidth()) // 2}+64')
+
+# ↓ Debug window
+insecticide = Toplevel(sortir)
+"""Debug output window."""
+insecticide.title('<DEBUG>')
+insecticide.geometry('+32+32')
+insecticide.protocol('WM_DELETE_WINDOW', ShallPass)
+pogovorit = ScrolledText(
+    insecticide,
+    height=26,
+    wrap='word',
+    state='normal',
+)
+"""Scrollable text in Debug output window."""
+pogovorit.pack(fill='both', side='top', expand=True)
+pogovorit.insert('1.0', f'This is PNMViewer {__version__} debug window.\nSome image and image list info will be shown here.\n')
+pogovorit.see('end')
+# ↓ Hiding debug window; will be unhidden by GetSource.
+insecticide.iconify()
+# ↓ Placing debug window right below main one.
+insecticide.lower(sortir)
 
 # ↓ Command line part
 if len(argv) == 2:
