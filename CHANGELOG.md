@@ -14,6 +14,7 @@ Current versioning for this branch is MAINVERSION.MMsinceJan2024.DD.312 (*i.e.*,
 
 | Version | Major changes |
 | :--- | :--- |
+| 2.33.3.312 | Shortening main format selection tree, some tuple export optimization for P1 and P4. |
 | 2.30.12.312 | Beside representing image as `list(list(list(int)))`, two more structures added: `list(list(tuple(int)))` and `tuple(tuple(tuple(int)))`, controlled by `tuplevel` parameter. |
 | 2.26.27.312 | Minor changes to chessboard rendering. |
 | 2.26.23.23 | More suitable import scheme like `from pypnm import list2bin, list2pnm, pnm2list` |

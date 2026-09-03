@@ -18,7 +18,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.32.2.8'  # 2 Aug 2026
+__version__ = '2.33.3.8'  # 3 Sep 2026
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -138,10 +138,10 @@ def GetSource(event=None) -> None:
     }
 
     # ↓ attempt to calculate zoom to fit
-    #   GUI X extra = 16 px, GUI Y extra = 63 px
+    #   GUI extra = 16 px
     screen_width, screen_height = sortir.winfo_screenwidth(), sortir.winfo_screenheight()
-    if X + 16 > screen_width or Y + 64 > screen_height:
-        zoom_factor = -(max((X + 16) // screen_width, (Y + 64) // screen_height))
+    if (preview.width() + 16) > screen_width or (preview.height() + frame_zoom.winfo_reqheight() + 16) > screen_height:
+        zoom_factor = max(-(max((preview.width() + 16) // screen_width, (preview.height() + frame_zoom.winfo_reqheight() + 16) // screen_height)), minizoom)
 
     preview = zoom_do[zoom_factor]
     # ↓ Sizes of preview to fit the screen
@@ -288,7 +288,7 @@ def zoomIn(event=None) -> None:
 
     global zoom_factor, preview
 
-    zoom_factor = min(zoom_factor + 1, 4)  # max zoom 5
+    zoom_factor = min(zoom_factor + 1, maxizoom)
     preview = zoom_do[zoom_factor]
     zanyato.config(
         image=preview,
@@ -314,7 +314,7 @@ def zoomIn(event=None) -> None:
     label_zoom.config(text=zoom_show[zoom_factor])
     # ↓ reenabling +/- buttons
     butt_minus.config(state='normal', cursor='hand2')
-    if zoom_factor == 4:  # max zoom 5
+    if zoom_factor == maxizoom:
         butt_plus.config(state='disabled', cursor='arrow')
     else:
         butt_plus.config(state='normal', cursor='hand2')
@@ -325,7 +325,7 @@ def zoomOut(event=None) -> None:
 
     global zoom_factor, preview
 
-    zoom_factor = max(zoom_factor - 1, -4)  # min zoom 1/5
+    zoom_factor = max(zoom_factor - 1, minizoom)
     preview = zoom_do[zoom_factor]
     zanyato.config(
         image=preview,
@@ -351,7 +351,7 @@ def zoomOut(event=None) -> None:
     label_zoom.config(text=zoom_show[zoom_factor])
     # ↓ reenabling +/- buttons
     butt_plus.config(state='normal', cursor='hand2')
-    if zoom_factor == -4:  # min zoom 1/5
+    if zoom_factor == minizoom:
         butt_minus.config(state='disabled', cursor='arrow')
     else:
         butt_minus.config(state='normal', cursor='hand2')
@@ -424,6 +424,7 @@ def canvasDrag(event) -> None:
 
 zoom_factor = 0
 sourcefilename = X = Y = Z = maxcolors = None
+minizoom, maxizoom = (-4, 4)  # Zoom from 1:5 to 5:1. Mnemonic: "mini" means "image look small".
 
 sortir = Tk()
 sortir.title('PNMViewer')
