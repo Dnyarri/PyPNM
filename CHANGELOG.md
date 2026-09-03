@@ -17,6 +17,7 @@ Current versioning for this branch is MAINVERSION.MMsinceJan2024.DD.34.
 
 | Version | Date | Major changes |
 | :---- | :---- | :---- |
+| 2.33.3.34 | 3 Sep 2026 | Shortening main format selection tree, some tuple export optimization for P1 and P4. |
 | 2.30.12.34 | 12 June 2026 | Beside representing image as `list(list(list(int)))`, two more structures added: `list(list(tuple(int)))` and `tuple(tuple(tuple(int)))`, controlled by `tuplevel` parameter. |
 | 2.29.19.34 | 18 May 2026 | Changed preview bitdepth reduction code for old Tkinter (18 May 2026). |
 | 2.26.26.34 | 27 Feb 2026 | Minor changes to chessboard rendering. |

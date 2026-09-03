@@ -67,13 +67,19 @@ Current PyPNM module read and write capabilities are briefly summarized below.
 | 1 bit ink on/off | P4 Binary PBM | Yes | No |
 | 1 bit ink on/off | P1 ASCII PBM | Yes | No |
 
+> **Note:**
+>
+> While Netpbm specifications declares "A PBM/PGM/PPM file consists of **a sequence of one or more** PBM/PGM/PPM images", PyPNM developer appeared to be unable to find any actual example of such a multi-image file, as well as imagine any practical usage for it. Therefore PyPNM expects PNM files to contain just one image, and so far files created with Photoshop, GIMP and other software fulfil these expectations.
+
 ## Image representation
 
 Is seems logical to represent an RGB image as nested 3D structure - (X, Y)-sized matrix of three-component (R, G, B) vectors. Since in Python list seem to be about the only variant for mutable structures like that, it is suitable to represent image as `list(list(list(int)))` structure. Therefore, it would be convenient to have module read/write image data from/to such a structure.
 
-Note that for L images memory structure, produced by PyPNM, is still `list(list(list(int)))`, with innermost list having only one component. Using the same consistent data structure enables further image editing with the same nested loop or map() regardless of color mode.
+> **Note:**
+>
+> For L images memory structure, produced by PyPNM, is still `list(list(list(int)))`, with innermost list having only one component. Using the same consistent data structure enables further image editing with the same nested loop or `map()` regardless of color mode.
 
-Note that since main PyPNM purpose is facilitating image editing, PyPNM module promotes 1 bit PBM files into image list data corresponding to 8 bit L when reading, inverting values and multiplying by 255, so that source 1 (ink on) is changed to 0 (black), and source 0 (ink off) is changed to 255 (white); so, practically, a PBM is opened as a 8 bit PGM. The reason for forced color space conversion is that any palette-based images, 1 bit included, are next to useless for general image processing, and have to be converted to smooth color anyway, therefore conversion is performed by PyPNM automatically.
+It should be noted that since main PyPNM purpose is facilitating image editing, PyPNM module promotes 1 bit PBM files into image list data corresponding to 8 bit L when reading, inverting values and multiplying by 255, so that source 1 (ink on) is changed to 0 (black), and source 0 (ink off) is changed to 255 (white); so, practically, a PBM is opened as a 8 bit PGM. The reason for forced color space conversion is that any palette-based images, 1 bit included, are next to useless for general image processing, and have to be converted to smooth color anyway, therefore conversion is performed by PyPNM automatically.
 
 ## Python compatibility
 
@@ -242,10 +248,10 @@ Note that `list2pnm` is a switch between internal `list2pnmbin` and `list2pnmasc
 
    Adding `tuplevel` option in recent PyPNM version provided Scale3xSFX speed increase *ca.* 17% on low color images due to pixel pattern caching.
 
-2. [Adaptive image averager](https://dnyarri.github.io/povthread.html#averager) is an example of special effect image filter, necessary for [POV‑Ray Thread](https://dnyarri.github.io/povthread.html) project, but absent in normal image editors like Photoshop. As a result, filter was written in Python, and works surprisingly fast for a Python image editing.
+2. [Adaptive image averager](https://dnyarri.github.io/povthread.html#averager) is an example of special effect image filter, necessary for [POV‑Ray Thread](https://dnyarri.github.io/povthread.html) project, but absent in normal image editors like Photoshop. As a result, filter was written entirely in Python, and works surprisingly fast for a Python image editing.
 
-   Nested list image representation, as provided by PyPNM, allows pixel processing with a single map() in any color mode from L to RGBA, thus making the code both simple and fast.
+   Nested list image representation, as provided by PyPNM, allows pixel processing with a single `map()` in any color mode from L to RGBA, thus making the code both simple and fast.
 
-3. [Barycentric and bilinear image interpolation, rescaling, and other transformations in pure Python](https://dnyarri.github.io/imin.html) also utilizes map()-based approach to simplify processing images, represented by PyPNM-generated nested lists.
+3. [Barycentric and bilinear image interpolation, rescaling, and other transformations in pure Python](https://dnyarri.github.io/imin.html) also utilizes `map()`-based approach to simplify processing images, represented by PyPNM-generated nested lists.
 
    Apparently, PyPNM also provides displaying images being edited by means of Tkinter.

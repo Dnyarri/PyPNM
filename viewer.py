@@ -26,7 +26,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.32.2.34'  # 2 Aug 2026
+__version__ = '2.33.3.34'  # 3 Sep 2026
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -185,7 +185,7 @@ def GetSource(event=None):
     #   GUI X extra = 16 px, GUI Y extra = 63 px
     screen_width, screen_height = sortir.winfo_screenwidth(), sortir.winfo_screenheight()
     if X + 16 > screen_width or Y + 64 > screen_height:
-        zoom_factor = -(max((X + 16) // screen_width, (Y + 64) // screen_height))
+        zoom_factor = max(-4, -(max((X + 16) // screen_width, (Y + 64) // screen_height)))
 
     # ↓ Building preview PhotoImage
     preview = zoom_do[zoom_factor]
