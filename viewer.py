@@ -24,7 +24,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.33.3.8.dev1'  # 3 Sep 2026
+__version__ = '2.33.18.12.dev1'  # 18 Sep 2026
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -50,11 +50,6 @@ def DisMiss(event=None) -> None:
     """Kill dialog and continue."""
 
     sortir.destroy()
-
-
-def ShallPass() -> None:
-
-    pass
 
 
 def PopUnpopDebug() -> None:
@@ -599,7 +594,7 @@ insecticide = Toplevel(sortir)
 """Debug output window."""
 insecticide.title('<DEBUG>')
 insecticide.geometry('+32+32')
-insecticide.protocol('WM_DELETE_WINDOW', ShallPass)
+insecticide.protocol('WM_DELETE_WINDOW', lambda: None)
 pogovorit = ScrolledText(
     insecticide,
     height=26,
