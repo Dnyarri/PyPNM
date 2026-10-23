@@ -26,7 +26,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.33.3.34'  # 3 Sep 2026
+__version__ = '2.34.24.34'  # 24 Oct 2026
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -242,7 +242,7 @@ def GetSource(event=None):
     UINormal()
     fit_width, fit_height = min(sortir.winfo_reqwidth(), 9 * sortir.winfo_screenwidth() // 10), min(sortir.winfo_reqheight(), 9 * sortir.winfo_screenheight() // 10)
     sortir.minsize(fit_width, fit_height)
-    sortir.geometry('+{}+{}'.format((sortir.winfo_screenwidth() - sortir.winfo_reqwidth()) // 2, (sortir.winfo_screenheight() - sortir.winfo_reqheight()) // 2 - 32))
+    sortir.geometry('{width}x{height}+{xoffset}+{yoffset}'.format(width=sortir.winfo_reqwidth(), height=sortir.winfo_reqheight(), xoffset=(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2, yoffset=64))
     zanyato.focus_set()  # Required for some binding to work
 
 
@@ -386,6 +386,7 @@ def zoomOut(event=None):
         butt_minus.config(state='disabled', cursor='arrow')
     else:
         butt_minus.config(state='normal', cursor='hand2')
+    sortir.geometry('{width}x{height}'.format(width=sortir.winfo_reqwidth(), height=sortir.winfo_reqheight()))
 
 
 def zoomWheel(event):
@@ -456,7 +457,6 @@ sourcefilename = None
 
 sortir = Tk()
 sortir.title('PNMViewer')
-sortir.geometry('+200+100')
 sortir.iconphoto(True, PhotoImage(data=b'P6\n2 2\n255\n\xff\x00\x00\xff\xff\x00\x00\x00\xff\x00\xff\x00'))
 
 # ↓ Main menu, currently one "File" entry
@@ -536,7 +536,7 @@ fit_width, fit_height = min(sortir.winfo_reqwidth(), 9 * sortir.winfo_screenwidt
 sortir.minsize(fit_width, fit_height)
 # ↓ Setting maxsize to fit 90% of screen
 sortir.maxsize(9 * sortir.winfo_screenwidth() // 10, 9 * sortir.winfo_screenheight() // 10)
-sortir.geometry('+{}+{}'.format((sortir.winfo_screenwidth() - sortir.winfo_width()) // 2, (sortir.winfo_screenheight() - sortir.winfo_height()) // 2 - 32))
+sortir.geometry('{width}x{height}+{xoffset}+{yoffset}'.format(width=sortir.winfo_reqwidth(), height=sortir.winfo_reqheight(), xoffset=(sortir.winfo_screenwidth() - sortir.winfo_width()) // 2, yoffset=64))
 
 # ↓ Command line part
 if len(argv) == 2:

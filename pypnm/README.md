@@ -6,11 +6,14 @@
 
 PyPNM is a pure Python module, providing functions for:
 
-- **reading** PPM and PGM image files (both 8 and 16 bits per channel color depth, both binary and ASCII files) to image 3D nested lists for further editing;
+- **reading** PPM and PGM image files (both 8 and 16 bits per channel color depth, both binary and ASCII files) to image 3D nested lists for further editing.
 
   Reading support for 1 bpc PBM is provided as well. Writing PBM is not supported and not planned since 1 bpc images are next to useless for editing.
 
-- **displaying** 3D list thus obtained by converting it to Tkinter-compatible data in memory;
+- **displaying** 3D list thus obtained by converting it to Tkinter-compatible data in memory.
+
+  PyPNM ver. 3 support multithreading for image preview generation, thus allowing significant speed gain when used with free-threaded Python (*e.g.* `python3.14t.exe`).
+
 - **writing** edited image 3D list to disk as PPM or PGM file, either binary or ASCII.
 
 Functions are detailed in *"Functions description"*, and illustrated in *"Usage example"* sections below.
@@ -29,7 +32,7 @@ As a result, novice Python user (like the writer of these words) may find it dif
 
 ## Objectives
 
-**Primary goal** of current project was creating a minimalistic tool for visualizing image data (and, as far as practicable, other similar continual parallelepipedal data) to facilitate developing image filtering and editing software and prototypes in pure Python from scratch, not relying on third-party software with unknown limitations and uncontrolled deprecations.
+**Primary goal** of current project was creating a minimalistic tool for visualizing image data (and, as far as practicable, other similar continual rectangular data) to facilitate developing image filtering and editing software and prototypes in pure Python from scratch, not relying on third-party software with unknown limitations and uncontrolled deprecations.
 
 On the one hand, the only logical Python-native data structure for images seem to be nested 3D list, *i.e.* `list(list(list(int)))` (see *Image representation* below).
 
@@ -45,7 +48,7 @@ Thus, PyPNM may simplify writing image processing applications in Python, either
 
 | Fig. 1. *Example of pure Python image filtering application utilizing PyPNM* |
 | :---: |
-| [![Pure Python image adaptive averaging application, largely based on PyPNM](https://dnyarri.github.io/thread/ave.png "Pure Python image filtering application, largely based on PyPNM")](https://dnyarri.github.io/povthread.html#averager) |
+| [![Pure Python adaptive image averaging application, largely based on PyPNM](https://dnyarri.github.io/thread/ave.webp "Pure Python image filtering application, largely based on PyPNM")](https://dnyarri.github.io/povthread.html#averager) |
 | *Adaptive image averaging application. PNM image file open/save, as well as image filtering before/after display are based on PyPNM. Nested list structure, produced by PyPNM, allows easy processing of arbitrary number of channels with the same algorithm; for example, in this filter* `map`*s are actively used to create compact omnivorous algorithm.* |
 
 Noteworthy that PyPNM is pure Python module, which makes it pretty compact and OS-independent. No third-party imports, no Numpy version conflicts (some may find it surprising, but list reshaping in Python can be done with one line without Numpy) *etc*.
@@ -77,25 +80,15 @@ Is seems logical to represent an RGB image as nested 3D structure - (X, Y)-sized
 
 > **Note:**
 >
-> For L images memory structure, produced by PyPNM, is still `list(list(list(int)))`, with innermost list having only one component. Using the same consistent data structure enables further image editing with the same nested loop or `map()` regardless of color mode.
+> For L images memory structure, produced by PyPNM, is still `list(list(list(int)))`, with innermost list having only one component. Using the same consistent data structure enables further image editing with the same nested loop, or `map()`, or even with `ThreadPoolExecutor()` map regardless of color mode.
 
 It should be noted that since main PyPNM purpose is facilitating image editing, PyPNM module promotes 1 bit PBM files into image list data corresponding to 8 bit L when reading, inverting values and multiplying by 255, so that source 1 (ink on) is changed to 0 (black), and source 0 (ink off) is changed to 255 (white); so, practically, a PBM is opened as a 8 bit PGM. The reason for forced color space conversion is that any palette-based images, 1 bit included, are next to useless for general image processing, and have to be converted to smooth color anyway, therefore conversion is performed by PyPNM automatically.
 
 ## Python compatibility
 
-Current PyPNM version, created specifically for PyPI distribution, is a maximal backward compatibility build. While most of the development was performed using Python 3.12, extensive testing with other versions was carried out, and PyPNM proven to work with antique **Python 3.4** ([reached end of life 18 Mar 2019](https://devguide.python.org/versions/#full-chart)) under **Windows XP 32-bit** ([reached end of support 8 Apr 2014](https://learn.microsoft.com/en-us/lifecycle/products/windows-xp)).
+Current PyPNM version, created specifically for PyPI distribution, is a maximal backward compatibility build. While most of the development was performed using Python 3.12 (with free-threaded patch developed using Python 3.14), extensive testing with other versions was carried out, and PyPNM proven to work with antique **Python 3.4** ([reached end of life 18 Mar 2019](https://devguide.python.org/versions/#full-chart)) under **Windows XP 32-bit** ([reached end of support 8 Apr 2014](https://learn.microsoft.com/en-us/lifecycle/products/windows-xp)).
 
-What as to forward compatibility, currently PyPNM is working under stable Python 3.14, as well as Python 3.15 embryo, and supposed to keep working until Python developers deprecate arithmetics.
-
-> **Note:**
->
-> Tkinter, bundled with standard CPython distributions 3.10 and below have problems with 16 bpc images, ranging from silent crash to explainable exception. Although it's not PyPNM but Tkinter problem, it's still both ungood and severely discombobulating. As a workaround, `list2bin` function in PyPNM extended compatibility version (.34) includes a routine for color depth reduction from 16 bpc to 8 bpc when generating a preview.
->
-> Since color remapping requires extra calculation and therefore slows the function down, `list2bin` tries to avoid such a remapping unless it is absolutely necessary; decision on remapping, however, is based on correlation between CPython version and bundled Tkinter version, and therefore may fail if you have custom builds of Tkinter, or Python, or both. Failure is most likely to manifest as unnecessary slowdowns, and least likely as Tkinter exception.
->
-> Please notice that, to facilitate Python usage for image editing, this module is provided under Unlicense, meaning I don't care much of my copyright, so you may edit the source at will, including Python version detection criteria. *Hint:* Python version is detected as `python_version_tuple()[1]`.
->
-> If you have only new versions of Python (3.11 and above) and Tkinter installed, you may consider downloading [Main version of PyPNM](https://github.com/Dnyarri/PyPNM), which doesn't have any backward compatibility fixes, and therefore doesn't waste CPU time on it.
+What as to forward compatibility, currently PyPNM is working under stable Python 3.14, as well as newborn Python 3.15, and supposed to keep working until Python developers deprecate arithmetics.
 
 ## Installation
 
@@ -227,6 +220,28 @@ Write either binary or ASCII file from nested image data list, where:
    Default is `True`, meaning binary output, to provide backward compatibility.
 
 Note that `list2pnm` is a switch between internal `list2pnmbin` and `list2pnmascii` functions, whose direct usage is considered legacy. Using `list2pnm` instead of legacy calls simplifies writing "Save as..." functions for main programs - now you can use one function for all PNM flavours. Default is `bin = True` since binary PNM seem to be more convenient for big programs like Photoshop.
+
+## Special notes on `list2bin`
+
+### Multithreading and `list2bin`
+
+Versions 3.x.x.x of PyPNM include multithreading support for `list2bin`, providing dramatic speed improvement when run under free-threaded Python. Currently multithreaded version of `list2bin` is designed as a patch over "classic" function, *i.e.* old version 2 code is still here, intact and fully functional. Upon import, PyPNM tries to import `sys._is_gil_enabled()` and, if it fails or returns `True`, Python is considered single-threaded, so version 2 is executed; if PyPNM detect Python reporting GIL as disabled, multithreaded version 3 patch is applied.
+
+Developers should keep in mind that, while this patching scheme passed extensive testing with various versions of CPython, it may potentially fail with some hypothetical very custom Python build. Potential negative impact of such an error, however, is supposed to be limited to just working slower than possible, rather than any sort of fatal errors.
+
+### Old Tkinter and `list2bin`
+
+Tkinter, bundled with standard CPython 3.10 and below have problems with 16 bpc images, ranging from silent crash to prolific exception. Although it's not PyPNM but Tkinter problem, it's still both ungood and severely discombobulating. As a workaround, `list2bin` function in PyPNM extended compatibility version (.34) includes a routine for color depth reduction from 16 bpc to 8 bpc when generating a preview.
+
+Since color remapping requires extra calculation and therefore slows the function down, `list2bin` tries to avoid such a remapping unless it is absolutely necessary; decision on remapping, however, is based on correlation between CPython version and bundled Tkinter version, and therefore may fail if you have custom builds of Tkinter, or Python, or both. Failure is most likely to manifest as unnecessary slowdowns, and least likely as Tkinter exception.
+
+Please notice that, to facilitate Python usage for image editing, this module is provided under Unlicense, meaning I don't care much of my copyright, so you may edit the source at will, including Python version detection criteria. *Hint:* Python version is detected as `python_version_tuple()[1]`.
+
+If you have only new versions of Python (3.11 and above) and Tkinter installed, you may consider downloading [Main version of PyPNM](https://github.com/Dnyarri/PyPNM), which doesn't have any backward compatibility fixes, and therefore doesn't waste CPU time on it.
+
+### Multithreading, old Tkinter and `list2bin`
+
+Bundled Tkinter problems with 16 bpc images were solved with CPython 3.11 release. Official free threading support was introduced in Python 3.13, *ca.* two years later. Thus new  free-threaded Python and old Tkinter are expected to never meet, therefore no workaround for old Tkinter is included into version 3 patch.
 
 ## References
 

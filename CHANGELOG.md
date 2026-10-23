@@ -5,13 +5,19 @@ Pure Python module for PPM and PGM image files reading, displaying, and writing.
 ## Version
 
 [PyPNM Maximum compatibility version](https://github.com/Dnyarri/PyPNM/tree/py34/ "PyPNM for Python 3.4 and above").
-Successfully tested with Python 3.4 under Windows XP 32-bit.
+Successfully tested with Python 3.4 - 3.15 versions, starting from Python 3.4 under Windows XP 32-bit.
 
 Note that this branch ([`.34`](https://github.com/Dnyarri/PyPNM/tree/py34/ "PyPNM for Python 3.4 and above")) is functionally identical to, yet internally different from [`main`](https://github.com/Dnyarri/PyPNM/ "PyPNM for Python 3.11 and above") branch.
 
 ## History
 
 Current versioning for this branch is MAINVERSION.MMsinceJan2024.DD.34.
+
+### Version 3
+
+| Version | Date | Major changes |
+| :---- | :---- | :---- |
+| 3.34.24.34 | 24 Oct 2026 | Multithreading added to `list2bin` function. Speed became proportional to CPU cores number when run under free-threaded Python. |
 
 ### Version 2
 
