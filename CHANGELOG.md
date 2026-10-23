@@ -10,6 +10,12 @@ Pure Python module for PPM and PGM image files reading, displaying, and writing.
 
 Current versioning for this branch is MAINVERSION.MMsinceJan2024.DD.312 (*i.e.*, \*.13 is Jan 2025, \*.25 is Jan 2026, 2.30.12.312 is "Version 2 update 12 June 2026, for Python 3.11 and above", *etc.*)
 
+### Version 3
+
+| Version | Date | Major changes |
+| :---- | :---- | :---- |
+| 3.34.24.314 | 24 Oct 2026 | Multithreading added to `list2bin` function. Speed became proportional to CPU cores number when run under free-threaded Python. |
+
 ### Version 2
 
 | Version | Major changes |

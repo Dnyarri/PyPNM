@@ -11,7 +11,7 @@ since it recodes them to binary on the fly.
 
 NOTE:
 
-This is special developer edition, including PNG support with `PyPNG`_.,
+This is special developer edition, including PNG support with `PyPNG`_,
 and equipped with debug window, added deliberately to check data structures.
 
 .. _PyPNM for Python >= 3.11: https://github.com/Dnyarri/PyPNM
@@ -24,7 +24,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.33.18.12.dev1'  # 18 Sep 2026
+__version__ = '3.34.24.1.dev1'  # 24 Oct 2026
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -32,7 +32,7 @@ __status__ = 'Production'
 from pathlib import Path
 from platform import python_version, python_version_tuple
 from sys import argv
-from time import localtime, strftime  # Used to show file info only
+from time import localtime, strftime, time  # Used to show file info only
 from tkinter import BooleanVar, Button, Canvas, Frame, Label, Menu, PhotoImage, Tk, Toplevel
 from tkinter.filedialog import askopenfilename, asksaveasfilename
 from tkinter.messagebox import showinfo
@@ -89,9 +89,10 @@ def ShowInfo(event=None) -> None:
     file_size_str = f'{file_size / 1048576:.2f} Mb' if (file_size > 1048576) else f'{file_size / 1024:.2f} Kb' if (file_size > 1024) else f'{file_size} bytes'
     creation_str = strftime('%d %B %Y %H:%M:%S', localtime(Path(sourcefilename).stat().st_ctime)) if int(python_version_tuple()[1]) < 12 else strftime('%d %B %Y %H:%M:%S', localtime(Path(sourcefilename).stat().st_birthtime))
     modification_str = strftime('%d %B %Y %H:%M:%S', localtime(Path(sourcefilename).stat().st_mtime))
+
     showinfo(
         title='General information',
-        message=f'PNMViewer ver. {__version__}\nPython: {python_version()}\nModules:\n{pypnm.__name__} ver. {pypnm.__version__}',
+        message=f'PNMViewer ver. {__version__}\nPython: {python_version()} {nogil}\nModules:\n{pypnm.__name__} ver. {pypnm.__version__} {pypnm.SUBVERSION},\n{pypng.__name__} ver. {pypng.__version__}',
         detail=f'File properties:\n{sourcefilename}\nSize: {file_size_str}\nCreated:  {creation_str}\nModified: {modification_str}\n\nImage properties:\nWidth: {X} px\nHeight: {Y} px\nChannels: {Z} channel{"s" if Z > 1 else ""}\nColor depth: {maxcolors + 1} gradations/channel',
     )
 
@@ -126,6 +127,7 @@ def GetSource(event=None) -> None:
     #   NOTE: maxcolors, image3D, info are GLOBALS!
     #   They are used during save!
     tuplevel = 'image'
+    start = time()
     if Path(sourcefilename).suffix.lower() == '.png':
         X, Y, Z, maxcolors, image3D, info = pypng.png2list(sourcefilename, tuplevel)
 
@@ -135,9 +137,10 @@ def GetSource(event=None) -> None:
         info = {'bitdepth': 16} if maxcolors > 255 else {'bitdepth': 8}
     else:
         raise ValueError('Extension not recognized')
-
+    finish = time()
     # ↓ Updating debug text
     pogovorit.insert('end', f'\n{sourcefilename=}\n{X=} {Y=} {Z=} {maxcolors=} {tuplevel=}\n')
+    pogovorit.insert('end', f'\nReading: {finish - start} sec.\n')
     if X * Y < 16 * 16 + 1:
         pogovorit.insert('end', f'{image3D}\n')
     else:
@@ -152,11 +155,15 @@ def GetSource(event=None) -> None:
     PopUnpopDebug()
 
     # ↓ Converting list to bytes of PPM-like structure "preview_data" in memory
+    start = time()
     preview_data = pypnm.list2bin(image3D, maxcolors, show_chessboard=True)
+    pogovorit.insert('end', f'\nBuilding preview PNM: {time() - start} sec.\n')
     pogovorit.insert('end', f'\nPreview bytes beginning:\n{str(preview_data)[0:256]} ...\n')
     pogovorit.see('end')
     # ↓ Now showing "preview_data" bytes using Tkinter
+    start = time()
     preview = PhotoImage(data=preview_data)
+    pogovorit.insert('end', f'\nBuilding preview PhotoImage: {time() - start} sec.\n')
     # ↓ Adding filename to window title a-la Photoshop
     sortir.title(f'PNMViewer: {Path(sourcefilename).name}')
     # ↓ Dictionary of zoom label texts
@@ -240,7 +247,7 @@ def GetSource(event=None) -> None:
     UINormal()
     fit_width, fit_height = min(sortir.winfo_reqwidth(), 9 * sortir.winfo_screenwidth() // 10), min(sortir.winfo_reqheight(), 9 * sortir.winfo_screenheight() // 10)
     sortir.minsize(fit_width, fit_height)
-    sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_reqwidth()) // 2}+64')
+    sortir.geometry(f'{sortir.winfo_reqwidth()}x{sortir.winfo_reqheight()}+{(sortir.winfo_screenwidth() - sortir.winfo_reqwidth()) // 2}+64')
     zanyato.focus_set()  # Required for some binding to work
 
 
@@ -278,7 +285,9 @@ def SaveAsPNM(bin: bool) -> None:
 
     # ↓ Saving "savefilename" in PNM format depending on "bin"
     UIBusy()
+    start = time()
     pypnm.list2pnm(savefilename, image3D, maxcolors, bin)
+    pogovorit.insert('end', f'\nSaving: {time() - start} sec.\n')
     # ↓ Saved file becomes source file
     sourcefilename = savefilename
     sortir.title(f'PNMViewer: {Path(sourcefilename).name}')
@@ -309,7 +318,9 @@ def SaveAsPNG() -> None:
 
     # ↓ Feeding list to PyPNG via pnglpng
     UIBusy()
+    start = time()
     pypng.list2png(savefilename, image3D, info)
+    pogovorit.insert('end', f'\nSaving: {time() - start} sec.\n')
     # ↓ Saved file becomes source file
     sourcefilename = savefilename
     sortir.title(f'PNMViewer: {Path(sourcefilename).name}')
@@ -388,6 +399,7 @@ def zoomOut(event=None) -> None:
         butt_minus.config(state='disabled', cursor='arrow')
     else:
         butt_minus.config(state='normal', cursor='hand2')
+    sortir.geometry(f'{sortir.winfo_reqwidth()}x{sortir.winfo_reqheight()}')
 
 
 def zoomWheel(event) -> None:
@@ -459,6 +471,16 @@ def canvasDrag(event) -> None:
 zoom_factor = 0
 sourcefilename = X = Y = Z = maxcolors = None
 minizoom, maxizoom = (-4, 4)  # Zoom from 1:5 to 5:1. Mnemonic: "mini" means "image look small".
+
+try:
+    from sys import _is_gil_enabled  # current Python MAY support free threading
+
+    if not _is_gil_enabled():  # current Python DO support free threading
+        nogil = '[GIL OFF]'
+    else:
+        nogil = '[GIL ON]'
+except ImportError:
+    nogil = '[GIL ONLY]'
 
 sortir = Tk()
 sortir.title('PNMViewer')
@@ -593,7 +615,7 @@ sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_reqwidth()) // 2}
 insecticide = Toplevel(sortir)
 """Debug output window."""
 insecticide.title('<DEBUG>')
-insecticide.geometry('+32+32')
+insecticide.geometry(f'{sortir.winfo_screenwidth() // 2}x{sortir.winfo_screenheight() - 128}+{sortir.winfo_screenwidth() // 2 - 32}+32')
 insecticide.protocol('WM_DELETE_WINDOW', lambda: None)
 pogovorit = ScrolledText(
     insecticide,
@@ -601,11 +623,11 @@ pogovorit = ScrolledText(
     wrap='word',
     state='normal',
 )
-"""Scrollable text in Debug output window."""
+"""Scrollable text in ``insecticide`` debug output window."""
 pogovorit.pack(fill='both', side='top', expand=True)
-pogovorit.insert('1.0', f'This is PNMViewer {__version__} debug window.\nSome image and image list info will be shown here.\n')
+pogovorit.insert('1.0', f'This is PNMViewer {__version__} debug window.\nSome info will be shown below as it becomes available.\nPython: {python_version()} {nogil}\n')
 pogovorit.see('end')
-# ↓ Hiding debug window; will be unhidden by GetSource.
+# ↓ Temporarily hiding debug window.
 insecticide.iconify()
 # ↓ Placing debug window right below main one.
 insecticide.lower(sortir)
