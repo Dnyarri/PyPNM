@@ -18,7 +18,7 @@ __author__ = 'Ilya Razmanov'
 __copyright__ = '(c) 2025-2026 Ilya Razmanov'
 __credits__ = 'Ilya Razmanov'
 __license__ = 'unlicense'
-__version__ = '2.33.3.8'  # 3 Sep 2026
+__version__ = '3.34.24.1'  # 24 Oct 2026
 __maintainer__ = 'Ilya Razmanov'
 __email__ = 'ilyarazmanov@gmail.com'
 __status__ = 'Production'
@@ -191,7 +191,7 @@ def GetSource(event=None) -> None:
     UINormal()
     fit_width, fit_height = min(sortir.winfo_reqwidth(), 9 * sortir.winfo_screenwidth() // 10), min(sortir.winfo_reqheight(), 9 * sortir.winfo_screenheight() // 10)
     sortir.minsize(fit_width, fit_height)
-    sortir.geometry(f'+{(sortir.winfo_screenwidth() - sortir.winfo_reqwidth()) // 2}+64')
+    sortir.geometry(f'{sortir.winfo_reqwidth()}x{sortir.winfo_reqheight()}+{(sortir.winfo_screenwidth() - sortir.winfo_reqwidth()) // 2}+64')
     zanyato.focus_set()  # Required for some binding to work
 
 
@@ -355,6 +355,7 @@ def zoomOut(event=None) -> None:
         butt_minus.config(state='disabled', cursor='arrow')
     else:
         butt_minus.config(state='normal', cursor='hand2')
+    sortir.geometry(f'{sortir.winfo_reqwidth()}x{sortir.winfo_reqheight()}')
 
 
 def zoomWheel(event) -> None:

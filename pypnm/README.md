@@ -4,11 +4,14 @@
 
 PyPNM is a pure Python module, providing functions for:
 
-- reading PPM and PGM image files (both 8 and 16 bits per channel color depth) to image 3D nested lists for further editing;
+- reading PPM and PGM image files (both 8 and 16 bits per channel color depth) to image 3D nested lists for further editing.
 
    (Reading support for 1 bpc PBM is provided as well.)
 
-- displaying 3D list thus obtained by converting it to Tkinter-compatible data in memory;
+- **displaying** 3D list thus obtained by converting it to Tkinter-compatible data in memory.
+
+  PyPNM ver. 3 support multithreading for image preview generation, thus allowing significant speed gain when used with free-threaded Python (*e.g.* `python3.14t.exe`).
+
 - subsequent writing edited image pixel data 3D list to disk as PPM or PGM file, either binary or ASCII.
 
 Functions are detailed in [*"Functions description"*](#functions-description), and illustrated in [*"Usage example"*](#usage-example) sections below.
@@ -202,6 +205,10 @@ Write either binary or ASCII file from nested image data list, where:
 - `out_filename` - Name of PNM file to be written.
 
 Note that `list2pnm` is a switch between `list2pnmbin` and `list2pnmascii`, whose direct usage is considered legacy. Using `list2pnm` instead of legacy calls simplifies writing "Save as..." functions for main programs - now you can use one function for all PNM flavours. Default is `bin = True` since binary PNM seem to be more convenient for big programs like Photoshop.
+
+## Multithreading and `list2bin`
+
+Versions 3.x.x.x of PyPNM include multithreading support for `list2bin`, providing dramatic speed improvement when run under free-threaded Python. Currently this version of `list2bin` is designed as a patch over "classic" function, *i.e.* old version 2 is still here, intact and fully functional. Upon import, PyPNM tries to import `sys._is_gil_enabled()` and, if it fails or returns `True`, Python is considered single-threaded, so version 2 is executed; if PyPNM detect Python reporting itself being free-threaded, version 3 patch is executed.
 
 ## References
 

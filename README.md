@@ -15,6 +15,9 @@ PyPNM is a pure Python module for
   Reading support for 1 bpc PBM is provided as well. Writing PBM is not supported and not planned.
 
 - **displaying** 3D list thus obtained by converting it to Tkinter-compatible data in memory;
+
+  Multithreading patch is added to displaying functionality of PyPNM in version 3, providing speed multiplication proportional to CPU core number when run with free-threaded Python.
+
 - **writing** edited image 3D list to disk as PPM or PGM file, either binary or ASCII.
 
 All functions are detailed in [*"Functions description"*](#functions-description), and illustrated in [*"Usage example"*](#usage-example) sections below.
